@@ -45,6 +45,6 @@ spring:
 mybatis:
   #  config-location: classpath:SqlMapConfig.xml
   mapper-locations: classpath:/mapper/*.xml
-  type-aliases-package: com.bus.bean
+  type-aliases-package: com.bus.javabean
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

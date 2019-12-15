@@ -12,6 +12,7 @@ public class TestController
 
 	@RequestMapping("/test")
 	public String Test(){
+
 		return "backjsp/test";
 	}
 }

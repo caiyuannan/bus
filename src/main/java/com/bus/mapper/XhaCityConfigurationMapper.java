@@ -1,7 +1,6 @@
 <<<<<<< Updated upstream:src/main/java/com/bus/workspace/XhaCityConfigurationMapper.java
 package com.bus.workspace;
 
-=======
 package com.bus.mapper;
 /**
  * 城市配置mapper

@@ -1,3 +1,3 @@
-package com.bus.mapper;
+package com.bus.workspace;
 
 public interface XhaCityConfigurationMapper {}

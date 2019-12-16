@@ -1,7 +1,7 @@
 package com.bus.service;
 
+import com.bus.dao.XdjUserMapper;
 import com.bus.javabean.XdjUser;
-import com.bus.mapper.XdjUserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

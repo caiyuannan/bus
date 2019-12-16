@@ -1,4 +1,4 @@
-package com.bus.mapper;
+package com.bus.dao;
 
 import com.bus.javabean.XdjUser;
 import org.apache.ibatis.annotations.Mapper;

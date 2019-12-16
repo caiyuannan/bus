@@ -60,63 +60,63 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <!-- alibaba数据库连接池-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>druid</artifactId>-->
-<!--            <version>1.0.29</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; json类依赖包&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.vaadin.external.google</groupId>-->
-<!--            <artifactId>android-json</artifactId>-->
-<!--            <version>0.0.20131108.vaadin1</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; java后端数据校验包&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate.validator</groupId>-->
-<!--            <artifactId>hibernate-validator</artifactId>-->
-<!--            <version>6.0.7.Final</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; 文件上传依赖包&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>commons-fileupload</groupId>-->
-<!--            <artifactId>commons-fileupload</artifactId>-->
-<!--            <version>1.3.1</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; aop切面包&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.aspectj</groupId>-->
-<!--            <artifactId>aspectjweaver</artifactId>-->
-<!--            <version>1.7.2</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; json数据转换包&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>net.minidev</groupId>-->
-<!--            <artifactId>json-smart</artifactId>-->
-<!--            <version>2.3</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; gson数据转换包&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>at.stefangeyer.challonge.serializer</groupId>-->
-<!--            <artifactId>gson</artifactId>-->
-<!--            <version>2.0.1</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; json数据转换包&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>net.sf.json-lib</groupId>-->
-<!--            <artifactId>json-lib</artifactId>-->
-<!--            <version>2.4</version>-->
-<!--            <classifier>jdk13</classifier>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; 微信小程序所需：httpclient包&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.httpcomponents</groupId>-->
-<!--            <artifactId>httpclient</artifactId>-->
-<!--            <version>4.3.5</version>-->
-<!--        </dependency>-->
+<!--         alibaba数据库连接池-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.29</version>
+        </dependency>
+        <!-- json类依赖包-->
+        <dependency>
+            <groupId>com.vaadin.external.google</groupId>
+            <artifactId>android-json</artifactId>
+            <version>0.0.20131108.vaadin1</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- java后端数据校验包-->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.0.7.Final</version>
+        </dependency>
+        <!-- 文件上传依赖包-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+        <!-- aop切面包-->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <!-- json数据转换包-->
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>2.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- gson数据转换包-->
+        <dependency>
+            <groupId>at.stefangeyer.challonge.serializer</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <!-- json数据转换包-->
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk13</classifier>
+        </dependency>
+        <!-- 微信小程序所需：httpclient包-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.5</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

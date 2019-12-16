@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.mapper.LccDriverManageMapper">
+
+<resultMap id="driverMap" type="com.bus.javabean.LccDriverBean">
+    <result property="driverId" column="driver_id"/>
+    <result property="driverName" column="driver_name"/>
+</resultMap>
+
+    <select id="queryDriver" resultMap="driverMap">
+            select * from tb_driver where driver_state = '启用'
+    </select>
+
+</mapper>

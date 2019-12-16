@@ -1,7 +1,7 @@
 //package com.bus.service;
 //
 //import com.bus.javabean.XhaCityBean;
-//import com.bus.mapper.XhaCityConfigurationMapper;
+//import com.bus.dao.XhaCityConfigurationMapper;
 //import org.springframework.stereotype.Service;
 //import javax.annotation.Resource;
 //import java.util.List;
@@ -11,14 +11,11 @@
 // * by 谢海安
 // */
 //@Service
-//public class XhaCityConfigurationService{
+//public class XhaCityConfigurationServiceImpl implements XhaCityConfigurationService{
 //	@Resource
 //	private XhaCityConfigurationMapper ccm;
 //
-//	/**
-//	 * 查找城市
-//	 * @return
-//	 */
+//	@Override
 //	public List<XhaCityBean> findCity() {
 //		return ccm.findCity();
 //	}

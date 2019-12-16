@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <title>fullcalendar日历插件使用案例</title>
 
-<link rel="shortcut icon" href=<%=path+"/image/favicon.ico"%> >
+<link rel="shortcut icon" href=<%=path+"/images/favicon.ico"%> >
 <link rel="stylesheet" type="text/css" href=<%=path+"/css/jquery-ui.min.css" %>>
 <link rel="stylesheet" type="text/css" href=<%=path+"/css/jquery-ui.structure.min.css" %>>
 <link rel="stylesheet" type="text/css" href=<%=path+"/css/jquery-ui.theme.min.css" %>>
@@ -23,6 +23,7 @@
 <script type="text/javascript" src=<%=path+"/js/daygrid/main.js" %>></script>
 <script type="text/javascript" src=<%=path+"/js/interaction/main.js" %>></script>
 <script type="text/javascript" src=<%=path+"/js/demo.js" %>></script>
+
 </head>
 <body>
 	<div id='calendar'></div>
@@ -40,7 +41,7 @@
 
 			<select name="groups" id="groups">
 				<c:forEach items="${slist}" var="i" begin="0" step="1">
-					<option value="${i.staffId}" selected="selected">${i.sName}</option>
+					<option value="${i.driverId}" selected="selected">${i.driverName}</option>
 				</c:forEach>
 			</select>
 			</p>

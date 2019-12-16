@@ -31,6 +31,7 @@ public class XhaCityConfigurationController {
 	/**查询城市*/
 	@RequestMapping("findCity")
 	public void findCity(){
+		System.out.println("方法进来了！");
 		List<XhaCityBean> city = ccs.findCity();
 		System.out.println(city.toString());
 	}

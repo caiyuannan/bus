@@ -19,7 +19,7 @@ public class XhaCityConfigurationService{
 	 * 查找城市
 	 * @return
 	 */
-	public List<XhaCityBean> findCity() {
+	/*public List<XhaCityBean> findCity() {
 		return ccm.findCity();
-	}
+	}*/
 }

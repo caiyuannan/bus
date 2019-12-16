@@ -1,11 +1,95 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bus.dao">
-        <select id="selectBus">
-            select *from
+<mapper namespace="com.bus.mapper.DyfBusConfigurationMapper">
+<!--    查询所在省份包含的城市集合 以此返回一个城市的Javabean DyfProvince类型-->
+    <resultMap id="selectProvince" type="com.bus.javabean.DyfProvince">
+        <id property="provinceId" column="province_id"></id>
+        <result property="provinceName" column="province_name"></result>
+        <collection property="city" javaType="ArrayList" ofType="com.bus.javabean.DyfCityBean">
+            <id property="cityId" column="city_id"></id>
+            <result property="cityName" column="city_name"></result>
+        </collection>
+    </resultMap>
+<!--    查询所在省份所包含的城市sql语句-->
+        <select id="selectProvinceCity" resultMap="selectProvince">
+         select c.*,p.* from tb_province p
+         ,tb_city c,tb_province_city pc
+          where c.city_id = pc.city_id and
+          p.province_id = pc.province_id
         </select>
-        
+<!--    车辆管理的resultMap 之所以用这个是由于关联了状态表-->
+    <resultMap id="selectAllBusManger" type="com.bus.javabean.DyfBusBean">
+        <id property="busId" column="bus_id"></id>
+        <result property="busAge" column="bus_age"></result>
+        <result property="busDutyDriver" column="bus_duty_driver"></result>
+        <result property="busLicense" column="bus_license"></result>
+        <result property="busMin" column="bus_min"></result>
+        <result property="busType" column="bus_type"></result>
+        <result property="busState" column="bus_state"></result>
+        <result property="stateName" column="state_name"></result>
+    </resultMap>
+<!--    车辆管理sql语句  查询所有的车辆信息-->
+        <select id="selectBusManger"  resultMap="selectAllBusManger">
+            select tb_bus.*,tb_state.state_name
+            from tb_bus,tb_state where bus_state = state_id
+
+                <if test="busLicense !=null and busLicense!=''">
+                    and bus_license like concat(#{busLicense},'%')
+                </if>
+                <if test="busDutyDriver != null and busDutyDriver!=''">
+                    and bus_duty_driver = #{busDutyDriver}
+                </if>
+                <if test="busPlate !=null and busPlate!=''">
+                    and bus_license = #{busPlate}
+                </if>
+                <if test="busAge !=null and busAge!=''">
+                    and bus_age = #{busAge}
+                </if>
+                <if test="busMin !=null and busMin!=''">
+                    and bus_min = #{busMin}
+                </if>
+                <if test="busState!=null and busState!=''">
+                    and state_name = #{busState}
+                </if>
+
+            limit #{startIndex},#{pageSize}
+        </select>
+<!--    查询所有车辆以及带条件的车辆的条数-->
+    <select id="selectCountBus" resultType="java.math.BigDecimal">
+        select count(*)
+        from tb_bus,tb_state where bus_state = state_id
+            <if test="busLicense !=null and busLicense!=''">
+                and bus_license like concat(#{busLicense},'%')
+            </if>
+            <if test="busDutyDriver!=null and busDutyDriver!=''">
+                and bus_duty_driver = #{busDutyDriver}
+            </if>
+            <if test="busPlate !=null and busPlate!=''">
+                and bus_license = #{busPlate}
+            </if>
+            <if test="busAge !=null and busAge!=''">
+                and bus_age = #{busAge}
+            </if>
+            <if test="busMin !=null and busMin!=''">
+                and bus_min = #{busMin}
+            </if>
+            <if test="busState!=null and busState!=''">
+                and state_name = #{busState}
+            </if>
+    </select>
+<!--    查询所有的司机信息-->
+    <resultMap id="selectAllDriver" type="com.bus.javabean.LccDriverBean">
+        <id property="driverId" column="driver_id"></id>
+       <result property="driverName" column="driver_name"></result>
+        <result property="driverCellphone" column="driver_cellphone"></result>
+        <result property="driverIDNumber" column="driver_ID_number"></result>
+        <result property="driverState" column="driver_state"></result>
+        <result property="driverWage" column="driver_wage"></result>
+    </resultMap>
+    <select id="selectDriver" resultMap="selectAllDriver">
+        select *from tb_driver
+    </select>
 </mapper>
 
 

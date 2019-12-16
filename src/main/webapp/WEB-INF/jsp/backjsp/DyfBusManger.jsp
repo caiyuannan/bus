@@ -17,7 +17,7 @@
 %>
 <html>
 <head>
-	<title>文档审核</title>
+	<title>车辆信息模块</title>
 	<link rel="stylesheet" href="<%=laPath%>css/layui.css" media="all">
 	<script src="<%=laPath%>layui.js"></script>
 	<script src=<%=jspath+"jquery-3.4.1.js"%>></script>
@@ -37,12 +37,12 @@
 	<tr align="center">
 		<td>
 			<div class="layui-input-inline">
-				<input type="text" name="driverName" required lay-verify="required" placeholder="维护人" autocomplete="off" class="layui-input">
+				<input type="text" id="driverName" name="driverName" required lay-verify="required" placeholder="维护人" autocomplete="off" class="layui-input">
 			</div>
 		</td>
 		<td>
 			<div class="layui-form">
-				<select name="driverState" id="" lay-filter="myselect">
+				<select  name="driverState" id="driverState" lay-filter="myselect">
 					<option value="">请选择车辆状态</option>
 					<option value="在用">在用</option>
 					<option value="故障待救援">故障待救援</option>
@@ -55,7 +55,7 @@
 		<td>
 <%--			使用年数input--%>
 			<div class="layui-input-inline">
-				<input type="text" name="sendYear" required lay-verify="required" placeholder="使用年数" autocomplete="off" class="layui-input">
+				<input type="text" id="sendYear" name="sendYear" required lay-verify="required" placeholder="使用年数" autocomplete="off" class="layui-input">
 			</div>
 		</td>
 		<td>
@@ -65,17 +65,20 @@
 		<td>
 			<%--			车牌号码input--%>
 			<div class="layui-input-inline">
-				<input type="text" name="carCard" required lay-verify="required" placeholder="车牌号码" autocomplete="off" class="layui-input">
+				<input type="text" id="carCard" name="carCard" required lay-verify="required" placeholder="车牌号码" autocomplete="off" class="layui-input">
 			</div>
 		</td>
 		<td>
 			<%--			使用年限input--%>
 			<div class="layui-input-inline">
-				<input type="text" name="driverAge" required lay-verify="required" placeholder="使用年限" autocomplete="off" class="layui-input">
+				<input type="text" id="driverAge" name="driverAge" required lay-verify="required" placeholder="使用年限" autocomplete="off" class="layui-input">
 			</div>
 		</td>
-		<td style="margin-left: 50px;padding-left: 120px">
-			<input class="layui-btn layui-btn-primary layui-btn-lg" type="button" value="搜索" onclick="gotoDb()">
+		<td style="margin-left: 50px;padding-left: 0px">
+			<button type="button" class="layui-btn" onclick="onAddBtn()">
+				<i class="layui-icon">&#xe608;</i> 添加
+			</button>
+			<input  class="layui-btn  layui-btn-primary layui-btn-lg" type="button" value="搜索" onclick="gotoDb()">
 		</td>
 	</tr>
 </table>
@@ -116,22 +119,94 @@
 		});
 
 	});
+	//条件查询ajax刷新
 	function gotoDb(){
-		var downName  =$("#downName").val();
+		var driverState  =$("#driverState").val();
+		var sendYear = $("#sendYear").val();
+		var carCard = $("#carCard").val();
+		var driverAge = $("#driverAge").val();
+		var driverName = $("#driverName").val();
 		var table = layui.table;
-		/*table.reload('demo', {
-			url: 'http://localhost:8080/springboot/manger.action'
+		table.reload('demo', {
+			url: 'http://localhost:8080/bus/DyfBusMangerServlet'
 			,where: {
-				"downName" :downName
+				"driverSta":driverState,
+				"sendYear":sendYear,
+				"carCard":carCard,
+				"driverAge":driverAge,
+				"driverName":driverName
 			}
 			,page:{
 				curr:1
 			}//设定异步数据接口的额外参数
 			//,height: 300
-		});*/
+		});
 
 	}
+	//add-main 添加弹窗显示
+	function onAddBtn(){
+		//页面层-自定义
+		layer.open({
+			type: 1,
+			title:"新建配置",
+			closeBtn: false,
+			shift: 2,
+			area: ['500px', '600px'],
+			shadeClose: true,
+			// btn: ['新增', '取消'],
+			// btnAlign: 'c',
+			content: $("#add1-main"),
+			success: function(layero, index){},
+			yes:function(){
+			}
+		});
+	}
 </script>
+
+<%--添加按钮弹窗--%>
+<div id="add1-main" style="display: none;" align="center">
+	<h2 style="color: #2D93CA;margin-top: 50px">添加公交车数据</h2>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<input type="text" name="value" id="cardProvince" required style="width: 240px;margin-top: 30px;margin-left: -60px" lay-verify="required" placeholder="公交车车牌" autocomplete="off" class="layui-input">
+			<input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<input type="text" name="value" id="driverNam" required style="width: 240px;margin-left: -60px" lay-verify="required" placeholder="维护人" autocomplete="off" class="layui-input">
+			<input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<input type="text" name="busAge" id="busAge" required style="width: 240px;margin-left: -60px" lay-verify="required" placeholder="使用时间" autocomplete="off" class="layui-input">
+			<input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<input type="text" name="busYear" id="busYear" required style="width: 240px;margin-left: -60px" lay-verify="required" placeholder="使用年限" autocomplete="off" class="layui-input">
+			<input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form" >
+		<div class="layui-input-block">
+		<select  name="driverState" id="busState" lay-filter="required" style="width: 100px;margin-left: -60px">
+			<option value="">请选择车辆类型</option>
+			<option value="新能源">新能源</option>
+			<option value="燃油">燃油</option>
+		</select>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-block" style="margin-left: -40px;margin-top: 70px">
+			<button class="layui-btn" lay-submit lay-filter="save" >立即提交</button>
+			<button type="reset" class="layui-btn layui-btn-primary" id="closeSome" >重置</button>
+		</div>
+	</div>
+</div>
 </body>
 </html>
 

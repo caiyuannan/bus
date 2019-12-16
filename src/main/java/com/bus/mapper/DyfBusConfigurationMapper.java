@@ -2,6 +2,7 @@ package com.bus.mapper;
 
 import com.bus.javabean.DyfBusBean;
 import com.bus.javabean.DyfProvince;
+import com.bus.javabean.LccDriverBean;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,7 +20,7 @@ public interface DyfBusConfigurationMapper
 	 * @param busLicense 前台菜单跳转时分辨出查看城市
 	 * @param busDutyDriver 配置车辆管理维护司机
 	 * @param busPlate      查看车牌
-	 * @param busType       公交车类型
+	 * @param busAge       公交车类型
 	 * @param busMin        公交车使用时间
 	 * @param busState      公交车状态
 	 * @return
@@ -28,8 +29,8 @@ public interface DyfBusConfigurationMapper
 	(@Param("busLicense") String busLicense,
 	 @Param("busDutyDriver") String busDutyDriver,
 	 @Param("busPlate") String busPlate,
-	 @Param("busType") String busType,
-	 @Param("bubusMinsType") String busMin,
+	 @Param("busAge") String busAge,
+	 @Param("busMin") String busMin,
 	 @Param("busState") String busState,
 	 @Param("startIndex")Integer startIndex,@Param("pageSize")Integer pageSize);
 
@@ -37,7 +38,10 @@ public interface DyfBusConfigurationMapper
 	public BigDecimal selectCountBus(@Param("busLicense") String busLicense,
 	                                 @Param("busDutyDriver") String busDutyDriver,
 	                                 @Param("busPlate") String busPlate,
-	                                 @Param("busType") String busType,
-	                                 @Param("bubusMinsType") String busMin,
+	                                 @Param("busAge") String busAge,
+	                                 @Param("busMin") String busMin,
 	                                 @Param("busState") String busState);
+
+	//查询所有的司机 用来昨天加下拉框选择
+	public List<LccDriverBean> selectDriver();
 }

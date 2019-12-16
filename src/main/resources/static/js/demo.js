@@ -173,7 +173,7 @@ $(function() {
 					var str = JSON.stringify(ob);
 					$.ajax({
 						type: "POST",//提交的方式
-						url: "workServlet?methodName=ajax1",//提交的地址
+						url: "/toCrewScheduling",//提交的地址ajax1
 						data: "msg=" + str,//提交的数据
 						dataType: "text",//希望返回的数据类型
 						async: true,//异步操作

@@ -3,11 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bus.dao">
-    <resultMap id="cityRes" type="com.bus.javabean.XhaCityBean">
+<!--    <resultMap id="cityRes" type="com.bus.javabean.XhaCityBean">
         <result property="cityName" column="city_name"></result>
         <result property="provinceName" column="province_name"></result>
     </resultMap>
     <select id="findCity" resultMap="cityRes">
         SELECT * FROM tb_province
-    </select>
+    </select>-->
 </mapper>

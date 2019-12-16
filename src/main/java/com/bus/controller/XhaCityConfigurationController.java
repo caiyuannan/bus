@@ -14,7 +14,7 @@ import java.util.List;
  * by谢海安
  */
 @Controller
-@RequestMapping("city")
+@RequestMapping("/city")
 public class XhaCityConfigurationController {
 	@Resource
 	private XhaCityConfigurationService ccs;
@@ -29,7 +29,7 @@ public class XhaCityConfigurationController {
 		return "backjsp/"+path;
 	}
 	/**查询城市*/
-	@RequestMapping("findCity")
+	@RequestMapping("/findCity")
 	public void findCity(){
 		System.out.println("方法进来了！");
 		List<XhaCityBean> city = ccs.findCity();

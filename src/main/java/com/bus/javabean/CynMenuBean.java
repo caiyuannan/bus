@@ -14,7 +14,7 @@ public class CynMenuBean
     private String parentMenuName;
     private String childrenName;
     private String menuUrl;
-
+	private String user;
 	public CynMenuBean()
 	{
 	}

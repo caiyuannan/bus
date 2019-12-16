@@ -24,6 +24,7 @@ function subMethod() {
 	}else {
 		createCode('#loginCode');
 		alert("账号或密码不能为空");
+
 	}
 	return false;
 }

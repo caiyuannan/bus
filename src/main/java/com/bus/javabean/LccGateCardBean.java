@@ -15,7 +15,7 @@ public class LccGateCardBean
 	private int driverId;
 	/**上班时间+日期*/
 	private String office_hours;
-	/**下班时间+日期*/
+	/**下班时间+日期 */
 	private String closing_time;
 
 	public LccGateCardBean()

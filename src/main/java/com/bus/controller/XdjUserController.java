@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 
 /**
- * 许达军  乘客用户的控制类
+ * 许达军 乘客用户的控制类
  */
 @Controller
 public class XdjUserController

@@ -1,6 +1,9 @@
 
 package com.bus.mapper;
 import com.bus.javabean.XhaCityBean;
+import com.bus.javabean.XhaProvinceBean;
+import com.bus.javabean.XhaRouteBean;
+import com.bus.javabean.XhaStationBean;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,5 +16,11 @@ import java.util.List;
 @Mapper
 public interface XhaCityConfigurationMapper {
 	/**查询城市*/
-	public List<XhaCityBean> findCity(@Param("provinceName") String provinceName, @Param("cityName") String cityName);
+	public List<XhaProvinceBean> findCity(@Param("provinceName") String provinceName, @Param("cityName") String cityName,int startPage,int limitPage);
+
+	/**查询站点*/
+	public List<XhaStationBean> findStation(int cityId);
+
+	/**查询路线*/
+	public List<XhaRouteBean> findRoute(int cityId);
 }

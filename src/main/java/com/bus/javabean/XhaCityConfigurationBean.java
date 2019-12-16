@@ -1,6 +1,7 @@
 package com.bus.javabean;
 
 import org.springframework.stereotype.Component;
+import java.util.List;
 
 /**
  * 城市配置类
@@ -8,34 +9,34 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class XhaCityConfigurationBean {
-	/**序号*/
-	private int rowNumber;
-	/**省份名字*/
+	private int num;
 	private String provinceName;
-	/**城市名字*/
 	private String cityName;
-	/**站点数*/
-	private int stationCount;
-	/**线路数*/
-	private int routeCount;
+	private int stationCounts;
+	private int routeCounts;
 
 	public XhaCityConfigurationBean() {
 	}
 
-	public XhaCityConfigurationBean(int rowNumber, String provinceName, String cityName, int stationCount, int routeCount) {
-		this.rowNumber = rowNumber;
+	public XhaCityConfigurationBean(int num, String provinceName, String cityName, int stationCounts, int routeCounts) {
+		this.num = num;
 		this.provinceName = provinceName;
 		this.cityName = cityName;
-		this.stationCount = stationCount;
-		this.routeCount = routeCount;
+		this.stationCounts = stationCounts;
+		this.routeCounts = routeCounts;
 	}
 
-	public int getRowNumber() {
-		return rowNumber;
+	@Override
+	public String toString() {
+		return "XhaCityConfigurationBean{" + "num=" + num + ", provinceName='" + provinceName + '\'' + ", cityName='" + cityName + '\'' + ", stationCounts=" + stationCounts + ", routeCounts=" + routeCounts + '}';
 	}
 
-	public void setRowNumber(int rowNumber) {
-		this.rowNumber = rowNumber;
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
 	}
 
 	public String getProvinceName() {
@@ -54,24 +55,19 @@ public class XhaCityConfigurationBean {
 		this.cityName = cityName;
 	}
 
-	public int getStationCount() {
-		return stationCount;
+	public int getStationCounts() {
+		return stationCounts;
 	}
 
-	public void setStationCount(int stationCount) {
-		this.stationCount = stationCount;
+	public void setStationCounts(int stationCounts) {
+		this.stationCounts = stationCounts;
 	}
 
-	public int getRouteCount() {
-		return routeCount;
+	public int getRouteCounts() {
+		return routeCounts;
 	}
 
-	public void setRouteCount(int routeCount) {
-		this.routeCount = routeCount;
-	}
-
-	@Override
-	public String toString() {
-		return "XhaCityConfigurationBean{" + "rowNumber=" + rowNumber + ", provinceName='" + provinceName + '\'' + ", cityName='" + cityName + '\'' + ", stationCount=" + stationCount + ", routeCount=" + routeCount + '}';
+	public void setRouteCounts(int routeCounts) {
+		this.routeCounts = routeCounts;
 	}
 }

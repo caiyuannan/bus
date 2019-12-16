@@ -10,64 +10,53 @@ public class TableBean
 	private String msg;
 	private int count;
 	private int code;
-	private List<Object>date;
+	private List data;
 
 
-	public TableBean()
-	{
+	public TableBean() {
 	}
 
-	public TableBean(String msg, int count, int code, List<Object> date)
-	{
+	public TableBean(String msg, int count, int code, List data) {
 		this.msg = msg;
 		this.count = count;
 		this.code = code;
-		this.date = date;
+		this.data = data;
 	}
 
-	@Override
-	public String toString()
-	{
-		return "TableBean{" + "msg='" + msg + '\'' + ", count=" + count + ", code=" + code + ", date=" + date + '}';
-	}
-
-	public String getMsg()
-	{
+	public String getMsg() {
 		return msg;
 	}
 
-	public void setMsg(String msg)
-	{
+	public void setMsg(String msg) {
 		this.msg = msg;
 	}
 
-	public int getCount()
-	{
+	public int getCount() {
 		return count;
 	}
 
-	public void setCount(int count)
-	{
+	public void setCount(int count) {
 		this.count = count;
 	}
 
-	public int getCode()
-	{
+	public int getCode() {
 		return code;
 	}
 
-	public void setCode(int code)
-	{
+	public void setCode(int code) {
 		this.code = code;
 	}
 
-	public List<Object> getDate()
-	{
-		return date;
+	public List getData() {
+		return data;
 	}
 
-	public void setDate(List<Object> date)
-	{
-		this.date = date;
+	public void setData(List data) {
+		this.data = data;
+	}
+
+	@Override
+	public String toString() {
+		return "TableBean{" + "msg='" + msg + '\'' + ", count=" + count + ", code=" + code + ", data=" + data + '}';
 	}
 }

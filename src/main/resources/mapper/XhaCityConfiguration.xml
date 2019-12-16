@@ -2,24 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bus.mapper.XhaCityConfigurationMapper">
-        <resultMap id="cityRes" type="com.bus.javabean.XhaCityBean">
-                <result property="cityName" column="city_name"></result>
+        <resultMap id="provinceRes" type="com.bus.javabean.XhaProvinceBean">
+                <result property="provinceId" column="province_id"></result>
                 <result property="provinceName" column="province_name"></result>
+                <result property="cityBean.cityId" column="city_id"></result>
+                <result property="cityBean.cityName" column="city_name"></result>
         </resultMap>
-        <select id="findCity" resultMap="cityRes">
-            SELECT * FROM tb_province t1,tb_
-            <where>
+        <!-- 查找城市-->
+        <select id="findCity" resultMap="provinceRes">
+                SELECT tp.*,tc.*
+                FROM tb_province tp,tb_city tc,tb_province_city tpc
+                <where>
+                    tp.province_id = tpc.province_id AND tc.city_id = tpc.city_id
                     <if test="null != provinceName">
-                        AND province_name = {provinceName}
+                        AND province_name = #{provinceName}
                     </if>
                     <if test="null != cityName">
-                            AND city_name = {cityName}
+                        AND city_name = #{cityName}
                     </if>
-            </where>
+                    <if test="0 != startPage">
 
-
+                    </if>
+                </where>
         </select>
-        
+
+        <!-- 查找站点-->
+        <resultMap id="stationRes" type="com.bus.javabean.XhaStationBean">
+                <result property="stationId" column="station_id"></result>
+                <result property="cityId" column="city_id"></result>
+                <result property="stationName" column="station_name"></result>
+                <result property="stationLon" column="station_lon"></result>
+                <result property="stationLat" column="station_lat"></result>
+        </resultMap>
+        <select id="findStation" parameterType="java.lang.Integer" resultMap="stationRes">
+            SELECT * FROM tb_station WHERE city_id = #{cityId};
+        </select>
+
+        <!-- 查找路线-->
+        <resultMap id="routeRes" type="com.bus.javabean.XhaRouteBean">
+                <result property="routeId" column="route_id"></result>
+                <result property="routeFee" column="route_fee"></result>
+                <result property="routeTime" column="route_time"></result>
+                <result property="routeName" column="route_name"></result>
+                <result property="cityId" column="city_id"></result>
+                <result property="stateId" column="state_id"></result>
+        </resultMap>
+        <select id="findRoute" parameterType="java.lang.Integer" resultMap="routeRes">
+            SELECT * FROM tb_route WHERE city_id = #{cityId};
+        </select>
+
 </mapper>
 
 

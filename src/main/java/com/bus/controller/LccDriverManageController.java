@@ -1,8 +1,10 @@
 package com.bus.controller;
 
+import com.bus.javabean.LccCrewSchedulingBean;
 import com.bus.javabean.LccDriverBean;
 import com.bus.javabean.Mssg;
 import com.bus.service.LccDriverManageService;
+import com.bus.until.GetWeek;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,17 +39,37 @@ public class LccDriverManageController
 	 * 预加载司机名字
 	 * @return
 	 */
-	@RequestMapping("toCrewSchedulingPage")
-	public ModelAndView toCrewSchedulingPage(){
+	@RequestMapping("/driverManage")
+	public ModelAndView toCrewSchedulingPage(String date){
 
-		System.out.println("进入日历插件");
+		System.out.println("进入司机排班");
 
-		List<LccDriverBean> list = ldms.findDriver();
+		try
+		{
 
-		System.out.println(list+"打印司机表");
+			List list = null;
+			if(null==date){
 
-		modelAndView.addObject("slist",list);
-		modelAndView.setViewName("backjsp/fullcalendarDemo");
+				Date nowDate = new Date();
+				list = GetWeek.convertWeekByDate(nowDate);
+			}else{
+
+				Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+				list = GetWeek.convertWeekByDate(date1);
+			}
+
+			HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork();
+			System.out.println("周Week"+list);
+			System.out.println("workmap"+map);
+			modelAndView.addObject("workmap",map);
+			modelAndView.addObject("week",list);
+
+		} catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+
+		modelAndView.setViewName("backjsp/driverManage");
 
 		return modelAndView;
 

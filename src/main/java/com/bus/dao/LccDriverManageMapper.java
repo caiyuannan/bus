@@ -1,8 +1,11 @@
-package com.bus.mapper;
+package com.bus.dao;
 
+import com.bus.javabean.LccCrewSchedulingBean;
 import com.bus.javabean.LccDriverBean;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,10 +31,9 @@ public interface LccDriverManageMapper
 	public int checkDriverWork(int driverId, String date);
 
 	/**
-	 * 给司机排班
-	 * @param driverId
-	 * @param date
+	 * 预加载周排班查询
 	 * @return
 	 */
-	public boolean addWork(int driverId, String date);
+
+	public List<LccCrewSchedulingBean> queryWeekWork();
 }

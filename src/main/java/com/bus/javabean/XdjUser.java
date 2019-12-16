@@ -1,6 +1,6 @@
 package com.bus.javabean;
 /**
- * 许达军  乘客用户
+ * 许达军  乘客用户表
  */
 public class XdjUser
 {

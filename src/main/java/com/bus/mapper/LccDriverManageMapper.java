@@ -5,6 +5,10 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 司机管理接口类
+ * by连晨诚
+ */
 @Mapper
 public interface LccDriverManageMapper
 
@@ -21,5 +25,13 @@ public interface LccDriverManageMapper
 	 * @param date
 	 * @return
 	 */
-	//public boolean checkDriverWork(int driverId, int date);
+	public int checkDriverWork(int driverId, String date);
+
+	/**
+	 * 给司机排班
+	 * @param driverId
+	 * @param date
+	 * @return
+	 */
+	public boolean addWork(int driverId, String date);
 }

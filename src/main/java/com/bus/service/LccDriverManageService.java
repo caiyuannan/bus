@@ -19,4 +19,15 @@ public class LccDriverManageService
 	public List<LccDriverBean> findDriver() {
 		return lmp.queryDriver();
 	}
+
+	public boolean checkDriverWork(int driverId,String date){
+
+		int num = lmp.checkDriverWork(driverId,date);
+
+		if(num>0){
+			return true;
+		}
+
+		return false;
+	}
 }

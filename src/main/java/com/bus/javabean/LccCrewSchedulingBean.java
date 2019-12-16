@@ -15,19 +15,21 @@ public class LccCrewSchedulingBean
 	private int driverId;
 	/**公交车排班id*/
 	private int busWorkId;
-	/**替班司机id*/
-	private int relayDriverId;
-
+	/**替班状态*/
+	private String relayState;
+	/**排班日期*/
+	private String workTime;
 	public LccCrewSchedulingBean()
 	{
 	}
 
-	public LccCrewSchedulingBean(int workId, int driverId, int busWorkId, int relayDriverId)
+	public LccCrewSchedulingBean(int workId, int driverId, int busWorkId, String relayState, String workTime)
 	{
 		this.workId = workId;
 		this.driverId = driverId;
 		this.busWorkId = busWorkId;
-		this.relayDriverId = relayDriverId;
+		this.relayState = relayState;
+		this.workTime = workTime;
 	}
 
 	public int getWorkId()
@@ -60,19 +62,29 @@ public class LccCrewSchedulingBean
 		this.busWorkId = busWorkId;
 	}
 
-	public int getRelayDriverId()
+	public String getRelayState()
 	{
-		return relayDriverId;
+		return relayState;
 	}
 
-	public void setRelayDriverId(int relayDriverId)
+	public void setRelayState(String relayState)
 	{
-		this.relayDriverId = relayDriverId;
+		this.relayState = relayState;
+	}
+
+	public String getWorkTime()
+	{
+		return workTime;
+	}
+
+	public void setWorkTime(String workTime)
+	{
+		this.workTime = workTime;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "LccCrewScheduling{" + "workId=" + workId + ", driverId=" + driverId + ", busWorkId=" + busWorkId + ", relayDriverId=" + relayDriverId + '}';
+		return "LccCrewSchedulingBean{" + "workId=" + workId + ", driverId=" + driverId + ", busWorkId=" + busWorkId + ", relayState='" + relayState + '\'' + ", workTime='" + workTime + '\'' + '}';
 	}
 }

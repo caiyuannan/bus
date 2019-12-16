@@ -12,4 +12,14 @@
             select * from tb_driver where driver_state = '启用'
     </select>
 
+    <select id="checkDriverWork" resultType="java.lang.Integer">
+        select count(*) from tb_gate_card where work_date = #{driverId} and driver_id
+        =
+        (SELECT driver_id from tb_crew_scheduling where driver_id =#{date})
+    </select>
+
+    <insert id="addWork" parameterType="com.bus.javabean.LccCrewSchedulingBean">
+        INSERT INTO tb_user (USNAME,UPWD,USTATE,SEX,CAREER)
+        VALUES(#{usname},#{upwd},'启用',#{sex},#{career})
+    </insert>
 </mapper>

@@ -10,25 +10,25 @@ public class TableBean
 	private String msg;
 	private int count;
 	private int code;
-	private List<Object>date;
+	private List data;
 
 
 	public TableBean()
 	{
 	}
 
-	public TableBean(String msg, int count, int code, List<Object> date)
+	public TableBean(String msg, int count, int code, List data)
 	{
 		this.msg = msg;
 		this.count = count;
 		this.code = code;
-		this.date = date;
+		this.data = data;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "TableBean{" + "msg='" + msg + '\'' + ", count=" + count + ", code=" + code + ", date=" + date + '}';
+		return "TableBean{" + "msg='" + msg + '\'' + ", count=" + count + ", code=" + code + ", data=" + data + '}';
 	}
 
 	public String getMsg()
@@ -61,13 +61,13 @@ public class TableBean
 		this.code = code;
 	}
 
-	public List<Object> getDate()
+	public List getData()
 	{
-		return date;
+		return data;
 	}
 
-	public void setDate(List<Object> date)
+	public void setData(List data)
 	{
-		this.date = date;
+		this.data = data;
 	}
 }

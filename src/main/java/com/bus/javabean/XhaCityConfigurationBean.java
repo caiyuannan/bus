@@ -72,6 +72,7 @@ public class XhaCityConfigurationBean {
 
 	@Override
 	public String toString() {
-		return "XhaCityConfigurationBean{" + "rowNumber=" + rowNumber + ", provinceName='" + provinceName + '\'' + ", cityName='" + cityName + '\'' + ", stationCount=" + stationCount + ", routeCount=" + routeCount + '}';
+		return "XhaCityConfigurationBean" +
+				"{" + "rowNumber=" + rowNumber + ", provinceName='" + provinceName + '\'' + ", cityName='" + cityName + '\'' + ", stationCount=" + stationCount + ", routeCount=" + routeCount + '}';
 	}
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CynMangeUserMapper">
+    <select id="findMangeUserIdByUserName" parameterType="java.lang.String" resultMap="res-MangeUser">
+        select * from tb_mangeuser where mangeuser_name=#{mangeUserName}
+    </select>
+    <resultMap id="res-MangeUser" type="com.bus.javabean.CynMangeUserBean">
+        <result property="mangeUserId" column="mangeuser_id"/>
+        <result property="mangeUserName" column="mangeuser_name"/>
+        <result property="password" column="password"/>
+    </resultMap>
+
+    <select id="findMenuAllByUserName" parameterType="java.lang.String" resultMap="res-Menu">
+        select DISTINCT T1.*
+        from
+        ( select A.menu_id,A.menu_name parentmenuname,B.menu_name childname,B.menu_url
+            from tb_menu A,tb_menu B
+            where A.menu_id=B.menu_link_id ) T1,(
+							 select tb_role.role_id from tb_mangeuser,tb_role,tb_mangeuser_role
+               where tb_mangeuser.mangeuser_id=tb_mangeuser_role.mangeuser_id
+               and tb_role.role_id=tb_mangeuser_role.role_id
+               and tb_mangeuser.mangeuser_name=#{mangeUserName} ) T2,tb_role_menu,tb_role
+        where T1.menu_id=tb_role_menu.menu_id
+        and tb_role.role_id=tb_role_menu.role_id
+        and tb_role.role_id=T2.role_id
+    </select>
+    <resultMap id="res-Menu" type="com.bus.javabean.CynMenuBean">
+        <result property="menuId" column="menu_id"/>
+        <result property="parentMenuName" column="parentmenuname"/>
+        <result property="childrenName" column="childname"/>
+        <result property="menuUrl" column="menu_url"/>
+    </resultMap>
+</mapper>
+
+
+

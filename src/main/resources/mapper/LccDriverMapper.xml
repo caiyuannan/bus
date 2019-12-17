@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bus.dao.LccDriverManageMapper">
+<mapper namespace="com.bus.mapper.LccDriverManageMapper">
+<!--
 
 <resultMap id="driverMap" type="com.bus.javabean.LccDriverBean">
     <result property="driverId" column="driver_id"/>
@@ -11,28 +12,6 @@
     <select id="queryDriver" resultMap="driverMap">
             select * from tb_driver where driver_state = '启用'
     </select>
+-->
 
-    <select id="checkDriverWork" resultType="java.lang.Integer">
-        select count(*) from tb_gate_card where work_date = #{driverId} and driver_id
-        =
-        (SELECT driver_id from tb_crew_scheduling where driver_id =#{date})
-    </select>
-
-<!--    <insert id="addWork" parameterType="com.bus.javabean.LccCrewSchedulingBean">-->
-<!--        INSERT INTO tb_user (USNAME,UPWD,USTATE,SEX,CAREER)-->
-<!--        VALUES(#{usname},#{upwd},'启用',#{sex},#{career})-->
-<!--    </insert>-->
-
-
-    <resultMap id="weekWorkMap" type="com.bus.javabean.LccCrewSchedulingBean">
-        <result property="driverName" column="driver_name"/>
-        <result property="workTime" column="work_time"/>
-        <result property="busIicense" column="bus_license"/>
-    </resultMap>
-
-    <select id="queryWeekWork" resultMap="weekWorkMap">
-        select a.driver_name,b.work_time,c.bus_license from tb_driver as a,tb_crew_scheduling as b,tb_bus as c
-WHERE a.driver_id = b.driver_id and b.bus_work_id = c.bus_id
-
-    </select>
 </mapper>

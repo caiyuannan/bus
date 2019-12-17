@@ -13,21 +13,29 @@ public class LccCrewSchedulingBean
 	private int workId;
 	/**司机id*/
 	private int driverId;
+	/**司机名字*/
+	private String driverName;
 	/**公交车排班id*/
 	private int busWorkId;
-	/**替班司机id*/
-	private int relayDriverId;
-
+	/**替班状态*/
+	private String relayState;
+	/**排班日期*/
+	private String workTime;
+	/*车牌*/
+	private String busIicense;
 	public LccCrewSchedulingBean()
 	{
 	}
 
-	public LccCrewSchedulingBean(int workId, int driverId, int busWorkId, int relayDriverId)
+	public LccCrewSchedulingBean(int workId, int driverId, String driverName, int busWorkId, String relayState, String workTime, String busIicense)
 	{
 		this.workId = workId;
 		this.driverId = driverId;
+		this.driverName = driverName;
 		this.busWorkId = busWorkId;
-		this.relayDriverId = relayDriverId;
+		this.relayState = relayState;
+		this.workTime = workTime;
+		this.busIicense = busIicense;
 	}
 
 	public int getWorkId()
@@ -60,19 +68,51 @@ public class LccCrewSchedulingBean
 		this.busWorkId = busWorkId;
 	}
 
-	public int getRelayDriverId()
+	public String getRelayState()
 	{
-		return relayDriverId;
+		return relayState;
 	}
 
-	public void setRelayDriverId(int relayDriverId)
+	public void setRelayState(String relayState)
 	{
-		this.relayDriverId = relayDriverId;
+		this.relayState = relayState;
+	}
+
+	public String getWorkTime()
+	{
+		return workTime;
+	}
+
+	public void setWorkTime(String workTime)
+	{
+		this.workTime = workTime;
+	}
+
+
+	public String getBusIicense()
+	{
+		return busIicense;
+	}
+
+	public void setBusIicense(String busIicense)
+	{
+		this.busIicense = busIicense;
+	}
+
+	public String getDriverName()
+	{
+		return driverName;
+	}
+
+	public void setDriverName(String driverName)
+	{
+		this.driverName = driverName;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "LccCrewScheduling{" + "workId=" + workId + ", driverId=" + driverId + ", busWorkId=" + busWorkId + ", relayDriverId=" + relayDriverId + '}';
+
+		return "LccCrewSchedulingBean{" + "workId=" + workId + ", driverId=" + driverId + ", driverName='" + driverName + '\'' + ", busWorkId=" + busWorkId + ", relayState='" + relayState + '\'' + ", workTime='" + workTime + '\'' + ", busIicense='" + busIicense + '\'' + '}';
 	}
 }

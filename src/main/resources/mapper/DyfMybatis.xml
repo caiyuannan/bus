@@ -88,7 +88,7 @@
         <result property="driverWage" column="driver_wage"></result>
     </resultMap>
     <select id="selectDriver" resultMap="selectAllDriver">
-        select *from tb_driver
+        select *from tb_driver d,tb_city c where d.city_id = c.city_id and c.city_name=#{cityName}
     </select>
 </mapper>
 

@@ -146,20 +146,25 @@
 	//add-main 添加弹窗显示
 	function onAddBtn(){
 		//页面层-自定义
-		layer.open({
-			type: 1,
-			title:"新建配置",
-			closeBtn: false,
-			shift: 2,
-			area: ['500px', '600px'],
-			shadeClose: true,
-			// btn: ['新增', '取消'],
-			// btnAlign: 'c',
-			content: $("#add1-main"),
-			success: function(layero, index){},
-			yes:function(){
-			}
-		});
+		if ($("#driverNull").val()!=null &&$("#driverNull").val().length>0){
+			layer.open({
+				type: 1,
+				title:"新建配置",
+				closeBtn: false,
+				shift: 2,
+				area: ['500px', '600px'],
+				shadeClose: true,
+				// btn: ['新增', '取消'],
+				// btnAlign: 'c',
+				content: $("#add1-main"),
+				success: function(layero, index){},
+				yes:function(){
+				}
+			});
+		} else {
+			alert("请先添加该地区司机")
+		}
+
 	}
 </script>
 
@@ -173,10 +178,17 @@
 		</div>
 	</div>
 
-	<div class="layui-form-item">
+	<div class="layui-form" >
 		<div class="layui-input-block">
-			<input type="text" name="value" id="driverNam" required style="width: 240px;margin-left: -60px" lay-verify="required" placeholder="维护人" autocomplete="off" class="layui-input">
-			<input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input">
+			<select  name="driverState" id="busDiver" lay-filter="required" style="width: 100px;margin-left: -60px">
+				<option value="">请选择车辆类型</option>
+				<c:if test="${requestScope.selectAllDriver}!=null">
+					<c:forEach items="${requestScope.selectAllDriver}" var="item">
+						<option value="${item.driverName}">${item.driverName}</option>
+					</c:forEach>
+				</c:if>
+				
+			</select>
 		</div>
 	</div>
 	<div class="layui-form-item">
@@ -191,6 +203,7 @@
 			<input type="hidden" name="id" style="width: 240px" autocomplete="off" class="layui-input">
 		</div>
 	</div>
+	<input type="hidden" id="driverNull" value="${requestScope.selectAllDriver}">
 	<div class="layui-form" >
 		<div class="layui-input-block">
 		<select  name="driverState" id="busState" lay-filter="required" style="width: 100px;margin-left: -60px">

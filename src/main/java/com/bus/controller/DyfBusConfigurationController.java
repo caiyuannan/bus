@@ -63,7 +63,6 @@ public class DyfBusConfigurationController
 		//这里暂时写死，后面从接口拿到数据再操作
 		if (province.equals("厦门市")){
 			province = "闽D";
-
 		}
 		//用户前台用户添加车辆信息时判断是否为该地区车辆
 		request.getSession().setAttribute("province",province);

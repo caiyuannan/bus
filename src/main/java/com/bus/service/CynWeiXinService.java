@@ -1,4 +1,7 @@
 package com.bus.service;
 
-public class CynWeiXinService
-{}
+public interface CynWeiXinService
+{
+
+
+}

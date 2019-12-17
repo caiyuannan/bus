@@ -111,6 +111,7 @@
             <classifier>jdk13</classifier>
         </dependency>
 
+
         <!-- 微信小程序所需：httpclient包-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

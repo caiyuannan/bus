@@ -1,25 +1,26 @@
 package com.bus.aoplog;
-//import com.great.springboot.bean.MangeUser;
-//import com.great.springboot.service.MangeUserService;
-//import org.aspectj.lang.JoinPoint;
-//import org.aspectj.lang.annotation.After;
-//import org.aspectj.lang.annotation.Aspect;
-//import org.aspectj.lang.annotation.Pointcut;
-//import org.springframework.stereotype.Component;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.web.context.request.RequestContextHolder;
-//import org.springframework.web.context.request.ServletRequestAttributes;
-//
-//import javax.annotation.Resource;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import java.lang.reflect.Method;
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
-//
-//@Controller
-//@Aspect
-//@Component
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+@Controller
+@Aspect
+@Component
 public class CynSystemLogAspect
 {
 

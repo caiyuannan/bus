@@ -12,6 +12,7 @@ public class DyfBusBean
 	 * busType 公交车类型
 	 * busMin 公交车使用时间
 	 * busAge 公交车使用年限
+	 * busState 公交状态
 	 */
 	private Integer busId;
 	private String busLicense;
@@ -19,12 +20,25 @@ public class DyfBusBean
 	private String busType;
 	private String busMin;
 	private String busAge;
+	private Integer busState;
+	private String stateName;
 
 	public DyfBusBean()
 	{
 	}
 
-	public DyfBusBean(Integer busId, String busLicense, String busDutyDriver, String busType, String busMin, String busAge)
+	public DyfBusBean(String busLicense, String busDutyDriver, String busType, String busMin, String busAge, Integer busState, String stateName)
+	{
+		this.busLicense = busLicense;
+		this.busDutyDriver = busDutyDriver;
+		this.busType = busType;
+		this.busMin = busMin;
+		this.busAge = busAge;
+		this.busState = busState;
+		this.stateName = stateName;
+	}
+
+	public DyfBusBean(Integer busId, String busLicense, String busDutyDriver, String busType, String busMin, String busAge, Integer busState, String stateName)
 	{
 		this.busId = busId;
 		this.busLicense = busLicense;
@@ -32,21 +46,14 @@ public class DyfBusBean
 		this.busType = busType;
 		this.busMin = busMin;
 		this.busAge = busAge;
-	}
-
-	public DyfBusBean(String busLicense, String busDutyDriver, String busType, String busMin, String busAge)
-	{
-		this.busLicense = busLicense;
-		this.busDutyDriver = busDutyDriver;
-		this.busType = busType;
-		this.busMin = busMin;
-		this.busAge = busAge;
+		this.busState = busState;
+		this.stateName = stateName;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "DyfBusBean{" + "busId=" + busId + ", busLicense='" + busLicense + '\'' + ", busDutyDriver='" + busDutyDriver + '\'' + ", busType='" + busType + '\'' + ", busMin='" + busMin + '\'' + ", busAge='" + busAge + '\'' + '}';
+		return "DyfBusBean{" + "busId=" + busId + ", busLicense='" + busLicense + '\'' + ", busDutyDriver='" + busDutyDriver + '\'' + ", busType='" + busType + '\'' + ", busMin='" + busMin + '\'' + ", busAge='" + busAge + '\'' + ", busState=" + busState + ", stateName='" + stateName + '\'' + '}';
 	}
 
 	public Integer getBusId()
@@ -107,5 +114,25 @@ public class DyfBusBean
 	public void setBusAge(String busAge)
 	{
 		this.busAge = busAge;
+	}
+
+	public Integer getBusState()
+	{
+		return busState;
+	}
+
+	public void setBusState(Integer busState)
+	{
+		this.busState = busState;
+	}
+
+	public String getStateName()
+	{
+		return stateName;
+	}
+
+	public void setStateName(String stateName)
+	{
+		this.stateName = stateName;
 	}
 }

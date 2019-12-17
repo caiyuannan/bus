@@ -112,6 +112,7 @@ public class LccCrewSchedulingBean
 	@Override
 	public String toString()
 	{
+
 		return "LccCrewSchedulingBean{" + "workId=" + workId + ", driverId=" + driverId + ", driverName='" + driverName + '\'' + ", busWorkId=" + busWorkId + ", relayState='" + relayState + '\'' + ", workTime='" + workTime + '\'' + ", busIicense='" + busIicense + '\'' + '}';
 	}
 }

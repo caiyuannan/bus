@@ -1,3 +1,4 @@
+/*
 package com.bus.controller;
 import com.bus.javabean.*;
 import com.bus.service.XhaCityConfigurationService;
@@ -10,27 +11,33 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * 城市配置控制器
  * by谢海安
- */
+ *//*
+
 @Controller
 @RequestMapping("city")
 public class XhaCityConfigurationController {
 	@Resource
 	private XhaCityConfigurationService cityConfigurationService;
 
-	/**
+	*/
+/**
 	 * 返回界面层
 	 * @param path
 	 * @return
-	 */
+	 *//*
+
 	@RequestMapping("{url}")
 	public String view(@PathVariable(value = "url") String path){
 		return "backjsp/"+path;
 	}
 
-	/**查询城市配置*/
+	*/
+/**查询城市配置*//*
+
 	@RequestMapping("findCity")
 	@ResponseBody
 	public TableBean findCity(String page,String limit){
@@ -51,3 +58,4 @@ public class XhaCityConfigurationController {
 		return tableBean;
 	}
 }
+*/

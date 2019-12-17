@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bus.mapper.XhaCityConfigurationMapper">
+<mapper namespace="com.bus.dao.XhaCityConfigurationMapper">
         <resultMap id="provinceRes" type="com.bus.javabean.XhaProvinceBean">
                 <result property="provinceId" column="province_id"></result>
                 <result property="provinceName" column="province_name"></result>
@@ -10,7 +10,7 @@
         </resultMap>
         <!-- 查找城市-->
         <select id="findCity" resultMap="provinceRes">
-                SELECT tp.*,tc.*
+                SELECT (@rownum := @rownum +1)as row,tp.*,tc.*
                 FROM tb_province tp,tb_city tc,tb_province_city tpc
                 <where>
                     tp.province_id = tpc.province_id AND tc.city_id = tpc.city_id
@@ -21,7 +21,7 @@
                         AND city_name = #{cityName}
                     </if>
                     <if test="0 != startPage">
-
+                        row
                     </if>
                 </where>
         </select>

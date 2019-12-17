@@ -1,3 +1,4 @@
+/*
 package com.bus.controller;
 
 import com.bus.javabean.LccDriverBean;
@@ -16,10 +17,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+*/
 /**
  * 司机管理控制器
  * by连晨诚
- */
+ *//*
+
 @Controller
 public class LccDriverManageController
 {
@@ -28,10 +31,12 @@ public class LccDriverManageController
 
 	private ModelAndView modelAndView = new ModelAndView();
 
-	/**
+	*/
+/**
 	 * 预加载司机名字
 	 * @return
-	 */
+	 *//*
+
 	@RequestMapping("toCrewSchedulingPage")
 	public ModelAndView toCrewSchedulingPage(){
 
@@ -143,3 +148,4 @@ public class LccDriverManageController
 	}
 
 }
+*/

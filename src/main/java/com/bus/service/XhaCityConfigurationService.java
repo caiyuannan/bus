@@ -1,10 +1,9 @@
 package com.bus.service;
 
-import com.bus.javabean.XhaCityBean;
 import com.bus.javabean.XhaProvinceBean;
 import com.bus.javabean.XhaRouteBean;
 import com.bus.javabean.XhaStationBean;
-import com.bus.mapper.XhaCityConfigurationMapper;
+import com.bus.dao.XhaCityConfigurationMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;

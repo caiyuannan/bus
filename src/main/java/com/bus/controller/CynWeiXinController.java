@@ -15,9 +15,9 @@ public class CynWeiXinController
 	{
 		return path;
 	}*/
-	@RequestMapping("/login")
-	public void login()
-	{
-
-	}
+//	@RequestMapping("/login")
+//	public void login()
+//	{
+//
+//	}
 }

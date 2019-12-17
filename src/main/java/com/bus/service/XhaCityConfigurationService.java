@@ -1,10 +1,10 @@
 package com.bus.service;
 
 import com.bus.javabean.XhaCityBean;
-import com.bus.javabean.XhaProvinceBean;
-import com.bus.javabean.XhaRouteBean;
-import com.bus.javabean.XhaStationBean;
-import com.bus.mapper.XhaCityConfigurationMapper;
+//import com.bus.javabean.XhaProvinceBean;
+//import com.bus.javabean.XhaRouteBean;
+//import com.bus.javabean.XhaStationBean;
+//import com.bus.mapper.XhaCityConfigurationMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
@@ -15,28 +15,28 @@ import java.util.List;
  */
 @Service
 public class XhaCityConfigurationService{
-	@Resource
-	private XhaCityConfigurationMapper cityConfigurationMapper;
-
-	/**
-	 * 查找城市
-	 * @return
-	 */
-	public List<XhaProvinceBean> findCity(String provinceName, String cityName,int startPage,int limitPage) {
-		return cityConfigurationMapper.findCity(provinceName,cityName,startPage,limitPage);
-	}
-
-	/**
-	 * 查找站点
-	 */
-	public List<XhaStationBean> findStation(int cityId){
-		return cityConfigurationMapper.findStation(cityId);
-	}
-
-	/**
-	 * 查找线路
-	 */
-	public List<XhaRouteBean> findRoute(int cityId){
-		return cityConfigurationMapper.findRoute(cityId);
-	}
+//	@Resource
+//	private XhaCityConfigurationMapper cityConfigurationMapper;
+//
+//	/**
+//	 * 查找城市
+//	 * @return
+//	 */
+//	public List<XhaProvinceBean> findCity(String provinceName, String cityName,int startPage,int limitPage) {
+//		return cityConfigurationMapper.findCity(provinceName,cityName,startPage,limitPage);
+//	}
+//
+//	/**
+//	 * 查找站点
+//	 */
+//	public List<XhaStationBean> findStation(int cityId){
+//		return cityConfigurationMapper.findStation(cityId);
+//	}
+//
+//	/**
+//	 * 查找线路
+//	 */
+//	public List<XhaRouteBean> findRoute(int cityId){
+//		return cityConfigurationMapper.findRoute(cityId);
+//	}
 }

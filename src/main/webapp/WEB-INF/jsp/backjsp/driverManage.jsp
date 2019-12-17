@@ -131,7 +131,7 @@
 
 
 					<a  href="/ONECARD/AppointmentServlet?methodName=preWeek&nwd=${requestScope.week[0]}"><button class="layui-btn" type="button" style="margin-left: 36%;">上一周</button></a>
-					<a  href="/ONECARD/AppointmentServlet?methodName=nextWeek"><button class="layui-btn" type="button">下一周</button></a>
+					<a  href="/toNextWeek"><button class="layui-btn" type="button">下一周</button></a>
 
 
 			</div>

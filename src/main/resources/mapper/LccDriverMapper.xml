@@ -19,10 +19,6 @@
         (SELECT driver_id from tb_crew_scheduling where driver_id =#{date})
     </select>
 
-    <!--    <insert id="addWork" parameterType="com.bus.javabean.LccCrewSchedulingBean">-->
-    <!--        INSERT INTO tb_user (USNAME,UPWD,USTATE,SEX,CAREER)-->
-    <!--        VALUES(#{usname},#{upwd},'启用',#{sex},#{career})-->
-    <!--    </insert>-->
 
 
     <resultMap id="weekWorkMap" type="com.bus.javabean.LccCrewSchedulingBean">

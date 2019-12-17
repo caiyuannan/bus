@@ -1,0 +1,6 @@
+.wrap {
+    width: 50%;
+    height: 50%;
+    background: url("../img/1.jpg") no-repeat;
+    background-size: cover;
+}

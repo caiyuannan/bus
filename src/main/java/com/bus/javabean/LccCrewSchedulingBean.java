@@ -21,13 +21,18 @@ public class LccCrewSchedulingBean
 	private String relayState;
 	/**排班日期*/
 	private String workTime;
+	private String startTime;
+	private String endTime;
 	/*车牌*/
 	private String busIicense;
+	/**排班类型*/
+	private String workType;
+
 	public LccCrewSchedulingBean()
 	{
 	}
 
-	public LccCrewSchedulingBean(int workId, int driverId, String driverName, int busWorkId, String relayState, String workTime, String busIicense)
+	public LccCrewSchedulingBean(int workId, int driverId, String driverName, int busWorkId, String relayState, String workTime, String startTime, String endTime, String busIicense, String workType)
 	{
 		this.workId = workId;
 		this.driverId = driverId;
@@ -35,7 +40,10 @@ public class LccCrewSchedulingBean
 		this.busWorkId = busWorkId;
 		this.relayState = relayState;
 		this.workTime = workTime;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.busIicense = busIicense;
+		this.workType = workType;
 	}
 
 	public int getWorkId()
@@ -109,10 +117,39 @@ public class LccCrewSchedulingBean
 		this.driverName = driverName;
 	}
 
+	public String getWorkType()
+	{
+		return workType;
+	}
+
+	public void setWorkType(String workType)
+	{
+		this.workType = workType;
+	}
+
+	public String getStartTime()
+	{
+		return startTime;
+	}
+
+	public void setStartTime(String startTime)
+	{
+		this.startTime = startTime;
+	}
+
+	public String getEndTime()
+	{
+		return endTime;
+	}
+
+	public void setEndTime(String endTime)
+	{
+		this.endTime = endTime;
+	}
+
 	@Override
 	public String toString()
 	{
-
-		return "LccCrewSchedulingBean{" + "workId=" + workId + ", driverId=" + driverId + ", driverName='" + driverName + '\'' + ", busWorkId=" + busWorkId + ", relayState='" + relayState + '\'' + ", workTime='" + workTime + '\'' + ", busIicense='" + busIicense + '\'' + '}';
+		return "LccCrewSchedulingBean{" + "workId=" + workId + ", driverId=" + driverId + ", driverName='" + driverName + '\'' + ", busWorkId=" + busWorkId + ", relayState='" + relayState + '\'' + ", workTime='" + workTime + '\'' + ", startTime='" + startTime + '\'' + ", endTime='" + endTime + '\'' + ", busIicense='" + busIicense + '\'' + ", workType='" + workType + '\'' + '}';
 	}
 }

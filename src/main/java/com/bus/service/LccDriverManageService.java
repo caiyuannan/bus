@@ -4,6 +4,7 @@ import com.bus.javabean.LccCrewSchedulingBean;
 import com.bus.javabean.LccDriverBean;
 import com.bus.dao.LccDriverManageMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -20,25 +21,31 @@ public class LccDriverManageService
 	 * 查找司机列表
 	 * @return
 	 */
-	public List<LccDriverBean> findDriver() {
-		return lmp.queryDriver();
-	}
+//	public List<LccDriverBean> findDriver() {
+//		return lmp.queryDriver();
+//	}
+//
+//	public boolean checkDriverWork(int driverId,String date){
+//
+//		int num = lmp.checkDriverWork(driverId,date);
+//
+//		if(num>0){
+//			return true;
+//		}
+//
+//		return false;
+//	}
 
-	public boolean checkDriverWork(int driverId,String date){
+	/**
+	 * 对应日期加载排班表
+	 * @param lcsb
+	 * @return
+	 */
+	@Transactional
+	public HashMap<String, ArrayList<LccCrewSchedulingBean>> queryWeekWork(LccCrewSchedulingBean lcsb){
 
-		int num = lmp.checkDriverWork(driverId,date);
-
-		if(num>0){
-			return true;
-		}
-
-		return false;
-	}
-
-	public HashMap<String, ArrayList<LccCrewSchedulingBean>> queryWeekWork(){
-
-		List<LccCrewSchedulingBean> lis = lmp.queryWeekWork();
-
+		List<LccCrewSchedulingBean> lis = lmp.queryWeekWork(lcsb);
+		System.out.println("service:list打印"+lis);
 		HashMap<String, ArrayList<LccCrewSchedulingBean>> map = new HashMap<>();
 		for (int i = 0; i <lis.size() ; i++)
 		{
@@ -47,6 +54,7 @@ public class LccDriverManageService
 
 				ArrayList<LccCrewSchedulingBean> list = map.get(wk.getDriverName());
 				list.add( wk);
+
 			}else{
 
 				ArrayList<LccCrewSchedulingBean> list = new ArrayList<>();
@@ -58,5 +66,13 @@ public class LccDriverManageService
 		return  map;
 	}
 
+	public boolean updateDriverWork(String workType,String workId){
+		LccCrewSchedulingBean lcsb = new LccCrewSchedulingBean();
 
+		int wid =Integer.valueOf(workId);
+		lcsb.setWorkId(wid);
+		lcsb.setWorkType(workType);
+		System.out.println("service输出"+lcsb.getWorkType()+","+lcsb.getWorkId());
+		return lmp.updateDriverWork(lcsb);
+	}
 }

@@ -26,8 +26,14 @@ public class XdjUser
 	private String userCompanyLatitude;
 	//乘客用户的状态
 	private String userStatus;
+	//乘客用户的性别
+	private String userSex;
+	//乘客用户的家
+	private String userHome;
+	//乘客用户的公司
+	private String userCompany;
 
-	public XdjUser(int userId, String userName, String userPassword, String userPhonenumber, String userHeadportrait, int userBalance, String userHomeLongitude, String userHomeLatitude, String userCompanyLongitude, String userCompanyLatitude, String userStatus)
+	public XdjUser(int userId, String userName, String userPassword, String userPhonenumber, String userHeadportrait, int userBalance, String userHomeLongitude, String userHomeLatitude, String userCompanyLongitude, String userCompanyLatitude, String userStatus,String userSex,String userHome,String userCompany)
 	{
 		this.userId = userId;
 		this.userName = userName;
@@ -40,6 +46,9 @@ public class XdjUser
 		this.userCompanyLongitude = userCompanyLongitude;
 		this.userCompanyLatitude = userCompanyLatitude;
 		this.userStatus = userStatus;
+		this.userSex=userSex;
+		this.userHome=userHome;
+		this.userCompany=userCompany;
 	}
 
 	public XdjUser()
@@ -154,6 +163,36 @@ public class XdjUser
 	public void setUserStatus(String userStatus)
 	{
 		this.userStatus = userStatus;
+	}
+
+	public String getUserSex()
+	{
+		return userSex;
+	}
+
+	public void setUserSex(String userSex)
+	{
+		this.userSex = userSex;
+	}
+
+	public String getUserHome()
+	{
+		return userHome;
+	}
+
+	public void setUserHome(String userHome)
+	{
+		this.userHome = userHome;
+	}
+
+	public String getUserCompany()
+	{
+		return userCompany;
+	}
+
+	public void setUserCompany(String userCompany)
+	{
+		this.userCompany = userCompany;
 	}
 
 	@Override

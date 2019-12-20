@@ -18,7 +18,18 @@
 	<meta charset="utf-8">
 	<title>司机排班</title>
 	<link rel="stylesheet" href="/bus/layui/css/layui.css">
+	<script src=<%=jsPath + "jquery.js"%>></script>
 	<script src="/bus/layui/layui.js"></script>
+
+	<style>
+		.layui-form-item {
+			clear: none;
+		}
+
+		.layui-container{
+			margin-top: 100px;
+		}
+	</style>
 </head>
 
 <body>
@@ -34,150 +45,271 @@
 
 <%--					<input type="hidden" id="myID" name="myID" value="${sessionScope.staffID}">--%>
 
-	<form class="layui-form" action="">
-		<div class="layui-form-item">
-			<label class="layui-form-label">输入框</label>
+	<form id="driverSearch" class="layui-form" action="/bus/findPlateNumber" method="post">
+		<div class="layui-row">
+		<div class="layui-col-md6" >
+
+				<div class="layui-input-inline">
+<%--					<input type="text" class="layui-input" id="test6" placeholder=" - ">--%>
+				开始日期:<input type="date" name="start" id="start">
+					结束日期:<input type="date" name="end" id="end">
+				</div>
+		</div>
+		<div class="layui-form-item layui-col-md6">
+			<label class="layui-form-label">车牌搜索:</label>
 			<div class="layui-input-block">
-				<input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+				<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入车牌号" class="layui-input" style="width: 200px;display: inline-block;margin-right: 10px;">
+				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
 			</div>
+		</div>
+
 		</div>
 	</form>
 
-						<table  class="layui-table" lay-skin="line">
-							<thead>
-							<tr>
-								<th rowspan="2">
-									司机
-								</th>
+			<table id="main"  class="layui-table" lay-skin="line">
+				<thead>
+				<tr>
+					<th rowspan="2">
+						司机
+					</th>
 
-								<th>${requestScope.week[0]}<br>星期一</th>
-								<th>${requestScope.week[1]}<br>星期二</th>
-								<th>${requestScope.week[2]}<br>星期三</th>
-								<th>${requestScope.week[3]}<br>星期四</th>
-								<th>${requestScope.week[4]}<br>星期五</th>
-								<th>${requestScope.week[5]}<br>星期六</th>
-								<th>${requestScope.week[6]}<br>星期日</th>
-							</tr>
-							</thead>
-							<tbody>
+					<th>${requestScope.week[0]}<br>星期一</th>
+					<th>${requestScope.week[1]}<br>星期二</th>
+					<th>${requestScope.week[2]}<br>星期三</th>
+					<th>${requestScope.week[3]}<br>星期四</th>
+					<th>${requestScope.week[4]}<br>星期五</th>
+					<th>${requestScope.week[5]}<br>星期六</th>
+					<th>${requestScope.week[6]}<br>星期日</th>
+				</tr>
+				</thead>
+				<tbody>
 
-							<c:if test="${requestScope.workmap !=null}">
-								<c:forEach items="${requestScope.workmap}" begin="0" step="1" var="i">
-									<tr>
-										<td>${i.key}</td>
-										<td>
-											<input type="hidden" value="${requestScope.week[0]}">
-											<c:forEach items="${i.value}" begin="0" step="1" var="k">
-												<c:if test="${k.workTime==requestScope.week[0]}">
-													<button type="button" data-toggle="modal" data-target="#myModal" class="btn1 btn-info" value="" onclick="getdoc(this)">${k.busIicense}</button>
-												</c:if>
-											</c:forEach>
-										</td>
-										<td>
-											<input type="hidden" value="${requestScope.week[1]}">
-											<c:forEach items="${i.value}" begin="0" step="1" var="k">
-												<c:if test="${k.workTime==requestScope.week[1]}">
-													<button type="button" data-toggle="modal" data-target="#myModal" class="btn1 btn-info" value="" onclick="getdoc(this)">${k.busIicense}</button>
-												</c:if>
-											</c:forEach>
-										</td>
-										<td>
-											<input type="hidden" value="${requestScope.week[2]}">
-											<c:forEach items="${i.value}" begin="0" step="1" var="k">
-												<c:if test="${k.workTime==requestScope.week[2]}">
-													<button type="button" data-toggle="modal" data-target="#myModal" class="btn1 btn-info" value="" onclick="getdoc(this)">${k.busIicense}</button>
-												</c:if>
-											</c:forEach>
-										</td>
-										<td>
-											<input type="hidden" value="${requestScope.week[3]}">
-											<c:forEach items="${i.value}" begin="0" step="1" var="k">
-												<c:if test="${k.workTime==requestScope.week[3]}">
-													<button type="button" data-toggle="modal" data-target="#myModal" class="btn1 btn-info" value="" onclick="getdoc(this)">${k.busIicense}</button>
-												</c:if>
-											</c:forEach>
-										</td>
-										<td>
-											<input type="hidden" value="${requestScope.week[4]}">
-											<c:forEach items="${i.value}" begin="0" step="1" var="k">
-												<c:if test="${k.workTime==requestScope.week[4]}">
-													<button type="button" data-toggle="modal" data-target="#myModal" class="btn1 btn-info" value="" onclick="getdoc(this)">${k.busIicense}</button>
-												</c:if>
-											</c:forEach>
-										</td>
-										<td>
-											<input type="hidden" value="${requestScope.week[5]}">
-											<c:forEach items="${i.value}" begin="0" step="1" var="k">
-												<c:if test="${k.workTime==requestScope.week[5]}">
-													<button type="button" data-toggle="modal" data-target="#myModal" class="btn1 btn-info" value="" onclick="getdoc(this)">${k.busIicense}</button>
-												</c:if>
-											</c:forEach>
-										</td>
-										<td>
-											<input type="hidden" value="${requestScope.week[6]}">
-											<c:forEach items="${i.value}" begin="0" step="1" var="k">
-												<c:if test="${k.workTime==requestScope.week[6]}">
-													<button type="button" data-toggle="modal" data-target="#myModal" class="btn1 btn-info" value="" onclick="getdoc(this)">${k.busIicense}</button>
-												</c:if>
-											</c:forEach>
-										</td>
-									</tr>
+				<c:if test="${requestScope.workmap !=null}">
+					<c:forEach items="${requestScope.workmap}" begin="0" step="1" var="i">
+						<tr>
+							<td>${i.key}</td>
+							<td>
+								<input type="hidden" value="${requestScope.week[0]}">
+								<c:forEach items="${i.value}" begin="0" step="1" var="k">
+									<c:if test="${k.workTime==requestScope.week[0]}">
+										<%--${k.busIicense}--%>
+										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
+
+									</c:if>
 								</c:forEach>
-							</c:if>
-							</tbody>
-						</table>
+							</td>
+							<td>
+								<input type="hidden" value="${requestScope.week[1]}">
+								<c:forEach items="${i.value}" begin="0" step="1" var="k">
+									<c:if test="${k.workTime==requestScope.week[1]}">
+										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
 
-					</div>
+									</c:if>
+								</c:forEach>
+							</td>
+							<td>
+								<input type="hidden" value="${requestScope.week[2]}">
+								<c:forEach items="${i.value}" begin="0" step="1" var="k">
+									<c:if test="${k.workTime==requestScope.week[2]}">
+										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
+
+									</c:if>
+								</c:forEach>
+							</td>
+							<td>
+								<input type="hidden" value="${requestScope.week[3]}">
+								<c:forEach items="${i.value}" begin="0" step="1" var="k">
+									<c:if test="${k.workTime==requestScope.week[3]}">
+										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
+
+									</c:if>
+								</c:forEach>
+							</td>
+							<td>
+								<input type="hidden" value="${requestScope.week[4]}">
+								<c:forEach items="${i.value}" begin="0" step="1" var="k">
+									<c:if test="${k.workTime==requestScope.week[4]}">
+										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
+
+									</c:if>
+								</c:forEach>
+							</td>
+							<td>
+								<input type="hidden" value="${requestScope.week[5]}">
+								<c:forEach items="${i.value}" begin="0" step="1" var="k">
+									<c:if test="${k.workTime==requestScope.week[5]}">
+										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
+									</c:if>
+								</c:forEach>
+							</td>
+							<td>
+								<input type="hidden" value="${requestScope.week[6]}">
+								<c:forEach items="${i.value}" begin="0" step="1" var="k">
+									<c:if test="${k.workTime==requestScope.week[6]}">
+
+<%--										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.busIicense == null?'操作':k.busIicense}</button>--%>
+										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
+
+									</c:if>
+								</c:forEach>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:if>
+				</tbody>
+			</table>
+
+		</div>
 
 
-					<a  href="/ONECARD/AppointmentServlet?methodName=preWeek&nwd=${requestScope.week[0]}"><button class="layui-btn" type="button" style="margin-left: 36%;">上一周</button></a>
-					<a  href="/toNextWeek"><button class="layui-btn" type="button">下一周</button></a>
+		<a  href="/bus/toPreWeek?nwd=${requestScope.week[0]}"><button class="layui-btn" type="button" style="margin-left: 36%;">上一周</button></a>
+		<a  href="/bus/toNextWeek"><button class="layui-btn" type="button">下一周</button></a>
 
 
-			</div>
+		</div>
 	</div>
 </div>
+<form id="editForm" class="layui-form" action="" method="post" hidden= "hidden">
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">司机状态</label>
+		<div class="layui-input-block">
+			<input type="checkbox" checked="checked" value="排班" name="open" lay-skin="switch" lay-filter="switchTest" title="开关" lay-text="休息|排班">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">请选择车牌</label>
+		<div class="layui-input-block">
+			<select id="cnum" name="carNumber" lay-verify="required">
+				<option value=""></option>
+				<option value="闽D.99999">闽D.99999</option>
+				<option value="闽D.88888">闽D.88888</option>
+				<option value="闽D.77777">闽D.77777</option>
+			</select>
+		</div>
+	</div>
+
+</form>
 <script>
 
+	function selectRole(node) {
 
-	var date1;
+		//alert("该节点的值为"+$(node).attr('title'));
+		//var isUse = $('input[name="switch"]:checked').val();
+		var workid=$(node).attr('title');
+		layui.use(['layer','form'], function(){
+		var layer = layui.layer;
+		var form = layui.form;
 
-	function getdoc(node) {
+			var ck;
+			//监听指定开关
+			form.on('switch(switchTest)', function(data){
 
-		var name = $(node).text();
-		//alert(name);
-		$("#docName").text(name);
-		var doc = $("#docName").text();//获取医生名字
-		date1 = $(node).parent().find("input").eq(0).val();//获取预约当天日期
+				ck = this.checked ? '休息' : '排班';
+				alert.msg(ck);
 
-		var data = doc+","+date1;
+			});
 
-		//利用脚本的方式 创建 一个对象
-		var ob = {sendMsg: data};
-		//对象转换成字符串
-		var str = JSON.stringify(ob);
+			layer.open({
+				title : '司机排班',
+				type : 1,
+				area : [ '30%', '40%' ],
+				maxmin : true,
+				shadeClose : true,
+				content : $('#editForm'),
+				btn: ['确定', '取消'],
+				shade: [0.8, '#393D49'],
+				success : function(layero, index) {
 
-		$.ajax({
-			type: "POST",//提交的方式
-			url: "AppointmentServlet?methodName=queryRecordAjax",//提交的地址
-			data: "msg=" + str,//提交的数据
-			dataType: "text",//希望返回的数据类型
-			async: true,//异步提交
-			success: function (msg) {//成功的方法 msg为返回的数据
-				var ob2 = JSON.parse(msg);
-				//alert(ob2[0]['UNAME']);
+					// $("#uname").val(name);
+					// $("#upwd").val(pwd);
+					// $("#usex").val(sex);
+					// $("#career").val(career);
+					// $("#state").val(state);
+				},
+				btn1:function(index,layero){
 
+					alert(ck+","+$("#cnum").val()+","+workid);
 
-			},
-			error: function () {//错误的方法
-				alert("服务器正忙");
-			}
+					var str = ck+","+$("#cnum").val()+","+workid;
+					$.ajax({
+						url: "/bus/toAddWork",
+						type: "POST",
+						data: "msg=" + str,
+						success: function (msg) {
+
+							alert(msg);
+							if (msg == '排班'|| msg == '休息') {
+
+								//关闭弹框
+								if(msg == '排班'){
+									layer.close(index);
+
+									layer.msg("排班成功", {icon:6,time:500},function(){
+										setTimeout('window.location.reload()',500);
+									});
+
+								}else{
+
+									$(node).text("休息");
+									layer.close(index);
+									layer.msg("排班成功", {icon:6,time:500},function(){
+										setTimeout('window.location.reload()',500);
+									});
+								}
+
+								//layer.msg("修改成功", {icon: 6});
+								//parent.location.reload();
+							} else {
+								layer.msg("排班失败", {icon: 5});
+							}
+						}
+					});
+					return false;
+
+				}
+			});
+
 		});
-
-
 	}
 
 
+	// layui.use('form', function(){
+	// 	var form = layui.form;
+	//
+	// 	//监听提交
+	// 	form.on('submit(formDemo)', function(data){
+	// 		var str = JSON.stringify(data.field);
+	// 		$.ajax({
+	// 			url: "/bus/findPlateNumber",
+	// 			type: "POST",
+	// 			data: "msg=" + str,
+	// 			success: function (msg) {
+	//
+	// 				if (msg == 200) {
+	// 					//删除这一行
+	// 					obj.del();
+	// 					//关闭弹框
+	// 					layer.close(index);
+	// 					layer.msg("搜索成功", {icon: 6});
+	//
+	// 				} else {
+	// 					layer.msg("搜索失败", {icon: 5});
+	// 				}
+	// 			}
+	// 		});
+	// 		return false;
+	// 	});
+	// });
+
+	layui.use('laydate', function(){
+		var laydate = layui.laydate;
+	//日期范围
+	laydate.render({
+		elem: '#test6'
+		,range: true
+	});
+	});
 </script>
 </body>
 </html>

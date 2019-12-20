@@ -9,27 +9,56 @@
         <result property="driverName" column="driver_name"/>
     </resultMap>
 
-    <select id="queryDriver" resultMap="driverMap">
-            select * from tb_driver where driver_state = '启用'
-    </select>
+<!--    <select id="queryDriver" resultMap="driverMap">-->
+<!--            select * from tb_driver where driver_state = '启用'-->
+<!--    </select>-->
 
-    <select id="checkDriverWork" resultType="java.lang.Integer">
-        select count(*) from tb_gate_card where work_date = #{driverId} and driver_id
-        =
-        (SELECT driver_id from tb_crew_scheduling where driver_id =#{date})
-    </select>
+<!--    <select id="checkDriverWork" resultType="java.lang.Integer">-->
+<!--        select count(*) from tb_gate_card where work_date = #{driverId} and driver_id-->
+<!--        =-->
+<!--        (SELECT driver_id from tb_crew_scheduling where driver_id =#{date})-->
+<!--    </select>-->
 
 
 
     <resultMap id="weekWorkMap" type="com.bus.javabean.LccCrewSchedulingBean">
+        <result property="workId" column="work_id"/>
+        <result property="driverId" column="driver_id"/>
+        <result property="busWorkId" column="bus_work_id"/>
         <result property="driverName" column="driver_name"/>
         <result property="workTime" column="work_time"/>
         <result property="busIicense" column="bus_license"/>
+        <result property="workType" column="work_type"/>
+        <result property="startTime" column="work_time"/>
+        <result property="endTime" column="work_time"/>
     </resultMap>
 
-    <select id="queryWeekWork" resultMap="weekWorkMap">
-        select a.driver_name,b.work_time,c.bus_license from tb_driver as a,tb_crew_scheduling as b,tb_bus as c
-WHERE a.driver_id = b.driver_id and b.bus_work_id = c.bus_id
-
+    <select id="queryWeekWork" parameterType="com.bus.javabean.LccCrewSchedulingBean" resultMap="weekWorkMap">
+ SELECT * from(
+ select*from
+    (SELECT a.work_type,a.work_id,a.driver_id,a.work_time,b.driver_name from
+    (SELECT work_type,driver_id,work_time,work_id from tb_crew_scheduling)a
+    LEFT JOIN
+    (SELECT driver_name,driver_id from tb_driver)b
+    on a.driver_id = b.driver_id)c
+    LEFT JOIN
+    (select bus_id,bus_license from tb_bus)d
+    on c.work_type = d.bus_license)e  WHERE 1=1
+    <if test="workType!=null and workType!=''">and e.work_type=#{workType}</if>
+    <if test="startTime!=null and startTime!=''">and e.work_time&gt;=#{startTime}</if>
+    <if test="endTime!=null and endTime!=''">and e.work_time&lt;=#{endTime}</if>
     </select>
+
+    <select id="findBusWorkIdByBusIicense" parameterType="java.lang.String" resultType="int">
+        SELECT bus_id FROM tb_bus where bus_license = #{busIicense}
+    </select>
+
+
+    <update id="updateDriverWork" parameterType="com.bus.javabean.LccCrewSchedulingBean">
+        UPDATE tb_crew_scheduling
+        <trim prefix="set" suffixOverrides=",">
+            <if test="workType!=null">work_type=#{workType},</if>
+        </trim>
+        WHERE work_id =#{workId}
+    </update>
 </mapper>

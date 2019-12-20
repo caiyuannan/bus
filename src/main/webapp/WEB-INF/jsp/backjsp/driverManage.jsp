@@ -66,33 +66,32 @@
 		</div>
 	</form>
 
-			<table id="main"  class="layui-table" lay-skin="line">
-				<thead>
-				<tr>
-					<th rowspan="2">
-						司机
-					</th>
+			<table id="main"  class="layui-table" lay-skin="line" onclick="doclick()">
 
-					<th>${requestScope.week[0]}<br>星期一</th>
-					<th>${requestScope.week[1]}<br>星期二</th>
-					<th>${requestScope.week[2]}<br>星期三</th>
-					<th>${requestScope.week[3]}<br>星期四</th>
-					<th>${requestScope.week[4]}<br>星期五</th>
-					<th>${requestScope.week[5]}<br>星期六</th>
-					<th>${requestScope.week[6]}<br>星期日</th>
+				<tr>
+					<td>
+						司机
+					</td>
+
+					<td>${requestScope.week[0]}<br>星期一</td>
+					<td>${requestScope.week[1]}<br>星期二</td>
+					<td>${requestScope.week[2]}<br>星期三</td>
+					<td>${requestScope.week[3]}<br>星期四</td>
+					<td>${requestScope.week[4]}<br>星期五</td>
+					<td>${requestScope.week[5]}<br>星期六</td>
+					<td>${requestScope.week[6]}<br>星期日</td>
 				</tr>
-				</thead>
-				<tbody>
+
+
 
 				<c:if test="${requestScope.workmap !=null}">
 					<c:forEach items="${requestScope.workmap}" begin="0" step="1" var="i">
 						<tr>
-							<td>${i.key}</td>
+							<td id="dvkey">${i.key}</td>
 							<td>
 								<input type="hidden" value="${requestScope.week[0]}">
 								<c:forEach items="${i.value}" begin="0" step="1" var="k">
 									<c:if test="${k.workTime==requestScope.week[0]}">
-										<%--${k.busIicense}--%>
 										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
 
 									</c:if>
@@ -103,7 +102,6 @@
 								<c:forEach items="${i.value}" begin="0" step="1" var="k">
 									<c:if test="${k.workTime==requestScope.week[1]}">
 										<button type="button" class="layui-btn layui-btn-sm" title="${k.workId}" onclick="selectRole(this)">${k.workType}</button>
-
 									</c:if>
 								</c:forEach>
 							</td>
@@ -156,13 +154,13 @@
 						</tr>
 					</c:forEach>
 				</c:if>
-				</tbody>
+
 			</table>
 
 		</div>
 
 
-		<a  href="/bus/toPreWeek?nwd=${requestScope.week[0]}"><button class="layui-btn" type="button" style="margin-left: 36%;">上一周</button></a>
+		<a  href="/bus/toPreWeek?nwd=${requestScope.week[0]}" id="preWk"><button class="layui-btn" type="button" style="margin-left: 36%;">上一周</button></a>
 		<a  href="/bus/toNextWeek"><button class="layui-btn" type="button">下一周</button></a>
 
 
@@ -190,16 +188,117 @@
 	</div>
 
 </form>
+<%
+		String mg = (String)request.getAttribute("msg1");
+		if (mg!=null)
+		{
+//			out.write("<script>alert('"+mg+"')</script>");
+			out.write("<script>$(\'#preWk\').attr(\"disabled\",true);</script>");
+		}
+%>
+<%--event.srcElement.cellIndex+1--%>
 <script>
 
-	function selectRole(node) {
+	function doclick()
+	{
+		var td = event.srcElement; // 通过event.srcElement 获取激活事件的对象 td
+		//alert("行号：" + (td.parentElement.rowIndex + 1) + "，内容：" + td.title+td.innerText.length);
+		var j = td.cellIndex;
+		var data=document.getElementById("main").rows[0].cells[j].innerHTML;
+		var str = data.split('<');
+		//alert(str[0]);
 
-		//alert("该节点的值为"+$(node).attr('title'));
-		//var isUse = $('input[name="switch"]:checked').val();
+
+
+		if(td.innerText.length == 0){
+			//var workid=$(node).attr('title');
+			var workname=td.parentNode.children[0].innerHTML;
+			var worktime=str[0];
+			//alert("排班id"+td.title);
+			layui.use(['layer','form'], function(){
+				var layer = layui.layer;
+				var form = layui.form;
+
+				var ck;
+				//监听指定开关
+				form.on('switch(switchTest)', function(data){
+
+					ck = this.checked ? '休息' : '排班';
+					alert.msg(ck);
+
+				});
+
+				layer.open({
+					title : '司机排班',
+					type : 1,
+					area : [ '30%', '40%' ],
+					maxmin : true,
+					shadeClose : true,
+					content : $('#editForm'),
+					btn: ['确定', '取消'],
+					shade: [0.8, '#393D49'],
+					success : function(layero, index) {
+
+						// $("#uname").val(name);
+						// $("#upwd").val(pwd);
+						// $("#usex").val(sex);
+						// $("#career").val(career);
+						// $("#state").val(state);
+					},
+					btn1:function(index,layero){
+
+						//alert(ck+","+$("#cnum").val()+","+workname);
+
+						var str = ck+","+$("#cnum").val()+","+workname+","+worktime;
+						$.ajax({
+							url: "/bus/toAddBlankWork",
+							type: "POST",
+							data: "msg=" + str,
+							success: function (msg) {
+
+								alert(msg);
+								if (msg == '排班'|| msg == '休息') {
+
+									//关闭弹框
+									if(msg == '排班'){
+										layer.close(index);
+
+										layer.msg("排班成功", {icon:6,time:500},function(){
+											setTimeout('location.reload()',300);
+											//location.reload();
+										});
+
+									}else{
+
+										td.innerHTML="休息";
+										//$(node).text("休息");
+										layer.close(index);
+										layer.msg("排班成功", {icon:6,time:500},function(){
+											setTimeout('location.reload()',300);
+										});
+									}
+
+									//layer.msg("修改成功", {icon: 6});
+									//parent.location.reload();
+								} else {
+									layer.msg("排班失败", {icon: 5});
+								}
+							}
+						});
+						return false;
+
+					}
+				});
+
+			});
+
+		}
+	}
+	function selectRole(node) {
 		var workid=$(node).attr('title');
 		layui.use(['layer','form'], function(){
-		var layer = layui.layer;
-		var form = layui.form;
+			var layer = layui.layer;
+			var form = layui.form;
 
 			var ck;
 			//监听指定开关

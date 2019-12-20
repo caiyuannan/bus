@@ -1,7 +1,6 @@
 package com.bus.service;
 
-import com.bus.javabean.LccCrewSchedulingBean;
-import com.bus.javabean.LccDriverBean;
+import com.bus.javabean.*;
 import com.bus.dao.LccDriverManageMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LccDriverManageService
@@ -66,6 +66,28 @@ public class LccDriverManageService
 		return  map;
 	}
 
+	/**
+	 * 添加排班
+	 * @param workType
+	 * @param driverId
+	 * @param workTime
+	 * @return
+	 */
+	public boolean addDriverWork(String workType,int driverId,String workTime){
+		LccCrewSchedulingBean lcsb = new LccCrewSchedulingBean();
+		lcsb.setWorkType(workType);
+		lcsb.setDriverId(driverId);
+		lcsb.setWorkTime(workTime);
+		return lmp.addDriverWork(lcsb);
+	}
+
+
+	/**
+	 * 修改排班
+	 * @param workType
+	 * @param workId
+	 * @return
+	 */
 	public boolean updateDriverWork(String workType,String workId){
 		LccCrewSchedulingBean lcsb = new LccCrewSchedulingBean();
 
@@ -75,4 +97,70 @@ public class LccDriverManageService
 		System.out.println("service输出"+lcsb.getWorkType()+","+lcsb.getWorkId());
 		return lmp.updateDriverWork(lcsb);
 	}
+
+	/**
+	 * 查询所有车牌
+	 * @return
+	 */
+	@Transactional
+	public List<DyfBusBean> findAllBuses(){
+
+		System.out.println(lmp.findAllBuses().toString());
+		return lmp.findAllBuses();
+	}
+
+	/**
+	 * 查询所有线路
+	 * @return
+	 */
+	@Transactional
+	public List<LccRouteBean> findAllRoutes(){
+		System.out.println(lmp.findAllRoutes().toString());
+		return lmp.findAllRoutes();
+	}
+
+	/**
+	 * 查询所有司机
+	 * @return
+	 */
+	@Transactional
+	public List<LccDriverBean> findAllDriver(){
+		System.out.println(lmp.findAllDriver().toString());
+		return lmp.findAllDriver();
+	}
+
+	@Transactional
+	public List<Integer> findDriverId(){
+		System.out.println(lmp.findDriverId().toString());
+		return lmp.findDriverId();
+	}
+
+	public int insertBlankWork(LccCrewSchedulingBean lcdb){
+		System.out.println(lmp.insertBlankWork(lcdb)+"增加条数");
+		return lmp.insertBlankWork(lcdb);
+	}
+
+	@Transactional
+	public int queryDriverIdByDriverName(String driverName){
+
+		return lmp.queryDriverIdByDriverName(driverName);
+	}
+
+	/**
+	 * 查询发车时间--出站确认功能
+	 * @return
+	 */
+	@Transactional
+	public LccBusShfitBean findBusShfit(){
+
+		return lmp.findBusShfit();
+	}
+
+	@Transactional
+	public int insertDriverWorkload(Map<String,Object> map){
+
+		return lmp.insertDriverWorkload(map);
+	}
+
+
 }

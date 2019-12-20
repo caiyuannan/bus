@@ -1,8 +1,6 @@
 package com.bus.controller;
 
-import com.bus.javabean.LccCrewSchedulingBean;
-import com.bus.javabean.LccDriverBean;
-import com.bus.javabean.Mssg;
+import com.bus.javabean.*;
 import com.bus.service.LccDriverManageService;
 import com.bus.until.GetWeek;
 import com.google.gson.Gson;
@@ -29,7 +27,7 @@ public class LccDriverManageController
 	@Resource
 	private LccDriverManageService ldms;
 
-	int count = 0;
+	int count=0;
 
 	private ModelAndView modelAndView = new ModelAndView();
 
@@ -40,7 +38,7 @@ public class LccDriverManageController
 	@RequestMapping("/driverManage")
 	public ModelAndView toCrewSchedulingPage(String date){
 
-		System.out.println("进入司机排班");
+		System.out.println("进入司机排班"+count);
 
 		try
 		{
@@ -80,31 +78,40 @@ public class LccDriverManageController
 	@ResponseBody
 	public ModelAndView preWeek(String nwd)
 	{
-		System.out.println("进入上一周方法");
+		System.out.println("进入上一周方法"+count);
 
 		try
 		{
-			//int count =0;
-			//String dt = request.getParameter("nwd");
-			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-			Date dat = format1.parse(nwd);
-			Date date2 = new Date();
 
-			List list = null;
-			count--;
+				//int count =0;
+				//String dt = request.getParameter("nwd");
+			if(count>0)
+			{
+				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+				Date dat = format1.parse(nwd);
+				Date date2 = new Date();
 
-			Calendar calendar = Calendar.getInstance();
+				List list = null;
+				count--;
 
-			//calendar.setTime(dat);
-			calendar.add(Calendar.WEEK_OF_MONTH,count);//相当于在当前日期上加7天，例如现在是周一，加完后是下周一
-			calendar.set(Calendar.DAY_OF_WEEK,7);//把当前日期所在的周设置到周六（7 就是一周的最后一天：周六）
+				Calendar calendar = Calendar.getInstance();
 
-			list = GetWeek.convertWeekByDate(calendar.getTime());
+				//calendar.setTime(dat);
+				calendar.add(Calendar.WEEK_OF_MONTH, count);//相当于在当前日期上加7天，例如现在是周一，加完后是下周一
+				calendar.set(Calendar.DAY_OF_WEEK, 7);//把当前日期所在的周设置到周六（7 就是一周的最后一天：周六）
 
-			HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
-			modelAndView.addObject("workmap",map);
-			modelAndView.addObject("week",list);
-			modelAndView.setViewName("backjsp/driverManage");
+				list = GetWeek.convertWeekByDate(calendar.getTime());
+
+				HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
+				modelAndView.addObject("workmap", map);
+				modelAndView.addObject("week", list);
+				modelAndView.setViewName("backjsp/driverManage");
+			}
+			if(count==0){
+				modelAndView.addObject("msg1", "过去排班已作废");
+				modelAndView.setViewName("backjsp/driverManage");
+			}
+
 		} catch (ParseException e)
 		{
 			e.printStackTrace();
@@ -122,11 +129,12 @@ public class LccDriverManageController
 	public ModelAndView nextWeek()
 	{
 
-		System.out.println("进入下一周方法");
+		System.out.println("进入下一周方法"+count);
 
 
 		List list = null;
-
+		int a = 0;
+		LccCrewSchedulingBean lcdb = new LccCrewSchedulingBean();
 		count++;
 		Date nowDate = new Date();
 		Calendar calendar = Calendar.getInstance();
@@ -136,7 +144,22 @@ public class LccDriverManageController
 		calendar.set(Calendar.DAY_OF_WEEK,7);//把当前日期所在的周设置到周六（7 就是一周的最后一天：周六）
 
 		list = GetWeek.convertWeekByDate(calendar.getTime());
+		System.out.println("下周时间"+list);
 
+//		List<Integer> ilist = ldms.findDriverId();
+//
+//		for (Integer j : ilist) {
+//
+//			for (int i = 0; i <list.size() ; i++)
+//
+//			{
+//				lcdb.setDriverId(j);
+//				lcdb.setWorkTime(String.valueOf(list.get(i)));
+//				lcdb.setWorkType("操作");
+//				a = ldms.insertBlankWork(lcdb);
+//			}
+//
+//		}
 
 		HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
 		modelAndView.addObject("workmap",map);
@@ -145,8 +168,45 @@ public class LccDriverManageController
 
 		return modelAndView;
 	}
+	/**添加排班方法
+	 * @return
+	 */
+	@RequestMapping("/toAddBlankWork")
+	@ResponseBody
+	public String addBlankWork(String msg)
+	{
 
-	/**下一周排班方法
+		System.out.println("进入排班添加方法" + msg);
+
+		if (msg.contains(","))
+		{
+			String[] arr = msg.split(",");
+
+			int did = ldms.queryDriverIdByDriverName(arr[2]);
+
+
+			if(arr[0].equals("排班")&&arr[1]!=null && !"".equals(arr[1].trim()))
+			{
+
+				boolean flag = ldms.addDriverWork(arr[1], did,arr[3]);
+				if (flag)
+				{
+					return "排班";
+				}
+			}
+			if(arr[0].equals("休息")){
+				boolean flag = ldms.addDriverWork(arr[0], did,arr[3]);
+				if (flag)
+				{
+					return "休息";
+				}
+			}
+		}
+		return null;
+	}
+
+
+	/**修改排班方法
 	 * @return
 	 */
 	@RequestMapping("/toAddWork")
@@ -209,10 +269,53 @@ public class LccDriverManageController
 	}
 
 	@RequestMapping("/lccDriverNotarize")
-	public String toNotarizeWorkload(){
+	public ModelAndView toNotarizeWorkload(String busnum,String route,String driver){
 
 		System.out.println("进入出站确认页面");
-		return "backjsp/lccDriverNotarize";
+
+		List<DyfBusBean> lst = ldms.findAllBuses();
+		List<LccRouteBean> rst = ldms.findAllRoutes();
+		List<LccDriverBean> dst = ldms.findAllDriver();
+		System.out.println("获取线路集合"+rst);
+
+		LccBusShfitBean lcsb = ldms.findBusShfit();
+		String satTime = lcsb.getShfitDate()+","+lcsb.getShfitStartTime();
+		//获取时间
+		modelAndView.addObject("start",satTime);
+		//获取车牌
+		modelAndView.addObject("busnum",busnum);
+		modelAndView.addObject("olist",lst);
+
+		//获取线路
+		modelAndView.addObject("route",route);
+		modelAndView.addObject("rlist",rst);
+
+		//获取司机
+		modelAndView.addObject("driver",driver);
+		modelAndView.addObject("dlist",dst);
+		//return "backjsp/lccDriverNotarize";
+		modelAndView.setViewName("backjsp/lccDriverNotarize");
+
+		return modelAndView;
 	}
 
+	@RequestMapping("/toDriverNotarize")
+	public ModelAndView lccToDriverNotarize(String start,String busnum,String route,String driver){
+		//进入方法
+		System.out.println("进入方法"+start+"//"+busnum+"//"+route+"//"+driver);
+		//添加工作量表
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("busName",busnum);
+		map.put("routeName",route);
+		map.put("driverName",driver);
+		int i =ldms.insertDriverWorkload(map);
+
+		//System.out.println("成功"+i);
+		//添加考勤表
+
+		//修改汽车排班  发车状态
+
+		modelAndView.setViewName("backjsp/lccDriverNotarize");
+		return modelAndView;
+	}
 }

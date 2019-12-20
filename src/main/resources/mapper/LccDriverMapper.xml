@@ -61,4 +61,75 @@
         </trim>
         WHERE work_id =#{workId}
     </update>
+
+    <insert id="addDriverWork" parameterType="com.bus.javabean.LccCrewSchedulingBean">
+        insert into tb_crew_scheduling (driver_id,work_time,work_type)
+         values (#{driverId},#{workTime},#{workType});
+    </insert>
+    
+    
+
+    <resultMap id="busMap" type="com.bus.javabean.DyfBusBean">
+        <id property="busId" column="bus_id"></id>
+        <result property="busAge" column="bus_age"></result>
+        <result property="busDutyDriver" column="bus_duty_driver"></result>
+        <result property="busLicense" column="bus_license"></result>
+        <result property="busMin" column="bus_min"></result>
+        <result property="busType" column="bus_type"></result>
+        <result property="busState" column="bus_state"></result>
+        <result property="stateName" column="state_name"></result>
+    </resultMap>
+    <select id="findAllBuses" parameterType="com.bus.javabean.DyfBusBean" resultMap="busMap">
+        SELECT * from tb_bus
+    </select>
+
+    <resultMap id="routeMap" type="com.bus.javabean.LccRouteBean">
+        <result property="routeId" column="route_id"></result>
+        <result property="routeName" column="route_name"></result>
+        <result property="routeFee" column="route_fee"></result>
+        <result property="routeTime" column="route_time"></result>
+        <result property="stateId" column="state_id"></result>
+        <result property="cityName" column="city_name"></result>
+    </resultMap>
+    <select id="findAllRoutes" parameterType="com.bus.javabean.LccRouteBean" resultMap="routeMap">
+        SELECT * from tb_route
+    </select>
+    
+    <select id="findAllDriver" parameterType="com.bus.javabean.LccDriverBean" resultMap="driverMap">
+        SELECT * from tb_driver
+    </select>
+    
+    
+    <select id="findDriverId" resultType="Integer">
+        select DISTINCT driver_id from tb_crew_scheduling
+    </select>
+
+    <insert id="insertBlankWork" parameterType="com.bus.javabean.LccCrewSchedulingBean">
+        insert REPLACE INTO tb_crew_scheduling(driver_id,work_time,work_type)
+        values (#{driverId},#{workTime},#{workType})
+    </insert>
+
+
+    <select id="queryDriverIdByDriverName" parameterType="string" resultType="int">
+        select driver_id from tb_driver where driver_name=#{driverName}
+    </select>
+
+
+    <resultMap id="busShfitMap" type="com.bus.javabean.LccBusShfitBean">
+        <result property="shfitDate" column="shfit_date"/>
+        <result property="shfitStartTime" column="shfit_start_time"/>
+        <result property="shfitState" column="shift_state"/>
+    </resultMap>
+
+
+    <select id="findBusShfit" resultMap="busShfitMap">
+        SELECT * from tb_bus_shfit where shift_state='未发车' limit 1
+    </select>
+
+    <insert id="insertDriverWorkload" parameterType="map">
+        INSERT INTO tb_driver_workload(bus_id,route_id,driver_id)
+        select tb_bus.bus_id, tb_route.route_id, tb_driver.driver_id
+        FROM tb_bus, tb_route, tb_driver
+        WHERE tb_bus.bus_license = #{busName} and tb_route.route_name=#{routeName} and tb_driver.driver_name=#{driverName}
+    </insert>
 </mapper>

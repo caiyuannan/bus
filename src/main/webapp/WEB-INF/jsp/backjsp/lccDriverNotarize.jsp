@@ -25,6 +25,11 @@
 			text-align: center;
 			padding: 30px;
 		}
+		.slt{
+			background-color: pink;
+			width: 100%;
+			height: 25px;
+		}
 	</style>
 </head>
 <body>
@@ -37,34 +42,43 @@
 			</div>
 			<div class="layui-col-md6">
 				<h1>出站确认</h1>
-				<form class="layui-form" action="">
-					<div class="layui-form-item">
-						<label class="layui-form-label">时间:</label>
-						<div class="layui-input-block">
-							<input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
-						</div>
+				<form action="/bus/toDriverNotarize" method="post">
+					<div>
+						时间:<input type="text" name="start" required  lay-verify="required" value="${requestScope.start}" placeholder="请输入标题" autocomplete="off" class="layui-input">
 					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">车辆:</label>
-						<div class="layui-input-block">
-							<input type="text" name="car" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
-						</div>
+					<div>
+						车辆: <select name="busnum" id="busnum" class="slt">
+						<option value=""> 请选择</option>
+						<c:forEach items="${olist}" var="i" begin="0" step="1">
+							<option value="${i.busLicense}" <c:if test="${i.busLicense eq requestScope.busnum}">selected="selected"</c:if>>${i.busLicense}</option>
+						</c:forEach>
+						<input type="hidden" value="${requestScope.busnum}" id="oid">
+					</select>
 					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">线路:</label>
-						<div class="layui-input-block">
-							<input type="text" name="role" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
-						</div>
+
+					<div>
+						线路: <select name="route" id="route" class="slt">
+						<option value=""> 请选择</option>
+						<c:forEach items="${rlist}" var="i" begin="0" step="1">
+							<option value="${i.routeName}" <c:if test="${i.routeName eq requestScope.route}">selected="selected"</c:if>>${i.routeName}</option>
+						</c:forEach>
+						<input type="hidden" value="${requestScope.route}" id="rid">
+					</select>
 					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">司机名称:</label>
-						<div class="layui-input-block">
-							<input type="text" name="driver" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
-						</div>
+
+					<div>
+						司机名称: <select name="driver" id="driver" class="slt">
+						<option value=""> 请选择</option>
+						<c:forEach items="${dlist}" var="i" begin="0" step="1">
+							<option value="${i.driverName}" <c:if test="${i.driverName eq requestScope.driver}">selected="selected"</c:if>>${i.driverName}</option>
+						</c:forEach>
+						<input type="hidden" value="${requestScope.driver}" id="sid">
+					</select>
 					</div>
-					<div class="layui-form-item">
+
+					<div>
 						<div class="layui-input-block" style="text-align: center;padding: 15px;">
-							<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+							<button class="layui-btn" type="submit">立即提交</button>
 							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						</div>
 					</div>
@@ -78,16 +92,33 @@
 </div>
 
 <script>
-	//Demo
-	layui.use('form', function(){
-		var form = layui.form;
 
-		//监听提交
-		form.on('submit(formDemo)', function(data){
-			layer.msg(JSON.stringify(data.field));
-			return false;
+	$(function () {
+
+		$("#busnum option").each(function () {
+
+			if($(this).val() === $("#oid").val()){
+				$(this).attr("selected",true);
+			}
 		});
+
+		$("#route option").each(function () {
+
+			if($(this).val() === $("#rid").val()){
+				$(this).attr("selected",true);
+			}
+		});
+
+		$("#driver option").each(function () {
+
+			if($(this).val() === $("#sid").val()){
+				$(this).attr("selected",true);
+			}
+		})
+
+
 	});
+
 </script>
 </body>
 </html>

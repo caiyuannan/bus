@@ -59,4 +59,6 @@ public interface LccDriverManageMapper
 	public LccBusShfitBean findBusShfit();
 
 	public int insertDriverWorkload(Map<String,Object> map);
+	public int addGateCard(Map<String,Object> map);
+	public boolean updateBusShfitState(int shfitId);
 }

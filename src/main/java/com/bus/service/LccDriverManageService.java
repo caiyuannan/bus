@@ -162,5 +162,15 @@ public class LccDriverManageService
 		return lmp.insertDriverWorkload(map);
 	}
 
+	@Transactional
+	public int addGateCard(Map<String,Object> map){
 
+		return lmp.addGateCard(map);
+	}
+
+	@Transactional
+	public boolean updateBusShfitState(int shfitId){
+
+		return lmp.updateBusShfitState(shfitId);
+	}
 }

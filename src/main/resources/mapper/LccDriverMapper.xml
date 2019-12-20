@@ -116,20 +116,30 @@
 
 
     <resultMap id="busShfitMap" type="com.bus.javabean.LccBusShfitBean">
+        <result property="shfitId" column="shfit_id"/>
         <result property="shfitDate" column="shfit_date"/>
         <result property="shfitStartTime" column="shfit_start_time"/>
-        <result property="shfitState" column="shift_state"/>
+        <result property="shfitState" column="shfit_state"/>
     </resultMap>
 
 
     <select id="findBusShfit" resultMap="busShfitMap">
-        SELECT * from tb_bus_shfit where shift_state='未发车' limit 1
+        SELECT * from tb_bus_shfit where shfit_state='未发车' limit 1
     </select>
-
+<!--插入司机工作量表-->
     <insert id="insertDriverWorkload" parameterType="map">
         INSERT INTO tb_driver_workload(bus_id,route_id,driver_id)
         select tb_bus.bus_id, tb_route.route_id, tb_driver.driver_id
         FROM tb_bus, tb_route, tb_driver
         WHERE tb_bus.bus_license = #{busName} and tb_route.route_name=#{routeName} and tb_driver.driver_name=#{driverName}
     </insert>
+<!--插入司机考勤表-->
+    <insert id="addGateCard" parameterType="map">
+        INSERT INTO tb_gate_card(driver_id,office_hours,work_date)
+select driver_id ,#{shfit_start_time},#{shfit_date} FROM tb_driver where driver_name=#{driverName}
+    </insert>
+<!--更新发车表状态-->
+    <update id="updateBusShfitState" parameterType="int">
+        update tb_bus_shfit SET shfit_state='已发车' where shfit_id=#{shfitId}
+    </update>
 </mapper>

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -312,10 +313,26 @@ public class LccDriverManageController
 
 		//System.out.println("成功"+i);
 		//添加考勤表
+		Map<String,Object> map1 = new HashMap<String,Object>();
+		String[] arr = start.split(",");
+		String theDate = arr[0];
+		String theTime = arr[1];
+		System.out.println("切割后的时间"+arr[0]+"//"+arr[1]);
+		map1.put("driverName",driver);
+		map1.put("shfit_start_time",theTime);
+		map1.put("shfit_date",theDate);
+		int j = ldms.addGateCard(map1);
 
 		//修改汽车排班  发车状态
+		LccBusShfitBean lcsb = ldms.findBusShfit();
+		int sid = lcsb.getShfitId();
+		boolean flag = ldms.updateBusShfitState(sid);
 
-		modelAndView.setViewName("backjsp/lccDriverNotarize");
+		if(flag)
+		{
+			modelAndView.addObject("msg1", "出站确认成功!");
+			modelAndView.setViewName("backjsp/lccDriverNotarize");
+		}
 		return modelAndView;
 	}
 }

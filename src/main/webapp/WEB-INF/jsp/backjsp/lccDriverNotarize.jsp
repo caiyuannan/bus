@@ -90,7 +90,14 @@
 		</div>
 	</div>
 </div>
+<%
+	String mg = (String)request.getAttribute("msg1");
+	if (mg!=null)
+	{
+					out.write("<script>alert('"+mg+"')</script>");
 
+	}
+%>
 <script>
 
 	$(function () {

@@ -12,19 +12,13 @@ public class XhaCityBean {
 	private int cityId;
 	/**城市名字*/
 	private String cityName;
-	/**省份id*/
-	private int provinceId;
-	/**省份名字*/
-	private String provinceName;
 
 	public XhaCityBean() {
 	}
 
-	public XhaCityBean(int cityId, String cityName, int provinceId, String provinceName) {
+	public XhaCityBean(int cityId, String cityName) {
 		this.cityId = cityId;
 		this.cityName = cityName;
-		this.provinceId = provinceId;
-		this.provinceName = provinceName;
 	}
 
 	public int getCityId() {
@@ -43,24 +37,8 @@ public class XhaCityBean {
 		this.cityName = cityName;
 	}
 
-	public int getProvinceId() {
-		return provinceId;
-	}
-
-	public void setProvinceId(int provinceId) {
-		this.provinceId = provinceId;
-	}
-
-	public String getProvinceName() {
-		return provinceName;
-	}
-
-	public void setProvinceName(String provinceName) {
-		this.provinceName = provinceName;
-	}
-
 	@Override
 	public String toString() {
-		return "XhaCityBean{" + "cityId=" + cityId + ", cityName='" + cityName + '\'' + ", provinceId=" + provinceId + ", provinceName='" + provinceName + '\'' + '}';
+		return "XhaCityBean{" + "cityId=" + cityId + ", cityName='" + cityName + '\'' + '}';
 	}
 }

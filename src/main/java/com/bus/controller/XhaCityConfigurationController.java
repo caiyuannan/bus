@@ -1,18 +1,21 @@
 package com.bus.controller;
-import com.bus.javabean.*;
+import com.bus.javabean.TableBean;
+import com.bus.javabean.XhaCityConfigurationBean;
+import com.bus.javabean.XhaPageBean;
+import com.bus.javabean.XhaProvinceBean;
 import com.bus.service.XhaCityConfigurationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 城市配置控制器
- * by谢海安
+ * 城市配置控制类
+ * by 谢海安
  */
 @Controller
 @RequestMapping("city")
@@ -21,7 +24,7 @@ public class XhaCityConfigurationController {
 	private XhaCityConfigurationService cityConfigurationService;
 
 	/**
-	 * 返回界面层
+	 * 界面路径
 	 * @param path
 	 * @return
 	 */
@@ -30,24 +33,59 @@ public class XhaCityConfigurationController {
 		return "backjsp/"+path;
 	}
 
-	/**查询城市配置*/
-	@RequestMapping("findCity")
+	/**
+	 * 城市配置表
+	 * @param page：页码
+	 * @param limit：分页限制
+	 * @return
+	 */
+	@RequestMapping("queryCityConfiguration")
 	@ResponseBody
-	public TableBean findCity(String page,String limit){
-		List<XhaProvinceBean> provinceBeans = cityConfigurationService.findCity(null,null,0,0);
-		System.out.println("省份集合长度:"+provinceBeans.size());
-		List<XhaCityConfigurationBean> list = new ArrayList<XhaCityConfigurationBean>();
-		for (XhaProvinceBean provinceBean : provinceBeans) {
-			List<XhaStationBean> stations = cityConfigurationService.findStation(provinceBean.getCityBean().getCityId());
-			System.out.println("站点集合："+stations.size());
-			List<XhaRouteBean> routes = cityConfigurationService.findRoute(provinceBean.getCityBean().getCityId());
-			System.out.println("路线集合:"+routes.size());
-			XhaCityConfigurationBean ccb = new XhaCityConfigurationBean(provinceBean.getProvinceId(),provinceBean.getProvinceName(),provinceBean.getCityBean().getCityName(),stations.size(),routes.size());
-			list.add(ccb);
-		}
-		System.out.println("======================");
-		System.out.println("总集合:"+list.size());
-		TableBean tableBean = new TableBean("",list.size(),0,list);
-		return tableBean;
+	public TableBean queryCityConfiguration(String page,String limit,String provinceName,String cityName){
+		System.out.println("provinceName:"+provinceName+",cityName:"+cityName);
+		XhaPageBean pb = new XhaPageBean(provinceName,cityName,0,0);
+		//表格中的总条数
+		List<XhaCityConfigurationBean> count = cityConfigurationService.queryCityConfiguration(pb);
+		//带分页效果
+		XhaPageBean pbLimit = new XhaPageBean(provinceName,cityName,Integer.parseInt(page),Integer.parseInt(limit));
+		List<XhaCityConfigurationBean> beans = cityConfigurationService.queryCityConfigurationOnLimit(pbLimit);
+		TableBean tb = new TableBean("",count.size(),0,beans);
+		return tb;
+	}
+
+	/**
+	 * 删除城市配置表
+	 * @param cityConfigurationId：城市配置表id
+	 * @return
+	 */
+	@RequestMapping("deleteCityConfiguration")
+	@ResponseBody
+	public String deleteCityConfiguration(String cityConfigurationId){
+		System.out.println("获取到的是"+cityConfigurationId);
+		String result = cityConfigurationService.deleteCityConfiguration(Integer.parseInt(cityConfigurationId));
+		System.out.println(result);
+		return result;
+	}
+
+	/**
+	 * 添加城市配置里面的城市
+	 */
+	@RequestMapping("addCityConfiguration")
+	@ResponseBody
+	public String addCityConfiguration(String provinceName,String cityName){
+		System.out.println("添加进来了！");
+		String s = cityConfigurationService.addProvinceCity(provinceName, cityName);
+		System.out.println(s);
+		return s;
+	}
+
+	/**添加城市界面，同时把省份数据传输到前台*/
+	@RequestMapping("addCityView")
+	@ResponseBody
+	public ModelAndView addCityView(){
+		ModelAndView mv = new ModelAndView("backjsp/addCity");
+		List<XhaProvinceBean> provinceBeans = cityConfigurationService.queryProvince();
+		mv.addObject("province",provinceBeans);
+		return mv;
 	}
 }

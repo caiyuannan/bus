@@ -1,8 +1,9 @@
 <%--
   Created by IntelliJ IDEA.
-  User: 谢海安
-  Date: 2019/12/16
-  Time: 8:09
+  User: 70716
+  Date: 2019/12/18
+  Time: 15:25
+  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -12,7 +13,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" charset="UTF-8">
-	<title>城市配置路线</title>
+	<title>城市站点配置表</title>
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css"%>>
 	<script src=<%=path+"/js/jquery-3.4.1.js"%>></script>
 	<script src=<%=path+"/layui/layui.js"%>></script>
@@ -30,16 +31,12 @@
 </div>
 
 <div class="demoTable site-demo-button" id="layerDemo">
-	省份：
+	站点名称：
 	<div class="layui-inline">
-		<input name="provinceName" class="layui-input" id="provinceName" autocomplete="off">
-	</div>
-	城市：
-	<div class="layui-inline">
-		<input name="cityName" class="layui-input" id="cityName" autocomplete="off">
+		<input name="provinceName" class="layui-input" id="stationName" autocomplete="off">
 	</div>
 	<button class="layui-btn" data-type="reload" id="search-btn">搜索</button>
-	<button data-method="addCity" data-type="auto" class="layui-btn layui-btn-normal">新增城市</button>
+	<button data-method="addStation" data-type="auto" class="layui-btn layui-btn-normal">新增站点</button>
 </div>
 
 <table class="layui-hide" id="test" lay-filter="test"></table>
@@ -54,18 +51,18 @@
 		var table = layui.table;
 		table.render({
 			elem: '#test'
-			,url: '/bus/city/queryCityConfiguration'
+			,url: '/bus/station/queryStation?cityName=${requestScope.cityName}'
 			,cols: [[
 				{checkbox: true, fixed: true}
-				,{field:'cityConfigurationId', width:80, title: '序号', sort: true}
-				,{field:'provinceName', width:80, title: '省份'}
-				,{field:'cityName', width:80, title: '城市', sort: true}
-				,{field:'stationCount', width:120, title: '站点数', sort: true}
-				,{field:'routeCount', width:120, title: '线路数', sort: true}
+				,{field:'stationId', width:80, title: '序号', sort: true}
+				,{field:'stationName', width:80, title: '站点名称'}
+				,{field:'stationLon', width:80, title: 'x坐标', sort: true}
+				,{field:'stationLat', width:120, title: 'y坐标', sort: true}
+				,{field:'routes', width:120, title: '经过路线', sort: true}
 				,{field: 'operate', title:'操作', toolbar: '#barDemo', width:200}
 			]]
 			,initSort: {
-				field: 'cityConfigurationId' //排序字段，对应 cols 设定的各字段名
+				field: 'stationId' //排序字段，对应 cols 设定的各字段名
 				,type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
 			}
 			,id: 'testReload'
@@ -83,9 +80,9 @@
 			if(obj.event === 'del'){
 				layer.confirm('确认删除？', function(index){
 					$.ajax({
-						url:"/bus/city/deleteCityConfiguration",
+						url:"/bus/station/deleteStation",
 						type:"POST",
-						data:{"cityConfigurationId":data.cityConfigurationId},
+						data:{"stationId":data.stationId},
 						dataType:"text",
 						async:true,
 						success:function (data) {
@@ -168,8 +165,7 @@
 					curr: 1 //重新从第 1 页开始
 				}
 				,where: {
-					"provinceName":$("#provinceName").val(),
-					"cityName":$("#cityName").val()
+					"stationName":$("#stationName").val(),
 				}
 			}, 'data');
 		}
@@ -183,7 +179,7 @@
 		var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
 		//触发事件
 		var active = {
-			addCity: function(othis){
+			addStation: function(othis){
 				var type = othis.data('type')
 					,text = othis.text();
 				layer.open({
@@ -191,7 +187,7 @@
 					,title:['新增城市','font-size:20px']
 					,offset: type
 					,id: 'MODIFY'+type //防止重复弹出
-					,content: ['/bus/city/addCityView', 'no']
+					,content: ['/bus/station/addStationView?cityName=${requestScope.cityName}', 'no']
 					,area: ['400px', '350px']
 					,shade: 0 //不显示遮罩
 				});
@@ -206,3 +202,4 @@
 </script>
 </body>
 </html>
+

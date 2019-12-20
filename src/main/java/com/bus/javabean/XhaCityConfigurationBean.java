@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class XhaCityConfigurationBean {
 	/**序号*/
-	private int rowNumber;
+	private int cityConfigurationId;
 	/**省份名字*/
 	private String provinceName;
 	/**城市名字*/
@@ -22,20 +22,20 @@ public class XhaCityConfigurationBean {
 	public XhaCityConfigurationBean() {
 	}
 
-	public XhaCityConfigurationBean(int rowNumber, String provinceName, String cityName, int stationCount, int routeCount) {
-		this.rowNumber = rowNumber;
+	public XhaCityConfigurationBean(int cityConfigurationId, String provinceName, String cityName, int stationCount, int routeCount) {
+		this.cityConfigurationId = cityConfigurationId;
 		this.provinceName = provinceName;
 		this.cityName = cityName;
 		this.stationCount = stationCount;
 		this.routeCount = routeCount;
 	}
 
-	public int getRowNumber() {
-		return rowNumber;
+	public int getCityConfigurationId() {
+		return cityConfigurationId;
 	}
 
-	public void setRowNumber(int rowNumber) {
-		this.rowNumber = rowNumber;
+	public void setCityConfigurationId(int cityConfigurationId) {
+		this.cityConfigurationId = cityConfigurationId;
 	}
 
 	public String getProvinceName() {
@@ -72,7 +72,6 @@ public class XhaCityConfigurationBean {
 
 	@Override
 	public String toString() {
-		return "XhaCityConfigurationBean" +
-				"{" + "rowNumber=" + rowNumber + ", provinceName='" + provinceName + '\'' + ", cityName='" + cityName + '\'' + ", stationCount=" + stationCount + ", routeCount=" + routeCount + '}';
+		return "XhaCityConfigurationBean{" + "cityConfigurationId=" + cityConfigurationId + ", provinceName='" + provinceName + '\'' + ", cityName='" + cityName + '\'' + ", stationCount=" + stationCount + ", routeCount=" + routeCount + '}';
 	}
 }

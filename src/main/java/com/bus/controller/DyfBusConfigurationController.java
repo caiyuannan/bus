@@ -1,3 +1,4 @@
+/*
 package com.bus.controller;
 
 import com.bus.javabean.*;
@@ -21,10 +22,12 @@ import java.util.Date;
 import java.util.List;
 
 
+*/
 /**
  * @author 40651
  * Controller 层
- */
+ *//*
+
 @Controller
 public class DyfBusConfigurationController
 {
@@ -296,3 +299,4 @@ public class DyfBusConfigurationController
 		return tableBean;
 	}
 }
+*/

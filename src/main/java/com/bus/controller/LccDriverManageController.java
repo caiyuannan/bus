@@ -6,22 +6,18 @@ import com.bus.javabean.Mssg;
 import com.bus.service.LccDriverManageService;
 import com.bus.until.GetWeek;
 import com.google.gson.Gson;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * 司机管理控制器
@@ -32,6 +28,8 @@ public class LccDriverManageController
 {
 	@Resource
 	private LccDriverManageService ldms;
+
+	int count = 0;
 
 	private ModelAndView modelAndView = new ModelAndView();
 
@@ -58,7 +56,7 @@ public class LccDriverManageController
 				list = GetWeek.convertWeekByDate(date1);
 			}
 
-			HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork();
+			HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
 			System.out.println("周Week"+list);
 			System.out.println("workmap"+map);
 			modelAndView.addObject("workmap",map);
@@ -74,99 +72,147 @@ public class LccDriverManageController
 		return modelAndView;
 
 	}
-
-	@RequestMapping("toCrewScheduling")
+	/**
+	 * 进入上一周排班
+	 * @return
+	 */
+	@RequestMapping("/toPreWeek")
 	@ResponseBody
-	public void toCrewScheduling(HttpServletRequest request, HttpServletResponse response){
+	public ModelAndView preWeek(String nwd)
+	{
+		System.out.println("进入上一周方法");
 
-//
-//		String s = request.getParameter("msg");
-//
-//		System.out.println(s);
-//
-//		Gson g = new Gson();
-//
-//		Mssg msg = g.fromJson(s, Mssg.class);
-//		if(msg.getSendMssg().contains(","))//判断上传的字符串是否有","如果有就做切割
-//		{
-//			String[] arr = msg.getSendMssg().split(",");
-//			String head = arr[0];
-//			String strid = arr[1];
-//			String strdate = arr[2];
-//
-//			int sid = Integer.parseInt(strid);
-//
-//			switch (arr[0]){
-//				case "add":
-//
-//					boolean fg = ldms.checkDriverWork(Integer.parseInt(strid),strdate);
-//					if(fg==false)
-//					{
-//						boolean flag = StaffAction.getInstance().addWork(sid, strdate);
-//
-//						if (flag)
-//						{
-//							try
-//							{
-//								Mssg m = new Mssg();
-//								m.setSendMssg("添加成功");
-//								String jsonstr = g.toJson(m);
-//								System.out.println(jsonstr);
-//								response.setHeader("Content-Type", "text/html;charset=GB2312");
-//								PrintWriter printWriter = new PrintWriter(response.getOutputStream());
-//								printWriter.println(jsonstr);
-//								printWriter.flush();
-//							} catch (IOException e)
-//							{
-//								e.printStackTrace();
-//							}
-//						}
-//					}else{
-//
-//						try
-//						{
-//							Mssg m = new Mssg();
-//							m.setSendMssg("该排班已经存在");
-//							String jsonstr = g.toJson(m);
-//							System.out.println(jsonstr);
-//							response.setHeader("Content-Type", "text/html;charset=GB2312");
-//							PrintWriter printWriter = new PrintWriter(response.getOutputStream());
-//							printWriter.println(jsonstr);
-//							printWriter.flush();
-//						} catch (IOException e)
-//						{
-//							e.printStackTrace();
-//						}
-//					}
-//					break;
-//				case "del":
-//					boolean b = StaffAction.getInstance().delWork(sid);
-//					if (b)
-//					{
-//						try
-//						{
-//							Mssg m = new Mssg();
-//							m.setSendMssg("删除成功");
-//							String jsonstr = g.toJson(m);
-//							System.out.println(jsonstr);
-//							response.setHeader("Content-Type", "text/html;charset=GB2312");
-//							PrintWriter printWriter = new PrintWriter(response.getOutputStream());
-//							printWriter.println(jsonstr);
-//							printWriter.flush();
-//						} catch (IOException e)
-//						{
-//							e.printStackTrace();
-//						}
-//					}
-//					break;
-//
-//				default:
-//					break;
-//
-//			}
-//
-//		}
+		try
+		{
+			//int count =0;
+			//String dt = request.getParameter("nwd");
+			DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+			Date dat = format1.parse(nwd);
+			Date date2 = new Date();
 
+			List list = null;
+			count--;
+
+			Calendar calendar = Calendar.getInstance();
+
+			//calendar.setTime(dat);
+			calendar.add(Calendar.WEEK_OF_MONTH,count);//相当于在当前日期上加7天，例如现在是周一，加完后是下周一
+			calendar.set(Calendar.DAY_OF_WEEK,7);//把当前日期所在的周设置到周六（7 就是一周的最后一天：周六）
+
+			list = GetWeek.convertWeekByDate(calendar.getTime());
+
+			HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
+			modelAndView.addObject("workmap",map);
+			modelAndView.addObject("week",list);
+			modelAndView.setViewName("backjsp/driverManage");
+		} catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+
+		return modelAndView;
+	}
+
+	/**
+	 * 进入下一周排班
+	 * @return
+	 */
+	@RequestMapping("/toNextWeek")
+	@ResponseBody
+	public ModelAndView nextWeek()
+	{
+
+		System.out.println("进入下一周方法");
+
+
+		List list = null;
+
+		count++;
+		Date nowDate = new Date();
+		Calendar calendar = Calendar.getInstance();
+		Date date2 = new Date();
+		calendar.setTime(date2);
+		calendar.add(Calendar.WEEK_OF_MONTH,count);//相当于在当前日期上加7天，例如现在是周一，加完后是下周一
+		calendar.set(Calendar.DAY_OF_WEEK,7);//把当前日期所在的周设置到周六（7 就是一周的最后一天：周六）
+
+		list = GetWeek.convertWeekByDate(calendar.getTime());
+
+
+		HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
+		modelAndView.addObject("workmap",map);
+		modelAndView.addObject("week",list);
+		modelAndView.setViewName("backjsp/driverManage");
+
+		return modelAndView;
+	}
+
+	/**下一周排班方法
+	 * @return
+	 */
+	@RequestMapping("/toAddWork")
+	@ResponseBody
+	public String addWork(String msg)
+	{
+
+		System.out.println("进入排班修改方法" + msg);
+
+		if (msg.contains(","))
+		{
+			String[] arr = msg.split(",");
+			//System.out.println(arr[0]+"//"+arr[1]+"//"+arr[2]);
+
+			if(arr[0].equals("排班")&&arr[1]!=null && !"".equals(arr[1].trim()))
+			{
+
+				boolean flag = ldms.updateDriverWork(arr[1], arr[2]);
+				if (flag)
+				{
+					return "排班";
+				}
+			}
+			if(arr[0].equals("休息")){
+				boolean flag = ldms.updateDriverWork(arr[0], arr[2]);
+				if (flag)
+				{
+					return "休息";
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 进入按车牌查询排班
+	 * @return
+	 */
+	@RequestMapping("/findPlateNumber")
+	public ModelAndView findPlateNumber(String title,String start,String end){
+		System.out.println(title+"//"+start+"//"+end);
+//		//将json字符串转化为JSONObject
+		////		JSONObject jsonObject = JSONObject.fromObject(msg);
+		////		//通过getString("")分别取出里面的信息,title对应前台input的name
+		////		String name = jsonObject.getString("title");
+		LccCrewSchedulingBean lcsb = new LccCrewSchedulingBean();
+		lcsb.setWorkType(title);
+		lcsb.setStartTime(start);
+		lcsb.setEndTime(end);
+		Date nowDate = new Date();
+		List list = GetWeek.convertWeekByDate(nowDate);
+		HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(lcsb);
+		System.out.println("周Week"+list);
+		System.out.println("workmap"+map);
+		modelAndView.addObject("workmap",map);
+		modelAndView.addObject("week",list);
+		modelAndView.setViewName("backjsp/driverManage");
+
+		return modelAndView;
+	}
+
+	@RequestMapping("/lccDriverNotarize")
+	public String toNotarizeWorkload(){
+
+		System.out.println("进入出站确认页面");
+		return "backjsp/lccDriverNotarize";
 	}
 
 }

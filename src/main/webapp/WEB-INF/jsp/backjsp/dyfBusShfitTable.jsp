@@ -55,13 +55,14 @@
 //第一个实例
 		table.render({
 			elem: '#demo'
+			, height: 312
 			, url: 'http://localhost:8080/bus/busShfitAllInforMation' //数据接口
 			, page: true
 			, cols: [[ //表头
 				{field: 'shfitId', title: '序号', align: "center"}
 				, {field: 'busLicense', title: '时间', align: "center"}
 				, {field: 'busDutyDriver', title: '发车', align: "center"}
-				, {fixed: 'right', title: '操作', minWidth: "20px", toolbar: '#barDemo', align: "center"}
+				, {fixed: 'right', title: '操作', minWidth: "120px", toolbar: '#barDemo', align: "center"}
 
 			]]
 			, skin: 'sm' //表格风格

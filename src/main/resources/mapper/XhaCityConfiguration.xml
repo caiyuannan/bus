@@ -1,55 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bus.dao">
-<!--        <resultMap id="provinceRes" type="com.bus.javabean.XhaProvinceBean">-->
-<!--                <result property="provinceId" column="province_id"></result>-->
-<!--                <result property="provinceName" column="province_name"></result>-->
-<!--                <result property="cityBean.cityId" column="city_id"></result>-->
-<!--                <result property="cityBean.cityName" column="city_name"></result>-->
-<!--        </resultMap>-->
-<!--        &lt;!&ndash; 查找城市&ndash;&gt;-->
-<!--        <select id="findCity" resultMap="provinceRes">-->
-<!--                SELECT tp.*,tc.*-->
-<!--                FROM tb_province tp,tb_city tc,tb_province_city tpc-->
-<!--                <where>-->
-<!--                    tp.province_id = tpc.province_id AND tc.city_id = tpc.city_id-->
-<!--                    <if test="null != provinceName">-->
-<!--                        AND province_name = #{provinceName}-->
-<!--                    </if>-->
-<!--                    <if test="null != cityName">-->
-<!--                        AND city_name = #{cityName}-->
-<!--                    </if>-->
-<!--                    <if test="0 != startPage">-->
+<mapper namespace="com.bus.dao.XhaCityConfigurationMapper">
 
-<!--                    </if>-->
-<!--                </where>-->
-<!--        </select>-->
+    <resultMap id="cityConfigurationRes" type="com.bus.javabean.XhaCityConfigurationBean">
+        <id property="cityConfigurationId" column="city_configuration_id"></id>
+        <result property="provinceName" column="province_name"></result>
+        <result property="cityName" column="city_name"></result>
+        <result property="stationCount" column="station_count"></result>
+        <result property="routeCount" column="route_count"></result>
+    </resultMap>
+    <!-- 查询城市配置表,没有分页-->
+    <select id="queryCityConfiguration" parameterType="com.bus.javabean.XhaPageBean" resultMap="cityConfigurationRes">
+        select * from tb_city_configuration
+        <where>
+            and state_id = 1
+            <if test="null != provinceName and '' != provinceName">
+                and province_name like '%${provinceName}%'
+            </if>
+            <if test="null != cityName and '' != cityName">
+                and city_name like '%${cityName}%'
+            </if>
+        </where>
+    </select>
 
-<!--        &lt;!&ndash; 查找站点&ndash;&gt;-->
-<!--        <resultMap id="stationRes" type="com.bus.javabean.XhaStationBean">-->
-<!--                <result property="stationId" column="station_id"></result>-->
-<!--                <result property="cityId" column="city_id"></result>-->
-<!--                <result property="stationName" column="station_name"></result>-->
-<!--                <result property="stationLon" column="station_lon"></result>-->
-<!--                <result property="stationLat" column="station_lat"></result>-->
-<!--        </resultMap>-->
-<!--        <select id="findStation" parameterType="java.lang.Integer" resultMap="stationRes">-->
-<!--            SELECT * FROM tb_station WHERE city_id = #{cityId};-->
-<!--        </select>-->
+    <!-- 查询城市配置表,带分页限制-->
+    <select id="queryCityConfigurationOnLimit" parameterType="com.bus.javabean.XhaPageBean" resultMap="cityConfigurationRes">
+        select * from tb_city_configuration
+        <where>
+            and state_id = 1
+            <if test="null != provinceName and '' != provinceName">
+                and province_name like '%${provinceName}%'
+            </if>
+            <if test="null != cityName and '' != cityName">
+                and city_name like '%${cityName}%'
+            </if>
+        </where>
+        limit #{start},#{end}
+    </select>
 
-<!--        &lt;!&ndash; 查找路线&ndash;&gt;-->
-<!--        <resultMap id="routeRes" type="com.bus.javabean.XhaRouteBean">-->
-<!--                <result property="routeId" column="route_id"></result>-->
-<!--                <result property="routeFee" column="route_fee"></result>-->
-<!--                <result property="routeTime" column="route_time"></result>-->
-<!--                <result property="routeName" column="route_name"></result>-->
-<!--                <result property="cityId" column="city_id"></result>-->
-<!--                <result property="stateId" column="state_id"></result>-->
-<!--        </resultMap>-->
-<!--        <select id="findRoute" parameterType="java.lang.Integer" resultMap="routeRes">-->
-<!--            SELECT * FROM tb_route WHERE city_id = #{cityId};-->
-<!--        </select>-->
+    <!-- 删除城市配置表-->
+    <update id="deleteCityConfiguration" parameterType="java.lang.Integer">
+        update tb_city_configuration set state_id = 2,station_count = 0,route_count = 0 where city_configuration_id = #{cityConfigurationId}
+    </update>
+
+    <resultMap id="provinceRes" type="com.bus.javabean.XhaProvinceBean">
+        <result property="provinceId" column="province_id"></result>
+        <result property="provinceName" column="province_name"></result>
+    </resultMap>
+
+    <!-- 查询省名-->
+    <select id="queryProvince" resultMap="provinceRes">
+        select * from tb_province
+    </select>
+
+    <!-- 查询城市配置表是否已经存在相应的省份、城市-->
+    <select id="queryProvinceCityIsExited" resultMap="provinceRes">
+        select province_name from tb_city_configuration
+        <where>
+            and province_name = #{provinceName} and city_name = #{cityName} and state_id = 1
+        </where>
+    </select>
+
+    <!-- 查询城市配置表是否已经存在相应的省份、城市,并被逻辑删除-->
+    <select id="queryProvinceCityIsDeleted" resultMap="provinceRes">
+        select province_name from tb_city_configuration
+        <where>
+            and province_name = #{provinceName} and city_name = #{cityName}
+        </where>
+    </select>
+
+    <!-- 把省份城市逻辑删除的状态2改成1-->
+    <update id="updateProvinceCityState">
+        update tb_city_configuration set state_id = 1,station_count = 0,route_count = 0 where province_name = #{provinceName} and city_name = #{cityName}
+    </update>
+
+    <!-- 添加省份、城市-->
+    <insert id="addProvinceCity">
+        insert into tb_city_configuration(province_name,city_name,station_count,route_count,state_id) values (#{provinceName},#{cityName},0,0,1)
+    </insert>
 
 </mapper>
 

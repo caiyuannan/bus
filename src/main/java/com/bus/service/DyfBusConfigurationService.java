@@ -1,10 +1,9 @@
+/*
 package com.bus.service;
 
 import com.bus.javabean.DyfBusBean;
 import com.bus.javabean.DyfProvince;
 import com.bus.javabean.LccDriverBean;
-import com.bus.mapper.DyfBusConfigurationMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +20,8 @@ public class DyfBusConfigurationService
 		return busConfigurationMapper.selectProvinceCity();
 	}
 
-	/**
+	*/
+/**
 	 *
 	 * @param busLicense 前台菜单跳转时分辨出查看城市
 	 * @param busDutyDriver 配置车辆管理维护司机
@@ -31,7 +31,8 @@ public class DyfBusConfigurationService
 	 * @param busState      公交车状态
 	 * @return
 	 * 查询所有的车辆信息
-	 */
+	 *//*
+
 	//分页查询所有公交车
 	public List<DyfBusBean> selectBusManger(String busLicense,String busDutyDriver,String busPlate,String busAge, String busMin,String busState,Integer startPage,Integer page){
 		return busConfigurationMapper.selectBusManger(busLicense,busDutyDriver,busPlate,busAge,busMin,busState,startPage,page);
@@ -46,3 +47,4 @@ public class DyfBusConfigurationService
 		return busConfigurationMapper.selectDriver();
 	}
 }
+*/

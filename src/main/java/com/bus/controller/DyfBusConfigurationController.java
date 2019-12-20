@@ -1,3 +1,4 @@
+/*
 package com.bus.controller;
 
 import com.bus.javabean.DyfBusBean;
@@ -16,10 +17,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 
+*/
 /**
  * @author 40651
  * Controller 层
- */
+ *//*
+
 @Controller
 public class DyfBusConfigurationController
 {
@@ -88,3 +91,4 @@ public class DyfBusConfigurationController
 
 
 }
+*/

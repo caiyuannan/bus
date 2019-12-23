@@ -24,12 +24,15 @@ public class LccDriverBean
 	private int cityId;
 	/**司机所在城市名称*/
 	private String cityName;
+	/**司机上班站点*/
+	private int stationId;
+	private String stationName;
+
 	public LccDriverBean()
 	{
 	}
 
-
-	public LccDriverBean(int driverId, String driverName, String driverCellphone, String driverIDNumber, String driverState, int driverWage, int cityId, String cityName)
+	public LccDriverBean(int driverId, String driverName, String driverCellphone, String driverIDNumber, String driverState, int driverWage, int cityId, String cityName, int stationId, String stationName)
 	{
 		this.driverId = driverId;
 		this.driverName = driverName;
@@ -39,6 +42,8 @@ public class LccDriverBean
 		this.driverWage = driverWage;
 		this.cityId = cityId;
 		this.cityName = cityName;
+		this.stationId = stationId;
+		this.stationName = stationName;
 	}
 
 	public int getCityId()
@@ -121,9 +126,29 @@ public class LccDriverBean
 		this.driverWage = driverWage;
 	}
 
+	public int getStationId()
+	{
+		return stationId;
+	}
+
+	public void setStationId(int stationId)
+	{
+		this.stationId = stationId;
+	}
+
+	public String getStationName()
+	{
+		return stationName;
+	}
+
+	public void setStationName(String stationName)
+	{
+		this.stationName = stationName;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "LccDriverBean{" + "driverId=" + driverId + ", driverName='" + driverName + '\'' + ", driverCellphone='" + driverCellphone + '\'' + ", driverIDNumber='" + driverIDNumber + '\'' + ", driverState='" + driverState + '\'' + ", driverWage=" + driverWage + ", cityId=" + cityId + ", cityName='" + cityName + '\'' + '}';
+		return "LccDriverBean{" + "driverId=" + driverId + ", driverName='" + driverName + '\'' + ", driverCellphone='" + driverCellphone + '\'' + ", driverIDNumber='" + driverIDNumber + '\'' + ", driverState='" + driverState + '\'' + ", driverWage=" + driverWage + ", cityId=" + cityId + ", cityName='" + cityName + '\'' + ", stationId=" + stationId + ", stationName='" + stationName + '\'' + '}';
 	}
 }

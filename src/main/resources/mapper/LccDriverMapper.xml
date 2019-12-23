@@ -4,9 +4,17 @@
 
 <mapper namespace="com.bus.dao.LccDriverManageMapper">
 
+    <!--其他表联合查询的字段也可以放进自定义类的map里，属性要对应上那个表的数据库字段-->
     <resultMap id="driverMap" type="com.bus.javabean.LccDriverBean">
         <result property="driverId" column="driver_id"/>
         <result property="driverName" column="driver_name"/>
+        <result property="driverCellphone" column="driver_cellphone"/>
+        <result property="driverIDNumber" column="driver_ID_number"/>
+        <result property="driverState" column="driver_state"/>
+        <result property="driverWage" column="driver_wage"/>
+        <result property="cityId" column="city_id"/>
+        <result property="stationId" column="station_id"/>
+        <result property="stationName" column="station_name"/>
     </resultMap>
 
 <!--    <select id="queryDriver" resultMap="driverMap">-->
@@ -67,7 +75,6 @@
          values (#{driverId},#{workTime},#{workType});
     </insert>
     
-    
 
     <resultMap id="busMap" type="com.bus.javabean.DyfBusBean">
         <id property="busId" column="bus_id"></id>
@@ -80,7 +87,7 @@
         <result property="stateName" column="state_name"></result>
     </resultMap>
     <select id="findAllBuses" parameterType="com.bus.javabean.DyfBusBean" resultMap="busMap">
-        SELECT * from tb_bus
+        SELECT a.shfit_state,b.bus_license from tb_bus_shfit a,tb_bus b where a.shfit_bus_id = b.bus_id and a.shfit_state='未发车' limit 1
     </select>
 
     <resultMap id="routeMap" type="com.bus.javabean.LccRouteBean">
@@ -126,20 +133,125 @@
     <select id="findBusShfit" resultMap="busShfitMap">
         SELECT * from tb_bus_shfit where shfit_state='未发车' limit 1
     </select>
-<!--插入司机工作量表-->
-    <insert id="insertDriverWorkload" parameterType="map">
-        INSERT INTO tb_driver_workload(bus_id,route_id,driver_id)
-        select tb_bus.bus_id, tb_route.route_id, tb_driver.driver_id
-        FROM tb_bus, tb_route, tb_driver
-        WHERE tb_bus.bus_license = #{busName} and tb_route.route_name=#{routeName} and tb_driver.driver_name=#{driverName}
-    </insert>
+
 <!--插入司机考勤表-->
     <insert id="addGateCard" parameterType="map">
         INSERT INTO tb_gate_card(driver_id,office_hours,work_date)
 select driver_id ,#{shfit_start_time},#{shfit_date} FROM tb_driver where driver_name=#{driverName}
     </insert>
+<!--查询插入考勤表的ID-->
+    <select id="queryAttendanceId" resultType="int">
+        select attendance_id from tb_gate_card ORDER BY attendance_id DESC LIMIT 1
+    </select>
+    <!--插入司机工作量表-->
+    <insert id="insertDriverWorkload" parameterType="map">
+        INSERT INTO tb_driver_workload(bus_id,route_id,driver_id,attendance_id)
+        select tb_bus.bus_id, tb_route.route_id, tb_driver.driver_id,#{attendanceId}
+        FROM tb_bus, tb_route, tb_driver
+        WHERE tb_bus.bus_license = #{busName} and tb_route.route_name=#{routeName} and tb_driver.driver_name=#{driverName}
+    </insert>
 <!--更新发车表状态-->
-    <update id="updateBusShfitState" parameterType="int">
-        update tb_bus_shfit SET shfit_state='已发车' where shfit_id=#{shfitId}
+    <update id="updateBusShfitState" parameterType="map">
+        update tb_bus_shfit SET shfit_state='已发车',shfit_bus_id=(select bus_id FROM tb_bus where bus_license=#{busName}) where shfit_id=#{shfitId}
     </update>
+
+<!--司机带条件查询带分页-->
+    <select id="queryAllDrivers" parameterType="map" resultMap="driverMap">
+        SELECT tld.driver_id,tld.driver_name,tld.driver_cellphone,ts.station_name
+        FROM tb_driver tld
+        INNER JOIN tb_station ts
+        ON tld.station_id=ts.station_id where 1=1
+    <if test="driverName!=null and driverName!=''">and tld.driver_name=#{driverName}</if>
+    <if test="driverCellphone!=null and driverCellphone!=''">and tld.driver_cellphone=#{driverCellphone}</if>
+    <if test="stationName!=null and stationName!=''">and ts.station_name=#{stationName}</if>
+        limit #{start},#{end}
+    </select>
+<!--司机查询总页-->
+    <select id="getTotalPage"  parameterType="map" resultType="java.lang.Integer">
+            select count(tbl.driver_id) from (SELECT td.driver_id,td.driver_name,td.driver_cellphone,ts.station_name
+            FROM tb_driver td
+            INNER JOIN tb_station ts
+            ON td.station_id=ts.station_id)tbl where 1=1
+        <if test="driverName!=null and driverName!=''">and tbl.driver_name=#{driverName}</if>
+        <if test="driverCellphone!=null and driverCellphone!=''">and tbl.driver_cellphone=#{driverCellphone}</if>
+        <if test="stationName!=null and stationName!=''">and tbl.station_name=#{stationName}</if>
+
+    </select>
+
+<!--修改司机-->
+    <update id="updateDrivers" parameterType="com.bus.javabean.LccDriverBean">
+        UPDATE tb_driver
+        <set>
+            <if test="driverName != null and driverName != ''">
+                driver_name=#{driverName},
+            </if>
+
+            <if test="driverCellphone != null and driverCellphone != ''">
+                driver_cellphone=#{driverCellphone},
+            </if>
+
+            <if test="stationName != null and stationName != ''">
+                station_id=(select station_id from tb_station where station_name = #{stationName})
+            </if>
+        </set>
+        WHERE driver_id=#{driverId}
+    </update>
+<!--司机工作量总页数-->
+    <resultMap id="driverWorkloadMap" type="com.bus.javabean.LccDriverWorkloadBean">
+        <result property="workloadId" column="workload_id"/>
+        <result property="busId" column="bus_id"/>
+        <result property="routeId" column="route_id"/>
+        <result property="driverId" column="driver_id"/>
+        <result property="stationId" column="station_id"/>
+        <result property="attendanceId" column="attendance_id"/>
+        <result property="startTime" column="work_date"/>
+        <result property="endTime" column="work_date"/>
+        <result property="busLicense" column="bus_license"/>
+        <result property="routeName" column="route_name"/>
+        <result property="workDate" column="work_date"/>
+        <result property="officeHours" column="office_hours"/>
+    </resultMap>
+<!--司机工作量带条件查询-->
+    <select id="findDriverWorkload" parameterType="map" resultMap="driverWorkloadMap">
+        SELECT wk.workload_id,wk.bus_license,wk.route_name,wk.work_date,wk.office_hours from
+        (select a.driver_id,a.workload_id,b.bus_license,c.route_name,d.work_date,d.office_hours from tb_driver_workload a,tb_bus b,tb_route c,tb_gate_card d
+        where a.bus_id=b.bus_id and a.route_id=c.route_id and a.attendance_id=d.attendance_id)wk WHERE driver_id=#{driverId}
+        <if test="startTime != null and startTime != ''">
+            and work_date&gt;=#{startTime},
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and work_date&lt;=#{endTime}
+        </if>
+        limit #{start},#{end}
+    </select>
+
+    <select id="getTotalPage1" parameterType="map" resultType="java.lang.Integer">
+        SELECT count(wk.workload_id) from
+        (select a.driver_id,a.workload_id,b.bus_license,c.route_name,d.work_date,d.office_hours from tb_driver_workload a,tb_bus b,tb_route c,tb_gate_card d
+        where a.bus_id=b.bus_id and a.route_id=c.route_id and a.attendance_id=d.attendance_id)wk WHERE driver_id=#{driverId}
+        <if test="startTime != null and startTime != ''">
+            and work_date&gt;=#{startTime},
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and work_date&lt;=#{endTime}
+        </if>
+    </select>
+
+
+    <resultMap id="driverWageMap" type="com.bus.javabean.LccDriverWageBean">
+        <result property="cityName" column="city_name"></result>
+        <result property="driverName" column="driver_name"></result>
+        <result property="driverWage" column="driver_wage"></result>
+        <result property="driverCellphone" column="driver_cellphone"></result>
+    </resultMap>
+<!--司机工资查询带分页-->
+    <select id="findDriverWage" parameterType="map" resultMap="driverWageMap">
+select b.city_name,a.driver_name,a.driver_wage,a.driver_cellphone FROM tb_driver a,tb_city b WHERE driver_state='启用' and a.city_id=b.city_id
+limit #{start},#{end}
+    </select>
+
+<!--司机工资总页数-->
+    <select id="getTotalPage2" parameterType="map" resultType="java.lang.Integer">
+        select COUNT(*) FROM tb_driver a,tb_city b WHERE driver_state='启用' and a.city_id=b.city_id
+    </select>
 </mapper>

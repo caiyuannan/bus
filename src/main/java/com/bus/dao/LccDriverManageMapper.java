@@ -17,19 +17,6 @@ import java.util.Map;
 public interface LccDriverManageMapper
 
 {
-//	/**
-//	 *预加载查询所有启用状态司机
-//	 * @return
-//	 */
-//	public List<LccDriverBean> queryDriver();
-//
-//	/**
-//	 * 检查司机是否当天排过班
-//	 * @param driverId
-//	 * @param date
-//	 * @return
-//	 */
-//	public int checkDriverWork(int driverId, String date);
 
 	/**
 	 * 预加载周排班查询
@@ -60,5 +47,17 @@ public interface LccDriverManageMapper
 
 	public int insertDriverWorkload(Map<String,Object> map);
 	public int addGateCard(Map<String,Object> map);
-	public boolean updateBusShfitState(int shfitId);
+	public int queryAttendanceId();
+	public boolean updateBusShfitState(Map<String,Object> map);
+
+	public List<LccDriverBean> queryAllDrivers(Map<String,Object> map);
+	public int getTotalPage(Map<String,Object> map);
+
+	public boolean updateDrivers(LccDriverBean ldb);
+
+	public List<LccDriverWorkloadBean> findDriverWorkload(Map<String,Object> map);
+	public int getTotalPage1(Map<String,Object> map);
+
+	public List<LccDriverWageBean> findDriverWage(Map<String,Object> map);
+	public int getTotalPage2(Map<String,Object> map);
 }

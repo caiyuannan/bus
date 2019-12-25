@@ -147,20 +147,6 @@ public class LccDriverManageController
 		list = GetWeek.convertWeekByDate(calendar.getTime());
 		System.out.println("下周时间"+list);
 
-//		List<Integer> ilist = ldms.findDriverId();
-//
-//		for (Integer j : ilist) {
-//
-//			for (int i = 0; i <list.size() ; i++)
-//
-//			{
-//				lcdb.setDriverId(j);
-//				lcdb.setWorkTime(String.valueOf(list.get(i)));
-//				lcdb.setWorkType("操作");
-//				a = ldms.insertBlankWork(lcdb);
-//			}
-//
-//		}
 
 		HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
 		modelAndView.addObject("workmap",map);

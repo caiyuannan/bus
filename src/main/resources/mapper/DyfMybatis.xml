@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bus.mapper.DyfBusConfigurationMapper">
-<!--    查询所在省份包含的城市集合 以此返回一个城市的Javabean DyfProvince类型-->
+<mapper namespace="com.bus.dao.DyfBusConfigurationMapper">
+    <!--    查询所在省份包含的城市集合 以此返回一个城市的Javabean DyfProvince类型-->
     <resultMap id="selectProvince" type="com.bus.javabean.DyfProvince">
         <id property="provinceId" column="province_id"></id>
         <result property="provinceName" column="province_name"></result>
@@ -11,14 +11,14 @@
             <result property="cityName" column="city_name"></result>
         </collection>
     </resultMap>
-<!--    查询所在省份所包含的城市sql语句-->
-        <select id="selectProvinceCity" resultMap="selectProvince">
+    <!--    查询所在省份所包含的城市sql语句-->
+    <select id="selectProvinceCity" resultMap="selectProvince">
          select c.*,p.* from tb_province p
          ,tb_city c,tb_province_city pc
           where c.city_id = pc.city_id and
           p.province_id = pc.province_id
         </select>
-<!--    车辆管理的resultMap 之所以用这个是由于关联了状态表-->
+    <!--    车辆管理的resultMap 之所以用这个是由于关联了状态表-->
     <resultMap id="selectAllBusManger" type="com.bus.javabean.DyfBusBean">
         <id property="busId" column="bus_id"></id>
         <result property="busAge" column="bus_age"></result>
@@ -29,66 +29,216 @@
         <result property="busState" column="bus_state"></result>
         <result property="stateName" column="state_name"></result>
     </resultMap>
-<!--    车辆管理sql语句  查询所有的车辆信息-->
-        <select id="selectBusManger"  resultMap="selectAllBusManger">
-            select tb_bus.*,tb_state.state_name
-            from tb_bus,tb_state where bus_state = state_id
+    <!--    车辆管理sql语句  查询所有的车辆信息-->
+    <select id="selectBusManger" resultMap="selectAllBusManger">
+        select tb_bus.*,tb_state.state_name
+        from tb_bus,tb_state where bus_state = state_id
 
-                <if test="busLicense !=null and busLicense!=''">
-                    and bus_license like concat(#{busLicense},'%')
-                </if>
-                <if test="busDutyDriver != null and busDutyDriver!=''">
-                    and bus_duty_driver = #{busDutyDriver}
-                </if>
-                <if test="busPlate !=null and busPlate!=''">
-                    and bus_license = #{busPlate}
-                </if>
-                <if test="busAge !=null and busAge!=''">
-                    and bus_age = #{busAge}
-                </if>
-                <if test="busMin !=null and busMin!=''">
-                    and bus_min = #{busMin}
-                </if>
-                <if test="busState!=null and busState!=''">
-                    and state_name = #{busState}
-                </if>
+        <if test="busLicense !=null and busLicense!=''">
+            and bus_license like concat(#{busLicense},'%')
+        </if>
+        <if test="busDutyDriver != null and busDutyDriver!=''">
+            and bus_duty_driver = #{busDutyDriver}
+        </if>
+        <if test="busPlate !=null and busPlate!=''">
+            and bus_license = #{busPlate}
+        </if>
+        <if test="busAge !=null and busAge!=''">
+            and bus_age = #{busAge}
+        </if>
+        <if test="busMin !=null and busMin!=''">
+            and bus_min = #{busMin}
+        </if>
+        <if test="busState!=null and busState!=''">
+            and state_name = #{busState}
+        </if>
 
-            limit #{startIndex},#{pageSize}
-        </select>
-<!--    查询所有车辆以及带条件的车辆的条数-->
+        limit #{startIndex},#{pageSize}
+    </select>
+    <!--    查询所有车辆以及带条件的车辆的条数-->
     <select id="selectCountBus" resultType="java.math.BigDecimal">
         select count(*)
         from tb_bus,tb_state where bus_state = state_id
-            <if test="busLicense !=null and busLicense!=''">
-                and bus_license like concat(#{busLicense},'%')
-            </if>
-            <if test="busDutyDriver!=null and busDutyDriver!=''">
-                and bus_duty_driver = #{busDutyDriver}
-            </if>
-            <if test="busPlate !=null and busPlate!=''">
-                and bus_license = #{busPlate}
-            </if>
-            <if test="busAge !=null and busAge!=''">
-                and bus_age = #{busAge}
-            </if>
-            <if test="busMin !=null and busMin!=''">
-                and bus_min = #{busMin}
-            </if>
-            <if test="busState!=null and busState!=''">
-                and state_name = #{busState}
-            </if>
+        <if test="busLicense !=null and busLicense!=''">
+            and bus_license like concat(#{busLicense},'%')
+        </if>
+        <if test="busDutyDriver!=null and busDutyDriver!=''">
+            and bus_duty_driver = #{busDutyDriver}
+        </if>
+        <if test="busPlate !=null and busPlate!=''">
+            and bus_license = #{busPlate}
+        </if>
+        <if test="busAge !=null and busAge!=''">
+            and bus_age = #{busAge}
+        </if>
+        <if test="busMin !=null and busMin!=''">
+            and bus_min = #{busMin}
+        </if>
+        <if test="busState!=null and busState!=''">
+            and state_name = #{busState}
+        </if>
     </select>
-<!--    查询所有的司机信息-->
+    <!--    查询所有的司机信息-->
     <resultMap id="selectAllDriver" type="com.bus.javabean.LccDriverBean">
         <id property="driverId" column="driver_id"></id>
-       <result property="driverName" column="driver_name"></result>
+        <result property="driverName" column="driver_name"></result>
         <result property="driverCellphone" column="driver_cellphone"></result>
         <result property="driverIDNumber" column="driver_ID_number"></result>
         <result property="driverState" column="driver_state"></result>
         <result property="driverWage" column="driver_wage"></result>
+        <result property="cityId" column="city_id"></result>
+        <result property="cityName" column="city_name"></result>
     </resultMap>
     <select id="selectDriver" resultMap="selectAllDriver">
         select *from tb_driver d,tb_city c where d.city_id = c.city_id and c.city_name=#{cityName}
+    </select>
+    <!--    添加车辆信息-->
+    <insert id="insertBus" parameterType="com.bus.javabean.DyfBusBean">
+        insert into tb_bus(bus_license,bus_duty_driver,bus_type,bus_min,bus_age,bus_state)
+         values (#{busLicense},#{busDutyDriver},#{busType},#{busMin},#{busAge},#{busState})
+    </insert>
+
+    <!--    查询所有状态id以及名称-->
+    <resultMap id="allStateMap" type="com.bus.javabean.stateBean">
+        <id property="stateId" column="state_id"></id>
+        <result property="stateName" column="state_name"></result>
+    </resultMap>
+    <!--    查询状态名称所对应状态表的id-->
+    <select id="selectAllState" parameterType="java.lang.String" resultMap="allStateMap">
+        select *from tb_state where
+        <if test="state !=null and state !=''">
+            state_name= #{state} and
+        </if>
+        state_user_id = 2
+    </select>
+    <delete id="deleteBusState">
+        update tb_bus set bus_state = #{stateNumber} where bus_id = #{busId}
+    </delete>
+    <!--    修改公交信息操作-->
+    <update id="updateBusInforMation" parameterType="com.bus.javabean.DyfBusBean">
+        update tb_bus
+        <trim prefix="set" suffixOverrides=",">
+            <if test="busLicense!=null and busLicense!=''">
+                bus_license = #{busLicense},
+            </if>
+            <if test="busDutyDriver!=null and busDutyDriver!=''">
+                bus_duty_driver = #{busDutyDriver},
+            </if>
+            <if test="busMin!=null and busMin!=''">
+                bus_min = #{busMin},
+            </if>
+            <if test="busAge!=null and busAge!=''">
+                bus_age = #{busAge}
+            </if>
+            <if test="busState>0">
+                bus_state = #{busState}
+            </if>
+        </trim>
+        where bus_id = #{busId}
+    </update>
+    <resultMap id="selectAllRepairMap" type="com.bus.javabean.DyfBusRepairBean">
+        <id property="repairId" column="repair_id"></id>
+        <result property="repairBusId" column="repair_bus_id"></result>
+        <result property="repairDriverId" column="repair_driver_id"></result>
+        <result property="repairStart" column="repair_start"></result>
+        <result property="repairStartTime" column="repair_start_time"></result>
+        <result property="repairFinishTime" column="repair_finish_time"></result>
+        <result property="repairFinish" column="repair_finish"></result>
+        <result property="repairState" column="repair_state"></result>
+        <result property="busDutyDriver" column="bus_duty_driver"></result>
+        <result property="stateName" column="state_name"></result>
+        <result property="busLicense" column="bus_license"></result>
+    </resultMap>
+    <select id="selectAllRepair" resultMap="selectAllRepairMap">
+        select r.*,b.bus_duty_driver,b.bus_license,s.state_name
+        from tb_bus_repair r,tb_bus b,
+        tb_state s where r.repair_bus_id = b.bus_id and s.state_id = r.repair_state
+        <if test="province!=null and province!=''">
+            and b.bus_license like concat(#{province},'%')
+        </if>
+        <if test="license!=null and license!=''">
+            and b.bus_license like concat(#{license},'%')
+        </if>
+        limit #{startIndex},#{pageSize}
+    </select>
+    <select id="countSelectRepair" resultType="java.math.BigDecimal">
+        select count(*) from
+        tb_bus_repair r,tb_bus b,tb_state s where r.repair_bus_id =
+        b.bus_id and s.state_id = r.repair_state
+        <if test="province!=null and province!=''">
+            and b.bus_license like concat(#{province},'%')
+        </if>
+        <if test="license!=null and license!=''">
+            and b.bus_license like concat(#{license},'%')
+        </if>
+    </select>
+    <!--    添加维修车辆-->
+    <insert id="insertAddRepairBus" parameterType="com.bus.javabean.DyfBusRepairBean">
+        INSERT into tb_bus_repair(repair_bus_id,repair_start,
+        repair_start_time,
+        <if test="repairFinish!=null and repairFinish!=''">
+            repair_finish,
+        </if>
+        <if test="repairFinishTime!=null and repairFinishTime!=''">
+            repair_finish_time,
+        </if>
+        repair_state) values (
+        #{repairBusId},#{repairStart},#{repairStartTime},
+        <if test="repairFinish!=null and repairFinish!=''">
+            #{repairFinish},
+        </if>
+        <if test="repairFinishTime!=null and repairFinishTime!=''">
+            #{repairFinishTime},
+        </if>
+        #{repairState}
+        )
+
+    </insert>
+<!--返回线路-->
+    <resultMap id="busShfitBean" type="com.bus.javabean.DyfBusShfitBean">
+        <id property="shfitId" column="shfit_id"></id>
+        <result property="shfitDate" column="shfit_date"></result>
+        <result property="shfitStartTime" column="shfit_start_time"></result>
+        <result property="shfitEndTime" column="shfit_end_time"></result>
+        <result property="shfitBusId" column="shift_bus_id"></result>
+        <result property="shfitBusLine" column="shift_bus_line"></result>
+        <result property="shfitState" column="shift_state"></result>
+        <result property="busLicense" column="bus_license"></result>
+        <result property="routeName" column="route_name"></result>
+    </resultMap>
+<!--    查询车辆分页数据-->
+    <select id="shfitSlectAllLine" resultMap="busShfitBean">
+      select distinct s.*,b.bus_license,r.route_name from tb_bus b,
+      tb_bus_shfit s,tb_route r
+        where b.bus_id = s.shift_bus_id and
+    s.shfit_date = #{shfitDate} and s.shift_bus_line = r.route_id
+    and r.city_name = #{cityName} and r.state_id = 1
+     limit #{startIndex},#{pageSize}
+    </select>
+<!--    查询排班总页数-->
+    <select id="shfitCount" resultType="integer">
+         select count(*)from tb_bus b,
+      tb_bus_shfit s,tb_route r
+        where b.bus_id = s.shift_bus_id and
+    s.shfit_date = #{shfitDate} and s.shift_bus_line = r.route_id
+    and r.city_name = #{cityName} and r.state_id = 1
+    </select>
+    <!--   线路时间resultMap-->
+    <resultMap id="routeAllSelect" type="com.bus.javabean.DyfRouteBean">
+        <id property="routeId" column="route_id"></id>
+        <result property="routeName" column="route_name"></result>
+        <result property="routeFee" column="route_fee"></result>
+        <result property="stateId" column="state_id"></result>
+        <result property="cityName" column="city_name"></result>
+        <result property="routeTime" column="route_time"></result>
+    </resultMap>
+<!--    查询到所有的线路-->
+    <select id="routeAllSelect" parameterType="java.lang.String" resultMap="routeAllSelect">
+        select *from tb_route
+        <if test="cityName !=null and cityName != ''">
+            where city_name = #{cityName}
+        </if>
+
     </select>
 </mapper>
 

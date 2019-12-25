@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bus.dao.LccStatisticsMapper">
+
+    <resultMap id="lcbMap" type="com.bus.javabean.LccCashBean">
+       <result property="routeName" column="route_name"></result>
+        <result property="incomes" column="income"></result>
+    </resultMap>
+<!--&lt;!&ndash;没有带时间条件查询线路收银统计&ndash;&gt;-->
+<!--    <select id="findRouteCashes" resultMap="lcbMap">-->
+<!--        select b.route_name,a.incomes from-->
+<!--        (select sum(income) incomes,route_id from tb_cash group by  route_id)a-->
+<!--        INNER JOIN-->
+<!--        (SELECT route_name,route_id from tb_route)b-->
+<!--        ON a.route_id = b.route_id-->
+<!--    </select>-->
+    <!--带时间条件查询线路收银统计-->
+    <select id="findRouteCashesByDate" parameterType="map" resultMap="lcbMap">
+
+        select b.route_name,a.incomes from
+        <choose>
+        <when test="(start != null and start != '') or (end != null and end != '')">
+        (select sum(income) incomes,route_id,cash_date from tb_cash  where 1=1
+         and cash_date&gt;#{start} and cash_date&lt;#{end} group by route_id,cash_date)a
+        </when>
+         <otherwise>
+         (select sum(income) incomes,route_id from tb_cash group by  route_id)a
+         </otherwise>
+        </choose>
+        INNER JOIN
+        (SELECT route_name,route_id from tb_route)b
+        ON a.route_id = b.route_id
+    </select>
+
+</mapper>

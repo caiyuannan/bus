@@ -8,8 +8,8 @@ public class XhaStationBean {
 	private int stationId;
 	private String cityName;
 	private String stationName;
-	private String stationLon;
-	private String stationLat;
+	private String stationLon;//x
+	private String stationLat;//y
 	private int stateId;
 	private String routes;
 

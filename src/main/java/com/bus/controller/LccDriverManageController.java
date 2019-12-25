@@ -51,8 +51,8 @@ public class LccDriverManageController
 				list = GetWeek.convertWeekByDate(nowDate);
 			}else{
 
-				Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-				list = GetWeek.convertWeekByDate(date1);
+				Date workDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+				list = GetWeek.convertWeekByDate(workDate);
 			}
 
 			HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
@@ -412,9 +412,9 @@ public class LccDriverManageController
 	//查看工作量数据表格带条件分页搜索
 	@RequestMapping("/toDriverWorkload")
 	@ResponseBody
-	private Msg checkWorkloadMethod(String page, String limit, String date1,String driverID){
+	private Msg checkWorkloadMethod(String page, String limit, String workDate,String driverID){
 
-		System.out.println("进入查看工作量方法"+driverID+"page:" + page + ",limit:" + limit +",date1:" +date1);
+		System.out.println("进入查看工作量方法"+driverID+"page:" + page + ",limit:" + limit +",workDate:" +workDate);
 
 		Map<String,Object> map=new HashMap<String,Object>();
 		Msg msg = new Msg();
@@ -423,8 +423,8 @@ public class LccDriverManageController
 		int lt = Integer.parseInt(limit);
 		int pg1 = (pg-1)*lt;
 
-		if (null == date1 || "".equals(date1)){
-			date1="";
+		if (null == workDate || "".equals(workDate)){
+			workDate="";
 			map.put("start",pg1);
 			map.put("end",lt);
 			map.put("driverId",driverID);
@@ -436,8 +436,8 @@ public class LccDriverManageController
 			msg = new Msg(0, null, count, dwblist);
 		}else{
 
-			String[] arr = date1.split("-");
-
+			String[] arr = workDate.split(" - ");
+			System.out.println(arr[0]+"//"+arr[1]);
 			map.put("start",pg1);
 			map.put("end",lt);
 			map.put("driverId",driverID);

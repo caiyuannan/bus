@@ -20,11 +20,11 @@ public class LccStatisticsService
 	 * 查询路线收银统计
 	 * @return
 	 */
-	@Transactional
-	public List<LccCashBean> findRouteCashes(){
-		System.out.println(lsp.findRouteCashes().toString());
-		return lsp.findRouteCashes();
-	}
+//	@Transactional
+//	public List<LccCashBean> findRouteCashes(){
+//		System.out.println(lsp.findRouteCashes().toString());
+//		return lsp.findRouteCashes();
+//	}
 
 	/**
 	 * 查询路线收银统计带查询日期条件
@@ -32,7 +32,7 @@ public class LccStatisticsService
 	 */
 	@Transactional
 	public List<LccCashBean>findRouteCashesByDate(Map<String,Object> map){
-		//System.out.println(lsp.findRouteCashesByDate(map).toString());
+		System.out.println(lsp.findRouteCashesByDate(map).toString()+"========");
 		return lsp.findRouteCashesByDate(map);
 	}
 }

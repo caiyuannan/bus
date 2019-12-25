@@ -71,17 +71,15 @@
 		var $ = layui.$, active = {
 			reload: function(){
 				var demoReload = $('#demoReload');
-
+					//alert(demoReload.val()+"7777");
 				//执行重载
 				table.reload('testReload', {
 					page: {
 						curr: 1 //重新从第 1 页开始
 					}
-					,where: {
-						key: {
-							date1: demoReload.val()
-							//driverId: dvid.val()
-						}
+					,where:{
+						//'token': token,
+						workDate: demoReload.val()
 					}
 				}, 'data');
 			}

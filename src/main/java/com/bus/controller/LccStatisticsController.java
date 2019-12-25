@@ -61,6 +61,7 @@ public class LccStatisticsController
 			String[] arr=msg.split(",");
 			startTime = arr[0];
 			endTime=arr[1];
+			System.out.println("start"+startTime+"end"+endTime);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("start", startTime);
 			map.put("end", endTime);

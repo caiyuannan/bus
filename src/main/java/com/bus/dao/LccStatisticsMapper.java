@@ -9,7 +9,7 @@ import java.util.Map;
 @Mapper
 public interface LccStatisticsMapper
 {
-	public List<LccCashBean> findRouteCashes();
+	//public List<LccCashBean> findRouteCashes();
 
 	public List<LccCashBean>findRouteCashesByDate(Map<String,Object> map);
 }

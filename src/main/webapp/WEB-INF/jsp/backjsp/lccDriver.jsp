@@ -52,7 +52,7 @@
 		</div>
 		<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>
 		<script type="text/html" id="barDemo">
-			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+<%--			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>--%>
 			<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
 			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">工作量查看</a>
 <%--			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>--%>

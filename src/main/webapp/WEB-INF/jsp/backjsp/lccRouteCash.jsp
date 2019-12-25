@@ -18,7 +18,7 @@
 	<title>收银统计</title>
 	<link rel="stylesheet" href="/bus/layui/css/layui.css">
 	<script src=<%=jsPath + "jquery.js"%>></script>
-	<script src=<%=jsPath + "echarts.min.js"%>></script>
+	<script src=<%=jsPath + "echarts.js"%>></script>
 	<script src="/bus/layui/layui.js"></script>
 </head>
 <body>
@@ -66,7 +66,8 @@
 
 
 	function updateTable(){
-
+		nameArr.splice(0);
+		valueArr.splice(0);
 		var ob = $("#startTime").val()+","+$("#endTime").val();
 		//alert(ob);
 		var str = JSON.stringify(ob);
@@ -78,7 +79,7 @@
 			//dataType:"html",
 			success : function(msg) {
 				var arr = JSON.parse(msg);
-				//alert(msg);
+				alert(msg);
 				for (var i = 0; i < arr.length; i++) {
 					// 普通柱状图使用的数据
 					nameArr.push(arr[i].routeName);
@@ -120,7 +121,7 @@ function createEchars() {
 
 		yAxis: {},
 		series : [ {
-			name : '数据',
+			name : '线路',
 			type : 'bar',
 			data : valueArr
 		} ]
@@ -131,7 +132,10 @@ function createEchars() {
 	myChart.setOption(option, true);
 
 	//barChart.setOption(option, true);
+
 }
+
+
 </script>
 </body>
 </html>

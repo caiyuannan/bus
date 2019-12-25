@@ -24,12 +24,14 @@ public class LccCashBean
 
 	private int incomes;
 	private String routeName;
+	private String start;
+	private String end;
 
 	public LccCashBean()
 	{
 	}
 
-	public LccCashBean(int cashId, int driverId, int userId, String cashDate, String cashTime, int income, int busStopId, int routeId, int incomes, String routeName)
+	public LccCashBean(int cashId, int driverId, int userId, String cashDate, String cashTime, int income, int busStopId, int routeId, int incomes, String routeName, String start, String end)
 	{
 		this.cashId = cashId;
 		this.driverId = driverId;
@@ -41,6 +43,8 @@ public class LccCashBean
 		this.routeId = routeId;
 		this.incomes = incomes;
 		this.routeName = routeName;
+		this.start = start;
+		this.end = end;
 	}
 
 	public int getCashId()
@@ -143,9 +147,29 @@ public class LccCashBean
 		this.routeName = routeName;
 	}
 
+	public String getStart()
+	{
+		return start;
+	}
+
+	public void setStart(String start)
+	{
+		this.start = start;
+	}
+
+	public String getEnd()
+	{
+		return end;
+	}
+
+	public void setEnd(String end)
+	{
+		this.end = end;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "LccCashBean{" + "cashId=" + cashId + ", driverId=" + driverId + ", userId=" + userId + ", cashDate='" + cashDate + '\'' + ", cashTime='" + cashTime + '\'' + ", income=" + income + ", busStopId=" + busStopId + ", routeId=" + routeId + ", incomes=" + incomes + ", routeName=" + routeName + '}';
+		return "LccCashBean{" + "cashId=" + cashId + ", driverId=" + driverId + ", userId=" + userId + ", cashDate='" + cashDate + '\'' + ", cashTime='" + cashTime + '\'' + ", income=" + income + ", busStopId=" + busStopId + ", routeId=" + routeId + ", incomes=" + incomes + ", routeName='" + routeName + '\'' + ", start='" + start + '\'' + ", end='" + end + '\'' + '}';
 	}
 }

@@ -216,25 +216,16 @@ select driver_id ,#{shfit_start_time},#{shfit_date} FROM tb_driver where driver_
         SELECT wk.workload_id,wk.bus_license,wk.route_name,wk.work_date,wk.office_hours from
         (select a.driver_id,a.workload_id,b.bus_license,c.route_name,d.work_date,d.office_hours from tb_driver_workload a,tb_bus b,tb_route c,tb_gate_card d
         where a.bus_id=b.bus_id and a.route_id=c.route_id and a.attendance_id=d.attendance_id)wk WHERE driver_id=#{driverId}
-        <if test="startTime != null and startTime != ''">
-            and work_date&gt;=#{startTime},
-        </if>
-        <if test="endTime != null and endTime != ''">
-            and work_date&lt;=#{endTime}
-        </if>
-        limit #{start},#{end}
+        <if test="startTime != null and startTime != ''">and work_date &gt;= #{startTime}</if>
+        <if test="endTime != null and endTime != ''">and work_date &lt;= #{endTime}</if> limit #{start},#{end}
     </select>
 
     <select id="getTotalPage1" parameterType="map" resultType="java.lang.Integer">
         SELECT count(wk.workload_id) from
         (select a.driver_id,a.workload_id,b.bus_license,c.route_name,d.work_date,d.office_hours from tb_driver_workload a,tb_bus b,tb_route c,tb_gate_card d
         where a.bus_id=b.bus_id and a.route_id=c.route_id and a.attendance_id=d.attendance_id)wk WHERE driver_id=#{driverId}
-        <if test="startTime != null and startTime != ''">
-            and work_date&gt;=#{startTime},
-        </if>
-        <if test="endTime != null and endTime != ''">
-            and work_date&lt;=#{endTime}
-        </if>
+        <if test="startTime != null and startTime != ''">and work_date &gt;= #{startTime}</if>
+        <if test="endTime != null and endTime != ''">and work_date &lt;= #{endTime}</if>
     </select>
 
 

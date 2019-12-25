@@ -54,6 +54,13 @@ public class DyfBusConfigurationService
 		return busConfigurationMapper.selectDriver(province);
 	}
 
+	//	查询所有的站点
+	@Transactional
+	public List<DyfRouteOrder> selectAllStation()
+	{
+		return busConfigurationMapper.selectAllStation();
+	}
+
 	//	添加bus操作
 	@Transactional
 	public int insertBus(DyfBusBean dyfBusBean)
@@ -83,6 +90,7 @@ public class DyfBusConfigurationService
 	}
 
 	//	车辆维修表查询
+	@Transactional
 	public List<DyfBusRepairBean> selectAllRepair(BigDecimal startIndex, Integer pageSize, String province, String license)
 	{
 
@@ -90,31 +98,85 @@ public class DyfBusConfigurationService
 	}
 
 	//车辆总条数
+	@Transactional
 	public BigDecimal countSelectRepair(String province, String license)
 	{
 		return busConfigurationMapper.countSelectRepair(province, license);
 	}
 
 	//	当用户点击维修状态后插入维修表表数据
+	@Transactional
 	public Integer insertAddRepairBus(DyfBusRepairBean dyfBusRepairBean)
 	{
 		return busConfigurationMapper.insertAddRepairBus(dyfBusRepairBean);
 	}
 
 	//	排班查看
-	public List<DyfBusShfitBean> shfitSlectAllLine(BigDecimal startIndex, Integer pageSize, String shfitDate, String cityName)
+	@Transactional
+	public List<DyfBusShfitBean> shfitSlectAllLine(String shfitDate, String cityName, String shfitBusLine, String busEndStation, String shfitBusStartStation)
 	{
-		return busConfigurationMapper.shfitSlectAllLine(startIndex, pageSize, shfitDate, cityName);
+		return busConfigurationMapper.shfitSlectAllLine(shfitDate, cityName, shfitBusLine, busEndStation, shfitBusStartStation);
 	}
 
 	//	排班总条数
+	@Transactional
 	public Integer shfitCount(@Param("shfitDate") String shfitDate, @Param("cityName") String cityName)
 	{
 		return busConfigurationMapper.shfitCount(shfitDate, cityName);
 	}
 
 	//	查询所有的线路名称及id
-	public List<DyfRouteBean> routeAllSelect(String cityName){
+	@Transactional
+	public List<DyfRouteBean> routeAllSelect(String cityName)
+	{
 		return busConfigurationMapper.routeAllSelect(cityName);
+	}
+
+	//	查询所有可排班车联的，区分起始站和终点站
+	@Transactional
+	public List<DyfRouteOrder> selectSomeStation(String routeOrder, String routeName)
+	{
+		return busConfigurationMapper.selectSomeStation(routeOrder, routeName);
+	}
+
+	//	查询所有的已排班信息
+	public List<DyfBusShfitBean> selectAllCanRefait(String shfitDate, String cityName, String shfitBusLine, String busEndStation, String shfitBusStartStation)
+	{
+		return busConfigurationMapper.selectAllCanRefait(shfitDate, cityName, shfitBusLine, busEndStation, shfitBusStartStation);
+	}
+
+	//	查询所有可排班车辆
+	public List<DyfBusBean> selectAllNoShfitBus(List<Integer> list, String busEndStation)
+	{
+		return busConfigurationMapper.selectAllNoShfitBus(list, busEndStation);
+	}
+
+	//排班添加
+	public int addShfit(String shfitDate, String shfitStartTime, String shfitBusId, String shfitBusLine, String shfitStartId, String startStation)
+	{
+		return busConfigurationMapper.addShfit(shfitDate, shfitStartTime, shfitBusId, shfitBusLine, shfitStartId, startStation);
+	}
+
+	//换班
+	public int updateShfitBus(String shfitBusId, String shfitBusLine, String shfitBusStation, String startId, String shfitDate, String oldShfitId)
+	{
+		return busConfigurationMapper.updateShfitBus(shfitBusId, shfitBusLine, shfitBusStation, startId, shfitDate, oldShfitId);
+	}
+
+	//根据车牌查询车辆id
+	public DyfBusBean selectBusLinsece(String busLicense)
+	{
+		return busConfigurationMapper.selectBusLinsece(busLicense);
+	}
+
+	//	查询所得车辆站点
+	public List<dyfStationBean> testGetAllData(String routeName, String cityName)
+	{
+		return busConfigurationMapper.testGetAllData(routeName, cityName);
+	}
+
+	//	查询该城市所有的路线
+	public List<dyfAllRouteBean> selectAllRoute(String cityName){
+		return busConfigurationMapper.selectAllRoute(cityName);
 	}
 }

@@ -3,6 +3,7 @@ package com.bus.controller;
 import com.bus.javabean.TableBean;
 import com.bus.javabean.XhaPageBean;
 import com.bus.javabean.XhaProvinceBean;
+import com.bus.javabean.XhaStationBean;
 import com.bus.service.XhaStationConfigurationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,6 @@ public class XhaStationConfigurationController {
 	@RequestMapping("queryStation")
 	@ResponseBody
 	public TableBean queryStation(String cityName,String stationName,String page,String limit){
-		System.out.println("城市名:"+cityName+",stationName:"+stationName+",page:"+page+",limit:"+limit);
 		XhaPageBean pb = new XhaPageBean(Integer.parseInt(page),Integer.parseInt(limit),cityName,stationName);
 		return stationService.queryStationByProvinceName(pb);
 	}
@@ -53,17 +53,34 @@ public class XhaStationConfigurationController {
 	/**删除站点*/
 	@RequestMapping("deleteStation")
 	@ResponseBody
-	public String deleteStation(String stationId){
-		return stationService.deleteStation(Integer.parseInt(stationId));
+	public String deleteStation(String stationId,String cityName){
+		return stationService.deleteStation(Integer.parseInt(stationId),cityName);
+	}
+
+	/**添加站点界面*/
+	@ResponseBody
+	@RequestMapping("addStationView")
+	public ModelAndView addStationView(String cityName){
+		ModelAndView mv = new ModelAndView("backjsp/addStation");
+		mv.addObject("cityName",cityName);
+		return mv;
 	}
 
 	/**添加站点*/
+	@RequestMapping("addStation")
 	@ResponseBody
-	@RequestMapping("addStationView")
-	public String addStation(String cityName){
-		System.out.println("cityName:"+cityName);
-
-		return "";
+	public String addStation(String cityName,String stationName,String stationLon,String stationLat){
+		XhaStationBean stationBean = new XhaStationBean(cityName,stationName,stationLon,stationLat);
+		return stationService.addStataion(stationBean);
 	}
 
+	/**站点在百度地图上查看*/
+	@ResponseBody
+	@RequestMapping("queryBaiduMap")
+	public ModelAndView queryBaiduMap(String stationId){
+		XhaStationBean stationBean = stationService.queryStationById(Integer.parseInt(stationId));
+		ModelAndView mv = new ModelAndView("/backjsp/stationMap");
+		mv.addObject("station", stationBean);
+		return mv;
+	}
 }

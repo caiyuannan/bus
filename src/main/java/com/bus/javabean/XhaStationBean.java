@@ -8,12 +8,19 @@ public class XhaStationBean {
 	private int stationId;
 	private String cityName;
 	private String stationName;
-	private String stationLon;
-	private String stationLat;
+	private String stationLon;//x
+	private String stationLat;//y
 	private int stateId;
 	private String routes;
 
 	public XhaStationBean() {
+	}
+
+	public XhaStationBean(String cityName, String stationName, String stationLon, String stationLat) {
+		this.cityName = cityName;
+		this.stationName = stationName;
+		this.stationLon = stationLon;
+		this.stationLat = stationLat;
 	}
 
 	public XhaStationBean(int stationId, String cityName, String stationName, String stationLon, String stationLat, int stateId, String routes) {

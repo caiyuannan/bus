@@ -25,5 +25,20 @@ public interface XhaStationConfigurationMapper {
 	public int deleteStation(int stationId);
 
 	/**查询站点是否已经存在*/
-	public XhaStationBean seleteStationIsExisted(@Param("stationName") String stationName,@Param("stateId") int stateId);
+	public XhaStationBean seleteStationIsExisted(@Param("stationName") String stationName, @Param("stateId") int stateId);
+
+	/**把被逻辑删除的站点重新添加回来*/
+	public int updateStation(XhaStationBean stationBean);
+
+	/**添加新站点*/
+	public int addStation(XhaStationBean stationBean);
+
+	/**根据站点的变动及时更新城市配置表添加数据*/
+	public int addStationCount(@Param("cityName") String cityName);
+
+	/**根据站点的变动及时更新城市配置表减少数据*/
+	public int reduceStationCount(@Param("cityName") String cityName);
+
+	/**根据站点id查询站点信息*/
+	public XhaStationBean queryStationById(int stationId);
 }

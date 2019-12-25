@@ -31,8 +31,8 @@ public class LccStatisticsService
 	 * @return
 	 */
 	@Transactional
-	public List<LccCashBean>findRouteCashesByDate(Map<String,Object> map){
-		System.out.println(lsp.findRouteCashesByDate(map).toString()+"========");
-		return lsp.findRouteCashesByDate(map);
+	public List<LccCashBean>findRouteCashesByDate(String s,String e){
+//		System.out.println(lsp.findRouteCashesByDate(map).toString()+"========");
+		return lsp.findRouteCashesByDate(s,e);
 	}
 }

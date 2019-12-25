@@ -59,13 +59,15 @@ public class LccStatisticsController
 		{
 			System.out.println("进入非空>>>>>>");
 			String[] arr=msg.split(",");
-			startTime = arr[0];
-			endTime=arr[1];
+			//切割多余的双引号
+			startTime = arr[0].split("\"")[1];
+			//切割多余的双引号
+			endTime=arr[1].split("\"")[0];
 			System.out.println("start"+startTime+"end"+endTime);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("start", startTime);
 			map.put("end", endTime);
-			List<LccCashBean> list1 = lss.findRouteCashesByDate(map);
+			List<LccCashBean> list1 = lss.findRouteCashesByDate(startTime,endTime);
 			jsonStr = gson.toJson(list1);
 			return jsonStr;
 		}
@@ -75,7 +77,16 @@ public class LccStatisticsController
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("start", startTime);
 			map.put("end", endTime);
-			List<LccCashBean> list1 = lss.findRouteCashesByDate(map);
+
+			String startTime1=startTime;
+			if (startTime1==null){
+				startTime1="0001-01-01";
+			}
+			String endTime1=endTime;
+			if (endTime1==null){
+				endTime1="9999-12-31";
+			}
+			List<LccCashBean> list1 = lss.findRouteCashesByDate(startTime1,endTime1);
 			jsonStr = gson.toJson(list1);
 			return jsonStr;
 		}

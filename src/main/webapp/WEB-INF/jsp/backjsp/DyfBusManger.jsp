@@ -400,6 +400,7 @@
 			var busAge = $("#busAge").val();
 			var busYear = $("#busYear").val();
 			var carType = $("#busState").val();
+			var endStation = $("#endStation").val();
 			var num = 1;
 			//判断车牌号是否正确，省市是否匹配
 			if (cardNum != null && cardNum.length > 0) {
@@ -424,6 +425,12 @@
 				alert("请先选择司机");
 				return;
 			} else {
+				num++;
+			}
+			if (endStation === 0||endStation.length<1){
+				layer.msg("请先选择车辆夜间停放站点")
+				return;
+			}else {
 				num++;
 			}
 			//	判断是否填入使用时间
@@ -469,11 +476,11 @@
 				num++;
 			}
 			//如果num等于6时代表前面的所有项已填写
-			if (num >= "6") {
+			if (num >= "7") {
 				$.ajax({
 					type: "post",
 					url: "http://localhost:8080/bus/DyfBusAddBus",
-					data: "msg=" + cardNum + "=" + busDiver + "=" + busAge + "=" + busYear + "=" + carType,
+					data: "msg=" + cardNum + "=" + busDiver + "=" + busAge + "=" + busYear + "=" + carType+"="+endStation,
 					datatype: "text",
 					async: true,
 					success: function (res) {
@@ -551,6 +558,18 @@
 					<option value="0">请选择车辆类型</option>
 					<option value="新能源">新能源</option>
 					<option value="燃油">燃油</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form">
+			<div class="layui-input-block">
+				<select name="driverState" id="endStation" lay-filter="required" style="width: 100px;margin-left: -60px">
+					<option value="0">请选择末班停站地点</option>
+					<c:if test="${requestScope.selectAllStation!=null}">
+						<c:forEach items="${requestScope.selectAllStation}" begin="0" step="1" var="item">
+							<option value="${item.routeStationName}">${item.routeStationName}</option>
+						</c:forEach>
+					</c:if>
 				</select>
 			</div>
 		</div>

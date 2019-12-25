@@ -13,6 +13,7 @@ public class DyfBusBean
 	 * busMin 公交车使用时间
 	 * busAge 公交车使用年限
 	 * busState 公交状态
+	 * endStation 公交车最后停放的站点
 	 */
 	private Integer busId;
 	private String busLicense;
@@ -22,9 +23,22 @@ public class DyfBusBean
 	private String busAge;
 	private Integer busState;
 	private String stateName;
-
+	private String endStation;
 	public DyfBusBean()
 	{
+	}
+
+	public DyfBusBean(Integer busId, String busLicense, String busDutyDriver, String busType, String busMin, String busAge, Integer busState, String stateName, String endStation)
+	{
+		this.busId = busId;
+		this.busLicense = busLicense;
+		this.busDutyDriver = busDutyDriver;
+		this.busType = busType;
+		this.busMin = busMin;
+		this.busAge = busAge;
+		this.busState = busState;
+		this.stateName = stateName;
+		this.endStation = endStation;
 	}
 
 	public DyfBusBean(String busLicense, String busDutyDriver, String busType, String busMin, String busAge, Integer busState, String stateName)
@@ -53,7 +67,17 @@ public class DyfBusBean
 	@Override
 	public String toString()
 	{
-		return "DyfBusBean{" + "busId=" + busId + ", busLicense='" + busLicense + '\'' + ", busDutyDriver='" + busDutyDriver + '\'' + ", busType='" + busType + '\'' + ", busMin='" + busMin + '\'' + ", busAge='" + busAge + '\'' + ", busState=" + busState + ", stateName='" + stateName + '\'' + '}';
+		return "DyfBusBean{" + "busId=" + busId + ", busLicense='" + busLicense + '\'' + ", busDutyDriver='" + busDutyDriver + '\'' + ", busType='" + busType + '\'' + ", busMin='" + busMin + '\'' + ", busAge='" + busAge + '\'' + ", busState=" + busState + ", stateName='" + stateName + '\'' + ", endStation='" + endStation + '\'' + '}';
+	}
+
+	public String getEndStation()
+	{
+		return endStation;
+	}
+
+	public void setEndStation(String endStation)
+	{
+		this.endStation = endStation;
 	}
 
 	public Integer getBusId()

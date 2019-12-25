@@ -1,5 +1,7 @@
 package com.bus.javabean;
 
+import java.util.List;
+
 /**
  * 路线表
  * by 谢海安
@@ -21,6 +23,59 @@ public class XhaRouteBean {
 		this.routeFee = routeFee;
 		this.routeTime = routeTime;
 		this.stateId = stateId;
+		this.cityId = cityId;
+	}
+
+	@Override
+	public String toString() {
+		return "XhaRouteBean{" + "routeId=" + routeId + ", routeName='" + routeName + '\'' + ", routeFee=" + routeFee + ", routeTime=" + routeTime + ", stateId=" + stateId + ", cityId=" + cityId + '}';
+	}
+
+	public int getRouteId() {
+		return routeId;
+	}
+
+	public void setRouteId(int routeId) {
+		this.routeId = routeId;
+	}
+
+	public String getRouteName() {
+		return routeName;
+	}
+
+	public void setRouteName(String routeName) {
+		this.routeName = routeName;
+	}
+
+	public int getRouteFee() {
+		return routeFee;
+	}
+
+	public void setRouteFee(int routeFee) {
+		this.routeFee = routeFee;
+	}
+
+	public int getRouteTime() {
+		return routeTime;
+	}
+
+	public void setRouteTime(int routeTime) {
+		this.routeTime = routeTime;
+	}
+
+	public int getStateId() {
+		return stateId;
+	}
+
+	public void setStateId(int stateId) {
+		this.stateId = stateId;
+	}
+
+	public int getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(int cityId) {
 		this.cityId = cityId;
 	}
 }

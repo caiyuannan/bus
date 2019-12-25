@@ -24,11 +24,13 @@ public class DyfBusShfitBean
 	private String shfitState;
 	private String busLicense;
 	private String routeName;
+	private String dateBusTime;
+	private String dateBusId;
 	public DyfBusShfitBean()
 	{
 	}
 
-	public DyfBusShfitBean(Integer shfitId, String shfitDate, String shfitStartTime, String shfitEndTime, String shfitBusId, String shfitBusLine, String shfitState, String busLicense, String routeName)
+	public DyfBusShfitBean(Integer shfitId, String shfitDate, String shfitStartTime, String shfitEndTime, String shfitBusId, String shfitBusLine, String shfitState, String busLicense, String routeName, String dateBusTime, String dateBusId)
 	{
 		this.shfitId = shfitId;
 		this.shfitDate = shfitDate;
@@ -39,12 +41,34 @@ public class DyfBusShfitBean
 		this.shfitState = shfitState;
 		this.busLicense = busLicense;
 		this.routeName = routeName;
+		this.dateBusTime = dateBusTime;
+		this.dateBusId = dateBusId;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "DyfBusShfitBean{" + "shfitId=" + shfitId + ", shfitDate='" + shfitDate + '\'' + ", shfitStartTime='" + shfitStartTime + '\'' + ", shfitEndTime='" + shfitEndTime + '\'' + ", shfitBusId='" + shfitBusId + '\'' + ", shfitBusLine='" + shfitBusLine + '\'' + ", shfitState='" + shfitState + '\'' + ", busLicense='" + busLicense + '\'' + ", routeName='" + routeName + '\'' + '}';
+		return "DyfBusShfitBean{" + "shfitId=" + shfitId + ", shfitDate='" + shfitDate + '\'' + ", shfitStartTime='" + shfitStartTime + '\'' + ", shfitEndTime='" + shfitEndTime + '\'' + ", shfitBusId='" + shfitBusId + '\'' + ", shfitBusLine='" + shfitBusLine + '\'' + ", shfitState='" + shfitState + '\'' + ", busLicense='" + busLicense + '\'' + ", routeName='" + routeName + '\'' + ", dateBusTime='" + dateBusTime + '\'' + ", dateBusId='" + dateBusId + '\'' + '}';
+	}
+
+	public String getDateBusId()
+	{
+		return dateBusId;
+	}
+
+	public void setDateBusId(String dateBusId)
+	{
+		this.dateBusId = dateBusId;
+	}
+
+	public String getDateBusTime()
+	{
+		return dateBusTime;
+	}
+
+	public void setDateBusTime(String dateBusTime)
+	{
+		this.dateBusTime = dateBusTime;
 	}
 
 	public String getRouteName()

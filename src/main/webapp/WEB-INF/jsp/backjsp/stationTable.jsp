@@ -20,16 +20,6 @@
 </head>
 <body>
 
-<div class="layui-row" id="editUser" style="display:none;">
-	<div class="layui-inline">
-		<label class="layui-form-label">用户名:</label>
-		<label class="layui-form-label" id="userLabel"></label>
-		<label class="layui-form-label">修改密码:</label>
-		<input class="layui-input" id="newPassword">
-		<button class="layui-btn" id="update" >修改</button>
-	</div>
-</div>
-
 <div class="demoTable site-demo-button" id="layerDemo">
 	站点名称：
 	<div class="layui-inline">
@@ -42,8 +32,8 @@
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <script id="barDemo" type="text/html">
 	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-	<a class="layui-btn layui-btn-xs" lay-event="modify">查看线路</a>
-	<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="changeState">查看站点</a>
+	<a class="layui-btn layui-btn-xs" lay-event="queryBaiduMap">地图查看</a>
+	<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="changeState">修改站点</a>
 </script>
 <script>
 	var reload = null;
@@ -82,7 +72,7 @@
 					$.ajax({
 						url:"/bus/station/deleteStation",
 						type:"POST",
-						data:{"stationId":data.stationId},
+						data:{"stationId":data.stationId,"cityName":${requestScope.cityName}},
 						dataType:"text",
 						async:true,
 						success:function (data) {
@@ -95,30 +85,9 @@
 					obj.del();
 					layer.close(index);
 				});
-			} /*else if(obj.event === 'changeState'){
-				layer.confirm('确定修改状态？', function(index){
-					$.ajax({
-						url:"/admin/changeState",
-						type:"POST",
-						data:{"adId":data.adId,"stId":data.stId},
-						dataType:"text",
-						async:true,
-						success:function (data) {
-							alert(data);
-							var str = data.replace("\"", "").replace("\"", "");
-							if(str === '更改成功!'){
-								layui.use('layer', function(){
-									reload();
-								});
-							}
-						},
-						error:function () {
-							alert("出错啦...");
-						}
-					})
-					layer.close(index);
-				});
-			} else if(obj.event === 'modify') {
+			} else if(obj.event === 'queryBaiduMap'){
+				window.location = "/bus/station/queryBaiduMap?stationId="+data.stationId;
+			} /*else if(obj.event === 'modify') {
 				$("#userLabel").text(data.adId);
 				layer.open({
 					type: 1

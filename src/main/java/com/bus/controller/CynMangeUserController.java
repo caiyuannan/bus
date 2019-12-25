@@ -3,7 +3,6 @@ package com.bus.controller;
 import com.bus.javabean.CynMangeUserBean;
 import com.bus.javabean.CynMenuBean;
 import com.bus.service.CynMangeUserService;
-import com.bus.service.CynWeiXinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

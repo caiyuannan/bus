@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CynWeiXinMapper">
+    <select id="findAllCitys" resultMap="res-city">
+        select *from tb_city
+    </select>
+    <resultMap id="res-city" type="com.bus.javabean.CynCityBean">
+        <result property="cityId" column="city_id"/>
+        <result property="cityName" column="city_name"/>
+    </resultMap>
+
+    <select id="findAllStationAndRoute" parameterType="java.lang.String" resultMap="res-station-route">
+            select distinct tb_routeOrder.routeOrder_id,tb_routeOrder.routeOrder_name,tb_routeOrder.routeOrder_station_name,tb_routeOrder.routeOrder_order,
+            tb_routeOrder.routeOrder_start_end,tb_routeOrder.city_name,tb_state.state_name
+            from tb_routeOrder,tb_state
+            where city_name=#{location}
+            and tb_state.state_name='启用'
+    </select>
+    <resultMap id="res-station-route" type="com.bus.javabean.CynStationAndRouteOrderBean">
+        <result property="routeOrderId" column="routeOrder_id"/>
+        <result property="routeOrderName" column="routeOrder_name"/>
+        <result property="stationName" column="routeOrder_station_name"/>
+        <result property="order" column="routeOrder_order"/>
+        <result property="isStartEnd" column="routeOrder_start_end"/>
+        <result property="cityName" column="city_name"/>
+        <result property="stateName" column="state_name"/>
+    </resultMap>
+
+    <select id="findAllStation" parameterType="java.lang.String" resultMap="res-stations">
+        select tb_station.station_id,tb_station.city_name,tb_station.station_name,tb_station.station_lon,tb_station.station_lat,tb_state.state_name
+        from tb_station,tb_state
+        where tb_station.station_name like '%${stationName}%'
+        and tb_state.state_id=tb_station.state_id
+    </select>
+    <resultMap id="res-stations" type="com.bus.javabean.CynStationAndRouteBean">
+        <result property="stationId" column="station_id"/>
+        <result property="stationName" column="station_name"/>
+        <result property="stationLon" column="station_lon"/>
+        <result property="stationLat" column="station_lat"/>
+        <result property="stateName" column="state_name"/>
+        <result property="cityName" column="city_name"/>
+    </resultMap>
+
+    <select id="getAllRoute" parameterType="java.lang.String" resultMap="res-RouteSelectName">
+        select t1.*,t2.routeOrder_station_name from tb_routeOrder t2,
+            (select tb_routeOrder.routeOrder_name
+            from tb_routeOrder
+            where tb_routeOrder.routeOrder_station_name=#{stationName} )t1
+        where t1.routeOrder_name=t2.routeOrder_name
+        and t2.routeOrder_start_end=0
+    </select>
+    <resultMap id="res-RouteSelectName" type="com.bus.javabean.CynRouteSelectBean">
+        <result property="routeName" column="routeOrder_name"/>
+        <result property="endStationName" column="routeOrder_station_name"/>
+    </resultMap>
+
+    <select id="testGetAllData" parameterType="java.lang.String" resultMap="res-Test">
+        select tb_routeOrder.routeOrder_id,tb_routeOrder.routeOrder_name,tb_routeOrder.routeOrder_station_name,
+            tb_routeOrder.routeOrder_order,tb_routeOrder.city_name,tb_station.station_lon,tb_station.station_lat
+        from tb_routeOrder,tb_station,tb_state
+        where tb_station.station_name=tb_routeOrder.routeOrder_station_name
+        and tb_state.state_id=tb_routeOrder.state_id
+        and tb_routeOrder.routeOrder_name=#{route}
+        and tb_state.state_name='启用'
+    </select>
+    <resultMap id="res-Test" type="com.bus.javabean.CynTestBean">
+        <result property="id" column="routeOrder_id"/>
+        <result property="routeName" column="routeOrder_name"/>
+        <result property="stationName" column="routeOrder_station_name"/>
+        <result property="order" column="routeOrder_order"/>
+        <result property="cityName" column="city_name"/>
+        <result property="lon" column="station_lon"/>
+        <result property="lat" column="station_lat"/>
+    </resultMap>
+    <select id="getXYByStationName" parameterType="java.lang.String" resultMap="res-Test">
+        select distinct tb_station.station_lon,tb_station.station_lat from tb_station where tb_station.station_name=#{stationName}
+    </select>
+</mapper>
+
+
+

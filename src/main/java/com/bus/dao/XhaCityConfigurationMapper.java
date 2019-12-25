@@ -27,14 +27,14 @@ public interface XhaCityConfigurationMapper {
 	public List<XhaProvinceBean> queryProvince();
 
 	/**查询城市配置表是否已经存在相应的省份、城市*/
-	public XhaProvinceBean queryProvinceCityIsExited(@Param("provinceName") String provinceName,@Param("cityName") String cityName);
+	public XhaProvinceBean queryProvinceCityIsExited(@Param("provinceName") String provinceName, @Param("cityName") String cityName);
 
 	/**查询城市配置表是否已经存在相应的省份、城市,并被逻辑删除*/
-	public XhaProvinceBean queryProvinceCityIsDeleted(@Param("provinceName") String provinceName,@Param("cityName") String cityName);
+	public XhaProvinceBean queryProvinceCityIsDeleted(@Param("provinceName") String provinceName, @Param("cityName") String cityName);
 
 	/**把省份城市逻辑删除的状态2改成1*/
-	public int updateProvinceCityState(@Param("provinceName") String provinceName,@Param("cityName") String cityName);
+	public int updateProvinceCityState(@Param("provinceName") String provinceName, @Param("cityName") String cityName);
 
 	/**添加省份城市*/
-	public int addProvinceCity(@Param("provinceName") String provinceName,@Param("cityName") String cityName);
+	public int addProvinceCity(@Param("provinceName") String provinceName, @Param("cityName") String cityName);
 }

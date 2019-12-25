@@ -162,5 +162,102 @@ public class LccDriverManageService
 		return lmp.insertDriverWorkload(map);
 	}
 
+	@Transactional
+	public int addGateCard(Map<String,Object> map){
 
+		return lmp.addGateCard(map);
+	}
+
+	/**
+	 * 查询考勤ID(关联添加考勤后马上查考勤最后一条记录ID)
+	 * @return
+	 */
+	@Transactional
+	public int queryAttendanceId(){
+		return  lmp.queryAttendanceId();
+	}
+	@Transactional
+	public boolean updateBusShfitState(Map<String,Object> map){
+
+		return lmp.updateBusShfitState(map);
+	}
+
+	/**
+	 * 司机带条件分页查询
+	 * @param map
+	 * @return
+	 */
+	@Transactional
+	public List<LccDriverBean> queryAllDrivers(Map<String,Object> map){
+		List<LccDriverBean> mp=lmp.queryAllDrivers(map);
+		for (int i = 0; i <mp.size() ; i++)
+		{
+			System.out.println(mp.get(i).getStationName()+"^^^^^^");
+		}
+		return lmp.queryAllDrivers(map);
+	}
+
+	/**
+	 * 司机查询总页
+	 * @param map
+	 * @return
+	 */
+	@Transactional
+	public int getTotalPages(Map<String,Object> map){
+
+		return lmp.getTotalPage(map);
+	}
+
+	/**
+	 * 修改司机资料
+	 * @param ldb
+	 * @return
+	 */
+	@Transactional
+	public boolean updateDrivers(LccDriverBean ldb){
+
+		return lmp.updateDrivers(ldb);
+	}
+
+	/**
+	 * 查看工作量
+	 * @param map
+	 * @return
+	 */
+	@Transactional
+	public List<LccDriverWorkloadBean> findDriverWorkload(Map<String,Object> map){
+
+		return lmp.findDriverWorkload(map);
+	}
+
+	/**
+	 * 查看工作量总页
+	 * @param map
+	 * @return
+	 */
+	@Transactional
+	public int getTotalPages1(Map<String,Object> map){
+
+		return lmp.getTotalPage1(map);
+	}
+
+	/**
+	 * 查看工资
+	 * @param map
+	 * @return
+	 */
+	public List<LccDriverWageBean> findDriverWage(Map<String,Object> map){
+
+		return lmp.findDriverWage(map);
+	}
+	/**
+	 * 查看工资总页
+	 * @param map
+	 * @return
+	 */
+	@Transactional
+	public int getTotalPages2(Map<String,Object> map){
+
+		return lmp.getTotalPage2(map);
+	}
 }

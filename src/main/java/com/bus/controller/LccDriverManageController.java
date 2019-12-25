@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -146,20 +147,6 @@ public class LccDriverManageController
 		list = GetWeek.convertWeekByDate(calendar.getTime());
 		System.out.println("下周时间"+list);
 
-//		List<Integer> ilist = ldms.findDriverId();
-//
-//		for (Integer j : ilist) {
-//
-//			for (int i = 0; i <list.size() ; i++)
-//
-//			{
-//				lcdb.setDriverId(j);
-//				lcdb.setWorkTime(String.valueOf(list.get(i)));
-//				lcdb.setWorkType("操作");
-//				a = ldms.insertBlankWork(lcdb);
-//			}
-//
-//		}
 
 		HashMap<String, ArrayList<LccCrewSchedulingBean>> map = ldms.queryWeekWork(null);
 		modelAndView.addObject("workmap",map);
@@ -303,19 +290,196 @@ public class LccDriverManageController
 	public ModelAndView lccToDriverNotarize(String start,String busnum,String route,String driver){
 		//进入方法
 		System.out.println("进入方法"+start+"//"+busnum+"//"+route+"//"+driver);
+
+		//System.out.println("成功"+i);
+		//添加考勤表
+		Map<String,Object> map1 = new HashMap<String,Object>();
+		String[] arr = start.split(",");
+		String theDate = arr[0];
+		String theTime = arr[1];
+		System.out.println("切割后的时间"+arr[0]+"//"+arr[1]);
+		map1.put("driverName",driver);
+		map1.put("shfit_start_time",theTime);
+		map1.put("shfit_date",theDate);
+		int j = ldms.addGateCard(map1);
+		//查询考勤ID
+		int wkid = ldms.queryAttendanceId();
 		//添加工作量表
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("busName",busnum);
 		map.put("routeName",route);
 		map.put("driverName",driver);
+		map.put("attendanceId",wkid);
 		int i =ldms.insertDriverWorkload(map);
+		//修改汽车排班  发车状态和关联车牌
+		Map<String,Object> map2 = new HashMap<String,Object>();
+		LccBusShfitBean lcsb = ldms.findBusShfit();
+		int sid = lcsb.getShfitId();
+		map2.put("shfitId",sid);
+		map2.put("busName",busnum);
+		boolean flag = ldms.updateBusShfitState(map2);
 
-		//System.out.println("成功"+i);
-		//添加考勤表
-
-		//修改汽车排班  发车状态
-
-		modelAndView.setViewName("backjsp/lccDriverNotarize");
+		if(flag)
+		{
+			modelAndView.addObject("msg1", "出站确认成功!");
+			modelAndView.setViewName("backjsp/lccDriverNotarize");
+		}
 		return modelAndView;
+	}
+
+
+    @RequestMapping("/lccDriver")
+	public ModelAndView toDriver(){
+	    System.out.println("进入司机页面...");
+	    modelAndView.setViewName("backjsp/lccDriver");
+		return modelAndView;
+    }
+
+	//查询司机方法
+
+	@RequestMapping("/showDriverTable")
+	@ResponseBody
+	//@Log(operationType="数据表格查询用户",operationName="查询用户方法")
+	public Msg totestRequstParam(String page, String limit, String driverName, String driverCellphone, String stationName){
+		System.out.println("page:" + page + ",limit=" + limit + ",driverName =" + driverName+ ",driverCellphone =" + driverCellphone+ ",stationName =" + stationName);
+
+		Map<String,Object> map=new HashMap<String,Object>();
+		int pg = Integer.parseInt(page);
+		int lt = Integer.parseInt(limit);
+		int pg1 = (pg-1)*lt;
+
+		if (null == driverName || "".equals(driverName)){
+			driverName="";
+		}else if(null == driverCellphone || "".equals(driverCellphone)){
+			driverCellphone="";
+		}else if(null == stationName || "".equals(stationName)){
+			stationName="";
+		}
+		map.put("start",pg1);
+		map.put("end",lt);
+
+		map.put("driverName",driverName);
+		map.put("driverCellphone",driverCellphone);
+		map.put("stationName",stationName);
+		System.out.println(map);
+		List<LccDriverBean> eilist = ldms.queryAllDrivers(map);
+
+		int count = ldms.getTotalPages(map);
+
+		Msg msg = new Msg(0, null, count, eilist);
+
+		System.out.println(msg+"111111");
+		return msg;
+
+	}
+
+	//修改司机方法
+	@RequestMapping("/toUpdateDriver")
+	@ResponseBody
+	//@Log(operationType="修改用户",operationName="修改用户方法")
+	public String toUpdate(String msg){
+		System.out.println(msg);
+		if(msg.contains(","))
+		{
+			String[] arr = msg.split(",");
+			LccDriverBean ldb = new LccDriverBean();
+			ldb.setDriverId(Integer.parseInt(arr[3]));
+			ldb.setDriverName(arr[0]);
+			ldb.setDriverCellphone(arr[1]);
+			ldb.setStationName(arr[2]);
+
+			boolean flag = ldms.updateDrivers(ldb);
+			if(flag){
+				return "200";
+			}
+
+		}
+
+		return null;
+	}
+
+	//查看司机工作量页面
+	@RequestMapping("/toCheckWorkload")
+
+	public ModelAndView checkWorkload(String did){
+
+		modelAndView.addObject("driverId", did);
+		modelAndView.setViewName("backjsp/lccCheckDriverWorkload");
+
+		return modelAndView;
+	}
+
+	//查看工作量数据表格带条件分页搜索
+	@RequestMapping("/toDriverWorkload")
+	@ResponseBody
+	private Msg checkWorkloadMethod(String page, String limit, String date1,String driverID){
+
+		System.out.println("进入查看工作量方法"+driverID+"page:" + page + ",limit:" + limit +",date1:" +date1);
+
+		Map<String,Object> map=new HashMap<String,Object>();
+		Msg msg = new Msg();
+
+		int pg = Integer.parseInt(page);
+		int lt = Integer.parseInt(limit);
+		int pg1 = (pg-1)*lt;
+
+		if (null == date1 || "".equals(date1)){
+			date1="";
+			map.put("start",pg1);
+			map.put("end",lt);
+			map.put("driverId",driverID);
+			//System.out.println(map);
+			List<LccDriverWorkloadBean> dwblist = ldms.findDriverWorkload(map);
+			System.out.println("返回集合"+dwblist);
+			int count = ldms.getTotalPages1(map);
+
+			msg = new Msg(0, null, count, dwblist);
+		}else{
+
+			String[] arr = date1.split("-");
+
+			map.put("start",pg1);
+			map.put("end",lt);
+			map.put("driverId",driverID);
+			map.put("startTime",arr[0]);
+			map.put("endTime",arr[1]);
+			//System.out.println(map);
+			List<LccDriverWorkloadBean> dwblist = ldms.findDriverWorkload(map);
+			System.out.println("返回集合"+dwblist);
+			int count = ldms.getTotalPages1(map);
+			msg = new Msg(0, null, count, dwblist);
+		}
+		return msg;
+	}
+
+	@RequestMapping("/DriverWage")
+	public ModelAndView driverWage(){
+		//modelAndView.addObject("driverId", did);
+		System.out.println("进入司机工资页面");
+		modelAndView.setViewName("backjsp/lccDriverWage");
+
+		return modelAndView;
+	}
+
+	@RequestMapping("/toDriverWage")
+	@ResponseBody
+	public Msg searchDriverWage(String page, String limit){
+
+		System.out.println("司机工资表格");
+		Map<String,Object> map=new HashMap<String,Object>();
+		Msg msg = new Msg();
+
+		int pg = Integer.parseInt(page);
+		int lt = Integer.parseInt(limit);
+		int pg1 = (pg-1)*lt;
+		map.put("start",pg1);
+		map.put("end",lt);
+		List<LccDriverWageBean> list = ldms.findDriverWage(map);
+		System.out.println("返回集合"+list);
+		int count = ldms.getTotalPages2(map);
+
+		msg = new Msg(0, null, count, list);
+
+		return msg;
 	}
 }

@@ -6,6 +6,7 @@ package com.bus.javabean;
  */
 public class LccBusShfitBean
 {
+	private int shfitId;
 	private String shfitDate;
 	private String shfitStartTime;
 	private String shfitState;
@@ -14,8 +15,9 @@ public class LccBusShfitBean
 	{
 	}
 
-	public LccBusShfitBean(String shfitDate, String shfitStartTime, String shfitState)
+	public LccBusShfitBean(int shfitId, String shfitDate, String shfitStartTime, String shfitState)
 	{
+		this.shfitId = shfitId;
 		this.shfitDate = shfitDate;
 		this.shfitStartTime = shfitStartTime;
 		this.shfitState = shfitState;
@@ -51,9 +53,19 @@ public class LccBusShfitBean
 		this.shfitState = shfitState;
 	}
 
+	public int getShfitId()
+	{
+		return shfitId;
+	}
+
+	public void setShfitId(int shfitId)
+	{
+		this.shfitId = shfitId;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "LccBusShfitBean{" + "shfitDate='" + shfitDate + '\'' + ", shfitStartTime='" + shfitStartTime + '\'' + ", shfitState='" + shfitState + '\'' + '}';
+		return "LccBusShfitBean{" + "shfitId=" + shfitId + ", shfitDate='" + shfitDate + '\'' + ", shfitStartTime='" + shfitStartTime + '\'' + ", shfitState='" + shfitState + '\'' + '}';
 	}
 }

@@ -38,6 +38,23 @@ public class CynMangeUserController
 	{
 		return "/backjsp/"+path;
 	}
+	@RequestMapping("/web2/{url}")
+	public String matchUrl2(@PathVariable(value = "url") String path)
+	{
+		return "/front/"+path;
+	}
+
+	/**
+	 * 前端首页
+	 * by连晨诚
+	 * @return
+	 */
+	@RequestMapping("/welcome")
+	public String toHome(){
+		System.out.println("进入前端欢迎页面");
+		return "front/home";
+	}
+
 	/**
 	 * 管理员登录
 	 * by蔡远南

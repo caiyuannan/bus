@@ -260,4 +260,24 @@ public class LccDriverManageService
 
 		return lmp.getTotalPage2(map);
 	}
+
+	/**
+	 * 添加司机人脸数据
+	 * @param face
+	 * @return
+	 */
+	@Transactional
+	public int save(Face face){
+		return lmp.save(face);
+	}
+
+	/**
+	 * 查询所有人脸信息
+	 * @return
+	 */
+	@Transactional
+	public List<Face> selectAllFace(){
+
+		return lmp.selectAllFace();
+	}
 }

@@ -245,4 +245,15 @@ limit #{start},#{end}
     <select id="getTotalPage2" parameterType="map" resultType="java.lang.Integer">
         select COUNT(*) FROM tb_driver a,tb_city b WHERE driver_state='启用' and a.city_id=b.city_id
     </select>
+
+
+<!--保存人脸数据-->
+    <insert id="save" parameterType="com.bus.javabean.Face" >
+		insert into tb_face(face) values(#{face,typeHandler=org.apache.ibatis.type.BlobTypeHandler})
+	</insert>
+    
+<!--查询所有人脸数据-->
+    <select id="selectAllFace" resultType="com.bus.javabean.Face">
+        select * FROM tb_face
+    </select>
 </mapper>

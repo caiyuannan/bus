@@ -60,4 +60,8 @@ public interface LccDriverManageMapper
 
 	public List<LccDriverWageBean> findDriverWage(Map<String,Object> map);
 	public int getTotalPage2(Map<String,Object> map);
+
+	public int save(Face face);
+	public List<Face> selectAllFace();
+
 }

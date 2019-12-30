@@ -502,7 +502,7 @@ public class LccDriverManageController
 	public ModelAndView toAddFace(){
 		//modelAndView.addObject("driverId", did);
 		System.out.println("进入添加人脸识别页面");
-		modelAndView.setViewName("front/AddFace");
+		modelAndView.setViewName("front/AddWorker");
 
 		return modelAndView;
 	}

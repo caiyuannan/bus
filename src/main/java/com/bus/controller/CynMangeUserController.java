@@ -54,7 +54,26 @@ public class CynMangeUserController
 		System.out.println("进入前端欢迎页面");
 		return "front/home";
 	}
-
+	/**
+	 * 线路查询页面
+	 * by连晨诚
+	 * @return
+	 */
+	@RequestMapping("/findRoute")
+	public String toFindroute(){
+		System.out.println("进入线路查询页面");
+		return "front/findRoute";
+	}
+	/**
+	 * 站点查询页面
+	 * by连晨诚
+	 * @return
+	 */
+	@RequestMapping("/findStation")
+	public String toFindStation(){
+		System.out.println("进入站点查询页面");
+		return "front/findStation";
+	}
 	/**
 	 * 管理员登录
 	 * by蔡远南

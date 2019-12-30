@@ -31,6 +31,7 @@
         <result property="childrenName" column="childname"/>
         <result property="menuUrl" column="menu_url"/>
     </resultMap>
+
 </mapper>
 
 

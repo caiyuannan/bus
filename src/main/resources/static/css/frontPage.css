@@ -1,0 +1,17 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+#mydiv{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+}
+#mydiv img{
+    width: 100px;
+    height: 100px;
+
+}

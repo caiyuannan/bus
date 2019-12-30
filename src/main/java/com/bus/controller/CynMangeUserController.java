@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 管理管控操作器
+ * 管理用户管控操作器
  * by蔡远南
  */
 

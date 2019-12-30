@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CynMangeMenuMapper">
+
+    <select id="findRoleAll" parameterType="com.bus.javabean.CynRoleBean" resultMap="res-Role-All">
+        select *from tb_role
+    </select>
+    <resultMap id="res-Role-All" type="com.bus.javabean.CynRoleBean">
+        <result property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+    </resultMap>
+
+    <select id="getOne" parameterType="com.bus.javabean.CynRoleBean" resultMap="tree2">
+        select tb_menu.menu_id id,tb_menu.menu_name title,tb_role.role_id role_id
+        from tb_menu,tb_role,tb_role_menu
+        where tb_menu.menu_link_id=0
+        and tb_role_menu.role_id=tb_role.role_id
+        and tb_role_menu.menu_id=tb_menu.menu_id
+        <if test="roleId == 0" >
+            and tb_role.role_id=1
+        </if>
+        <if test="roleId != 0" >
+            and tb_role.role_id=#{roleId}
+        </if>
+    </select>
+    <select id="getTwo" resultType="com.bus.javabean.CynMenuActionBean" parameterType="java.util.Map">
+        select distinct tb_menu.menu_id id,tb_menu.menu_name title
+        from (select tb_menu.menu_id,tb_menu.menu_name,tb_role.role_id
+        from tb_menu,tb_role,tb_role_menu
+        where tb_role_menu.role_id=tb_role.role_id
+        and tb_role_menu.menu_id=tb_menu.menu_id
+        )T1,tb_menu,tb_role,tb_role_menu
+        where T1.menu_id=tb_menu.menu_link_id
+        and tb_role_menu.role_id=tb_role.role_id
+        and tb_role_menu.menu_id=tb_menu.menu_id
+        and tb_menu.menu_link_id=#{id}
+        <if test="roleId != 0" >
+            and T1.role_id=#{roleId}
+        </if>
+    </select>
+    <resultMap id="tree2" type="com.bus.javabean.CynMenuActionBean">
+        <id column="id" property="id" />
+        <result column="roleId" property="role_id" />
+        <collection property="children" column="id=id,roleId=role_id" select="getTwo" />
+    </resultMap>
+
+
+
+    <resultMap id="tree" type="com.bus.javabean.CynMenuActionBean">
+        <id column="id" property="id" />
+        <result column="roleId" property="role_id" />
+        <collection property="children" column="id=id,roleId=role_id" select="MenuTwo" />
+    </resultMap>
+
+    <select id="MenuOne" parameterType="com.bus.javabean.CynRoleBean" resultMap="tree">
+        select tb_menu.menu_id id,tb_menu.menu_name title,tb_role.role_id role_id
+        from tb_menu,tb_role,tb_role_menu
+        where tb_menu.menu_link_id=0
+        and tb_role_menu.role_id=tb_role.role_id
+        and tb_role_menu.menu_id=tb_menu.menu_id
+        <if test="roleId == 0" >
+            and tb_role.role_id=1
+        </if>
+        <if test="roleId != 0" >
+            and tb_role.role_id=#{roleId}
+        </if>
+    </select>
+
+    <select id="MenuTwo" resultType="com.bus.javabean.CynMenuActionBean" parameterType="java.util.Map">
+        select distinct tb_menu.menu_id id,tb_menu.menu_name title
+        from (select tb_menu.menu_id,tb_menu.menu_name,tb_role.role_id
+              from tb_menu,tb_role,tb_role_menu
+              where tb_role_menu.role_id=tb_role.role_id
+              and tb_role_menu.menu_id=tb_menu.menu_id
+        )T1,tb_menu
+        where T1.menu_id=tb_menu.menu_link_id
+        and tb_menu.menu_link_id=#{id}
+        <if test="roleId != 0" >
+            and T1.role_id=#{roleId}
+        </if>
+    </select>
+
+    <select id="getMenuIdByRoleID" parameterType="com.bus.javabean.CynRoleBean" resultMap="res-menu">
+        select tb_role_menu.menu_id id from tb_role_menu where tb_role_menu.role_id=#{roleId}
+    </select>
+    <resultMap id="res-menu" type="com.bus.javabean.CynMenuActionBean">
+        <result property="id" column="id"/>
+    </resultMap>
+
+
+    <delete id="deleteRoleMenuByRoleid" parameterType="com.bus.javabean.CynRoleBean">
+        delete from tb_role_menu where tb_role_menu.role_id=#{roleId}
+    </delete>
+    <insert id="addAllRoleMenuRelation">
+        insert into tb_role_menu (role_id,menu_id) values
+        <foreach collection="list" item="item" separator=",">
+            (#{roleId},#{item})
+        </foreach>
+    </insert>
+
+    <select id="judeMenuRoleIsNull" parameterType="com.bus.javabean.CynRoleBean" resultMap="res-roleMenu">
+        select *from tb_role_menu where role_id=#{roleId}
+    </select>
+    <resultMap id="res-roleMenu" type="com.bus.javabean.CynRoleMenuBean">
+        <result property="roleMenuId" column="role_menu_id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="menuId" column="menu_id"/>
+    </resultMap>
+
+
+
+</mapper>
+
+
+

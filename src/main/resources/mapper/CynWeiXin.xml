@@ -2,6 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bus.dao.CynWeiXinMapper">
+
+    <insert id="addUser" parameterType="com.bus.javabean.CynUserBean" useGeneratedKeys ="true" keyProperty="userId">
+        insert into tb_user(user_name,user_password,user_phonenumber,user_balance,user_sex,user_home,user_company,user_status)
+        values(#{userName},#{password},#{phone},#{money},#{sex},#{home},#{company},1)
+    </insert>
+    <update id="addUserFaceToken" parameterType="com.bus.javabean.CynUserBean">
+        update tb_user set tb_user.user_face_token=#{faceToken} where tb_user.user_id=#{userId}
+    </update>
+
+    <select id="findUserByAccount" parameterType="java.lang.String" resultMap="res-User">
+        select tb_user.user_id,tb_user.user_name,tb_user.user_password,tb_user.user_phonenumber,tb_user.user_headportrait,
+            tb_user.user_balance,tb_state.state_name,tb_user.user_sex,tb_user.user_home,tb_user.user_company,tb_user.user_face_token
+        from tb_user,tb_state
+        where tb_user.user_name=#{account}
+        and tb_state.state_id=tb_user.user_status
+        and tb_user.user_status=1
+    </select>
+    <select id="findUserByFaceToken" parameterType="java.lang.String" resultMap="res-User">
+        select tb_user.user_id,tb_user.user_name,tb_user.user_password,tb_user.user_phonenumber,tb_user.user_headportrait,
+            tb_user.user_balance,tb_state.state_name,tb_user.user_sex,tb_user.user_home,tb_user.user_company,tb_user.user_face_token
+        from tb_user,tb_state
+        where tb_user.user_face_token=#{faceToken}
+        and tb_state.state_id=tb_user.user_status
+        and tb_user.user_status=1
+    </select>
+    <resultMap id="res-User" type="com.bus.javabean.CynUserBean">
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="password" column="user_password"/>
+        <result property="userHead" column="user_headportrait"/>
+        <result property="phone" column="user_phonenumber"/>
+        <result property="money" column="user_balance"/>
+        <result property="stateName" column="state_name"/>
+        <result property="sex" column="user_sex"/>
+        <result property="home" column="user_home"/>
+        <result property="company" column="user_company"/>
+        <result property="faceToken" column="user_face_token"/>
+    </resultMap>
+
     <select id="findAllCitys" resultMap="res-city">
         select *from tb_city
     </select>
@@ -73,9 +112,25 @@
         <result property="lon" column="station_lon"/>
         <result property="lat" column="station_lat"/>
     </resultMap>
+    <select id="getNearStation" parameterType="java.lang.String" resultMap="res-Test">
+        select tb_routeOrder.routeOrder_station_name,tb_routeOrder.routeOrder_order,tb_station.station_lat,tb_station.station_lon
+        from tb_routeOrder,tb_station
+        where routeOrder_name=#{route}
+        and tb_station.station_name=tb_routeOrder.routeOrder_station_name
+    </select>
+
     <select id="getXYByStationName" parameterType="java.lang.String" resultMap="res-Test">
         select distinct tb_station.station_lon,tb_station.station_lat from tb_station where tb_station.station_name=#{stationName}
     </select>
+
+    <insert id="addAdvice" parameterType="com.bus.javabean.CynAdviceBean" useGeneratedKeys ="true" keyProperty="id">
+        insert into tb_advice(advice_name,advice_type,advice_sth,advice_phone)
+        values(#{account},#{type},#{content},#{phone})
+    </insert>
+    <insert id="addAdviceImage" parameterType="com.bus.javabean.CynAdviceBean">
+        insert into tb_advice_image(advice_id,temp_path)
+        values(#{id},#{imagePath})
+    </insert>
 </mapper>
 
 

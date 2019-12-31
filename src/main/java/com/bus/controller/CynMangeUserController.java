@@ -75,6 +75,16 @@ public class CynMangeUserController
 		return "front/findStation";
 	}
 	/**
+	 * 个人中心页面
+	 * by连晨诚
+	 * @return
+	 */
+	@RequestMapping("/account")
+	public String toAccount(){
+		System.out.println("进入个人中心页面");
+		return "front/account";
+	}
+	/**
 	 * 管理员登录
 	 * by蔡远南
 	 */

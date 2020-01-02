@@ -16,20 +16,25 @@ public class CynLoginInterceptor implements HandlerInterceptor
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception
 	{
 		//获取请求发来的路径
-		String url=request.getRequestURI();
-
-		if(url.endsWith("/login")){
-			return true;
-		}
-		String contextPath=request.getContextPath();
-		Object obj=request.getSession().getAttribute("user");
-		if(obj==null){
-			response.sendRedirect(contextPath+"/web/login");
-		}else{
-			return true;
-		}
-		return false;
-
+//		String url=request.getRequestURI();
+//
+//		if(url.endsWith("/mangeuserlogin")||url.endsWith("/userlogin")||
+//		url.endsWith("faceLogin")||url.endsWith("AddWorker")||
+//				url.endsWith("findRoute")||url.endsWith("findStation")||
+//				url.endsWith("frontPage")||url.endsWith("home")||url.endsWith("success")||
+//				url.endsWith("mangeUserLogin")){
+//			return true;
+//		}
+//		String contextPath=request.getContextPath();
+//		Object obj=request.getSession().getAttribute("user");
+//		if(obj==null){
+//			response.sendRedirect(contextPath+"/web/mangeuserlogin");
+//		}else{
+//			return true;
+//		}
+//		return false;
+		//测试为true比较方便
+		return true;
 	}
 
 	@Override

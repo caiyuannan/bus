@@ -9,12 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CynMyConfigurer implements WebMvcConfigurer
 {
 
-	//@Override
-	//public void addInterceptors(InterceptorRegistry registry) {
-	//
-	//	registry.addInterceptor(new CynLoginInterceptor())
-	//			.addPathPatterns("/**")
-	//			.excludePathPatterns("/login","/login.jsp", "/error")
-	//			.excludePathPatterns("/layui/**","/css/**", "/js/**","/img/**");
-	//}
+//	@Override
+//	public void addInterceptors(InterceptorRegistry registry) {
+//
+//		registry.addInterceptor(new CynLoginInterceptor())
+//				.addPathPatterns("/**")
+//				.excludePathPatterns("/mangeuserlogin","/mangeuserlogin.jsp", "/error")
+//				.excludePathPatterns("/layui/**","/css/**", "/js/**","/img/**","/bootstrap/**");
+//	}
 }

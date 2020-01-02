@@ -1,6 +1,7 @@
 package com.bus.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.bus.aoplog.CynLog;
 import com.bus.javabean.*;
 import com.bus.service.CynWeiXinService;
 import net.sf.json.JSONArray;
@@ -58,6 +59,7 @@ public class CynWeiXinController
 				list.add(resMap);
 				map.put("userInf", list);
 				map.put("message", msg);
+
 			} else
 			{
 				msg = "账号或密码有误，请重新输入！";

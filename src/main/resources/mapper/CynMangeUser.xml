@@ -32,6 +32,24 @@
         <result property="menuUrl" column="menu_url"/>
     </resultMap>
 
+    <insert id="addLog" parameterType="com.bus.aoplog.CynSystemLog">
+        insert into tb_journal(operator,operation_time,operation_transaction,money)
+        values(#{actionName},#{actionTime},#{actionInf},#{money})
+    </insert>
+
+    <select id="findLogAllByOperatorName" parameterType="java.lang.String" resultMap="res-Log">
+        select *from tb_journal where 1=1
+        <if test="actionName!=null">
+            and tb_journal.operator=#{actionName}
+        </if>
+    </select>
+    <resultMap id="res-Log" type="com.bus.aoplog.CynSystemLog">
+        <result property="logInfId" column="journal_id"/>
+        <result property="actionName" column="operator"/>
+        <result property="actionTime" column="operation_time"/>
+        <result property="actionInf" column="operation_transaction"/>
+        <result property="money" column="money"/>
+    </resultMap>
 </mapper>
 
 

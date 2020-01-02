@@ -1,5 +1,7 @@
 package com.bus.dao;
 
+import com.bus.aoplog.CynSystemLog;
+import com.bus.aoplog.CynSystemLogAspect;
 import com.bus.javabean.CynMangeUserBean;
 import com.bus.javabean.CynMenuBean;
 import org.apache.ibatis.annotations.Mapper;
@@ -21,4 +23,14 @@ public interface CynMangeUserMapper
 	 * 获取所有的一二级菜单
 	 */
 	public List<CynMenuBean> findMenuAllByUserName(String mangeUserName);
+
+	/**
+	 * 添加日志
+	 */
+	public int addLog(CynSystemLog cynSystemLog);
+
+	/**
+	 * 获取所有的日志信息
+	 */
+	public List<CynSystemLog> findLogAllByOperatorName(String actionName);
 }

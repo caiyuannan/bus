@@ -1,5 +1,6 @@
 package com.bus.controller;
 
+import com.bus.aoplog.CynLog;
 import com.bus.dao.CynMangeMenuMapper;
 import com.bus.javabean.*;
 import com.bus.service.CynMangeMenuService;
@@ -108,6 +109,7 @@ public class CynMangeMenuController
 
 	@RequestMapping(value = "/changedemo")
 	@ResponseBody
+	@CynLog(operationType = "管理员权限分配",operationName = "操作人")
 	public List<CynMenuActionBean> getMenuSelectAll(String roleId)
 	{
 		CynRoleBean role = new CynRoleBean();

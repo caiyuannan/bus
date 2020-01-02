@@ -1,8 +1,10 @@
 package com.bus.controller;
 
+import com.bus.aoplog.CynLog;
 import com.bus.javabean.CynMangeUserBean;
 import com.bus.javabean.CynMenuBean;
 import com.bus.service.CynMangeUserService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,6 @@ import java.util.Map;
  * 管理用户管控操作器
  * by蔡远南
  */
-
 @Controller
 public class CynMangeUserController
 {
@@ -54,6 +55,7 @@ public class CynMangeUserController
 		System.out.println("进入前端欢迎页面");
 		return "front/home";
 	}
+
 	/**
 	 * 线路查询页面
 	 * by连晨诚
@@ -79,9 +81,10 @@ public class CynMangeUserController
 	 * by蔡远南
 	 */
 	@RequestMapping("/mangeUserLogin")
-	public String login(HttpServletRequest request)
+//	@CynLog(operationType = "管理员登录",operationName = "操作人")
+	public String mangeUserLogin(HttpServletRequest request)
 	{
-		String name = request.getParameter("username");
+		String name=request.getParameter("username");
 		CynMangeUserBean cynMangeUserBean=cynMangeUserService.finMangeUser(name);
 		if(null != cynMangeUserBean){
 			String pass = request.getParameter("password");
@@ -125,6 +128,16 @@ public class CynMangeUserController
 			}
 		}
 		return menuMap;
+	}
+
+	/**
+	 * 日志操作
+	 */
+	@RequestMapping("/mangelog")
+	public void mangeLog(String username)
+	{
+
+
 	}
 
 }

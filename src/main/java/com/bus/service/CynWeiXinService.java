@@ -18,6 +18,37 @@ public class CynWeiXinService
 	private CynWeiXinMapper cynWeiXinMapper;
 
 	/**
+	 * 微信端用户注册
+	 */
+	@Transactional
+	public int addUser(CynUserBean cynUserBean){
+		return cynWeiXinMapper.addUser(cynUserBean);
+	}
+	/**
+	 * 微信端用户注册增加图片
+	 */
+	@Transactional
+	public int addUserFaceToken(CynUserBean cynUserBean){
+		return cynWeiXinMapper.addUserFaceToken(cynUserBean);
+	}
+
+	/**
+	 * 微信端用户登录
+	 */
+	@Transactional
+	public CynUserBean findUserByAccount(String account){
+		return cynWeiXinMapper.findUserByAccount(account);
+	}
+
+	/**
+	 * 微信端用户人脸识别登录
+	 */
+	@Transactional
+	public CynUserBean findUserByFaceToken(String faceToken){
+		return cynWeiXinMapper.findUserByFaceToken(faceToken);
+	}
+
+	/**
 	 * 获取到数据库的所有城市
 	 */
 	@Transactional
@@ -57,6 +88,29 @@ public class CynWeiXinService
 	@Transactional
 	public CynTestBean getXYByStationName(String stationName){
 		return cynWeiXinMapper.getXYByStationName(stationName);
+	}
+
+	/**
+	 * 获取所需站点
+	 */
+	@Transactional
+	public List<CynTestBean> getNearStation(String route){
+		return cynWeiXinMapper.getNearStation(route);
+	}
+
+	/**
+	 * 添加到用户反馈表
+	 */
+	@Transactional
+	public int addAdvice(CynAdviceBean advice){
+		return cynWeiXinMapper.addAdvice(advice);
+	}
+	/**
+	 * 添加到用户反馈表关联的图片表
+	 */
+	@Transactional
+	public int addAdviceImage(CynAdviceBean advice){
+		return cynWeiXinMapper.addAdviceImage(advice);
 	}
 
 }

@@ -12,6 +12,14 @@ import java.util.List;
 @Mapper
 public interface CynWeiXinMapper
 {
+	public int addUser(CynUserBean cynUserBean);
+
+	public int addUserFaceToken(CynUserBean cynUserBean);
+
+	public CynUserBean findUserByAccount(@Param("account") String account);
+
+	public CynUserBean findUserByFaceToken(@Param("faceToken") String faceToken);
+
 	public List<CynCityBean> findAllCitys();
 
 	public List<CynStationAndRouteOrderBean> findAllStationAndRoute(String location);
@@ -23,4 +31,10 @@ public interface CynWeiXinMapper
 	public List<CynTestBean> testGetAllData(@Param("route") String route);
 
 	public CynTestBean getXYByStationName(@Param("stationName") String stationName);
+
+	public List<CynTestBean> getNearStation(@Param("route") String route);
+
+	public int addAdvice(CynAdviceBean advice);
+
+	public int addAdviceImage(CynAdviceBean advice);
 }

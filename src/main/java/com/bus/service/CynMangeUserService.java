@@ -1,5 +1,7 @@
 package com.bus.service;
 
+import com.bus.aoplog.CynSystemLog;
+import com.bus.aoplog.CynSystemLogAspect;
 import com.bus.dao.CynMangeUserMapper;
 import com.bus.javabean.CynMangeUserBean;
 import com.bus.javabean.CynMenuBean;
@@ -34,6 +36,18 @@ public class CynMangeUserService
 	{
 		return cynMangeUserMapper.findMenuAllByUserName(mangeUserName);
 	}
-
-
+	/**
+	 * 添加日志操作
+	 */
+	@Transactional
+	public int addLog(CynSystemLog cynSystemLogAspect){
+		return cynMangeUserMapper.addLog(cynSystemLogAspect);
+	}
+	/**
+	 * 查看日志操作
+	 */
+	@Transactional
+	public List<CynSystemLog> findLogAllByOperatorName(String actionName){
+		return cynMangeUserMapper.findLogAllByOperatorName(actionName);
+	}
 }

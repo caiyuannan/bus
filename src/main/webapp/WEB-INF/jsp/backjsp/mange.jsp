@@ -35,12 +35,12 @@
 							<span id="login">欢迎你,${sessionScope.user.mangeUserName}</span>
 						</c:when>
 						<c:otherwise>
-							<span id="login"><a href="/firstdemo/web/mangeuserlogin"%>">登录</a></span>
+							<span id="login"><a href="/bus/web/mangeuserlogin"%>">登录</a></span>
 						</c:otherwise>
 					</c:choose>
 				</a>
 			</li>
-			<li class="layui-nav-item"><a href="/firstdemo/web/mangeuserlogin">退出</a></li>
+			<li class="layui-nav-item"><a href="/bus/web/mangeuserlogin">退出</a></li>
 		</ul>
 	</div>
 

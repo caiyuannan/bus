@@ -62,7 +62,7 @@ public interface DyfBusConfigurationMapper
 //	查询所有的车辆排班
 	public List<DyfBusShfitBean> selectAllCanRefait(@Param("shfitDate") String shfitDate,@Param("cityName") String cityName,@Param("shfitBusLine") String shfitBusLine,@Param("busEndStation") String busEndStation,@Param("shfitBusStartStation") String shfitBusStartStation);
 //去除掉所有不可选择的排班
-	public List<DyfBusBean> selectAllNoShfitBus(@Param("list")List<Integer>list,@Param("busEndStation")String busEndStation);
+	public List<DyfBusBean> selectAllNoShfitBus(@Param("list")List<Integer>list,@Param("busEndStation")String busEndStation,@Param("busTime")String busTime,@Param("twoBusStation")String twoBusStation);
 //添加排班
 	public int addShfit(@Param("shfitDate") String shfitDate,@Param("shfitStartTime") String shfitStartTime,@Param("shfitBusId") String shfitBusId,@Param("shfitBusLine") String shfitBusLine,@Param("shfitStartId") String shfitStartId,@Param("startStation") String startStation);
 //	替换排班
@@ -73,4 +73,14 @@ public interface DyfBusConfigurationMapper
 	public List<dyfStationBean> testGetAllData(@Param("route") String route,@Param("cityName") String cityName);
 //	查询所有的站点名称
 	public List<dyfAllRouteBean>selectAllRoute(String cityName);
+//	时间轴信息查看
+	public List<DyfBusShfitBean> timerShfit(@Param("busId") String busId,@Param("busDate") String busDate);
+//	查询某段时间下所有排班车辆信息
+	public List<DyfBusBean> selectStationId(@Param("shfitBusId") String shfitBusId,@Param("shfitDate") String shfitDate,@Param("shfitStation") String shfitStation,@Param("shfitBusId1") Integer shfitBusId1,@Param("shfitBusId2") Integer shfitBusId2,@Param("shfitBusLine") String shfitBusLine);
+//	查询时间对应的时间id
+	public List<dyfDateBean>selectDateId(String dateTime);
+//	查询当断时间内停站车辆信息
+	public List<DyfBusShfitBean>selectHelpBus(@Param("dateNow") String dateNow,@Param("dateId") String dateId);
+//	查询该车最新发车信息
+	public List<DyfBusShfitBean>timeNameLisence(@Param("shfitThisStation") String shfitThisStation,@Param("shfitDate") String shfitDate,@Param("shfitBusId") String shfitBusId,@Param("shfitDateID") String shfitDateID);
 }

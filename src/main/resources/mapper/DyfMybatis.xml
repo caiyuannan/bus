@@ -28,6 +28,7 @@
         <result property="busType" column="bus_type"></result>
         <result property="busState" column="bus_state"></result>
         <result property="stateName" column="state_name"></result>
+        <result property="endStation" column="bus_end_station"></result>
     </resultMap>
     <!--    车辆管理sql语句  查询所有的车辆信息-->
     <select id="selectBusManger" resultMap="selectAllBusManger">
@@ -222,13 +223,15 @@
         <result property="routeName" column="route_name"></result>
         <result property="dateBusTime" column="date_bus_time"></result>
         <result property="dateBusId" column="date_bus_id"></result>
+        <result property="shfitThisStation" column="shfit_this_station"></result>
+        <result property="thisDateId" column="shfit_date_start_id"></result>
     </resultMap>
     <!--    查询车辆分页数据-->
     <select id="shfitSlectAllLine" resultMap="busShfitBean">
  select *from tb_bus_date d left join (select distinct s.shfit_bus_id,s.shfit_bus_line,s.shfit_date,
  s.shfit_end_time,s.shfit_id,s.shfit_start_time shfit_start_time,s.shfit_date_start_id,s.shfit_state,b.bus_license,r.route_name from tb_bus b, tb_bus_shfit s,tb_route
  r where b.bus_id = s.shfit_bus_id and s.shfit_date = #{shfitDate}
- and s.shfit_bus_line = r.route_name and r.city_name = #{cityName} and r.state_id = 1 and b.bus_state = '3' and b.bus_end_station  = #{busEndStation}  and s.shfit_bus_start_station = #{shfitBusStartStation}
+ and s.shfit_bus_line = r.route_name and r.city_name = #{cityName} and r.state_id = 1 and b.bus_state = '3' and s.shfit_this_station = #{shfitBusStartStation}
 )t
  on d.date_bus_id = t.shfit_date_start_id and t.shfit_bus_line = #{shfitBusLine}
     </select>
@@ -262,7 +265,7 @@
     <select id="selectSomeStation" resultMap="selectStaion">
         select *from tb_routeOrder t where 1= 1
         <if test="routeOrder !=null and routeOrder != ''">
-            and t.routeOrder_start_end = #{routeOrder}
+            and (t.routeOrder_start_end = 1 or t.routeOrder_start_end = '0')
         </if>
         <if test="routeName!=null and routeName!=''">
             and routeOrder_Name = #{routeName}
@@ -270,38 +273,56 @@
     </select>
 
 
-<!--    查询到当前天所有的排班车辆-->
+    <!--    查询到当前天所有的排班车辆-->
     <select id="selectAllCanRefait" resultMap="busShfitBean">
     select distinct s.shfit_bus_id,s.shfit_bus_line,s.shfit_date,
-    s.shfit_end_time,s.shfit_id,s.shfit_start_time shfit_start_time,s.shfit_date_start_id,s.shfit_state,b.bus_license,r.route_name from tb_bus b, tb_bus_shfit s,tb_route
+    s.shfit_end_time,s.shfit_this_station,s.shfit_id,s.shfit_start_time shfit_start_time,s.shfit_date_start_id,s.shfit_state,b.bus_license,r.route_name from tb_bus b, tb_bus_shfit s,tb_route
     r where b.bus_id = s.shfit_bus_id and s.shfit_date = #{shfitDate}
-    and s.shfit_bus_line = r.route_name and r.city_name = #{cityName} and r.state_id = 1 and b.bus_state = '3' and b.bus_end_station  = #{busEndStation}  and s.shfit_bus_start_station = #{shfitBusStartStation}
+    and s.shfit_bus_line = r.route_name and r.city_name = #{cityName}
+    and r.state_id = 1 and b.bus_state = '3'
+      and s.shfit_this_station = #{shfitBusStartStation}
+
     </select>
-<!--   查询所有未被排班车辆 -->
-    <select id="selectAllNoShfitBus"  resultMap="selectAllBusManger">
-        select *from tb_bus t where bus_end_station = #{busEndStation} and bus_state = 3
-        <foreach collection="list" item="item" >
-        and t.bus_id != #{item}
+    <!--   查询所有未被排班车辆 -->
+    <select id="selectAllNoShfitBus" resultMap="selectAllBusManger">
+        select *from tb_bus t where 1= 1
+        <if test="busEndStation !=null and busEndStation!=''">
+            and bus_end_station = #{busEndStation}
+        </if>
+         and bus_state = 3
+        <foreach collection="list" item="item">
+            and t.bus_id != #{item}
         </foreach>
     </select>
-<!--    车辆排班添加-->
-   <insert id="addShfit">
+    <!-- <if test=" busTime !=null and  busTime !=''">
+         or bus_end_station = #{twoBusStation}
+     </if>-->
+    <!--    车辆排班添加-->
+    <insert id="addShfit">
        insert into tb_bus_shfit(shfit_date,shfit_start_time,shfit_bus_id,shfit_bus_line,
-       shfit_state,shfit_date_start_id,shfit_bus_start_station)
-        VALUES (#{shfitDate},#{shfitStartTime},#{shfitBusId},#{shfitBusLine},'未发车',#{shfitStartId},#{startStation})
+       shfit_state,shfit_date_start_id,shfit_bus_start_station,shfit_this_station)
+        VALUES (#{shfitDate},#{shfitStartTime},#{shfitBusId},#{shfitBusLine},'未发车',#{shfitStartId},#{startStation},#{startStation})
    </insert>
-<!--    车辆排班修改-->
+    <!--    查询某个公交站当天该时段之前的所有排班信息 ， 用来做排班问题操作-->
+    <select id="selectStationId" resultMap="selectAllBusManger">
+        select *from tb_bus_shfit t,tb_bus s
+        where t.shfit_date_start_id &lt; #{shfitBusId} and t.shfit_date = #{shfitDate}
+        and t.shfit_this_station = #{shfitStation} and t.shfit_bus_id = s.bus_id and t.shfit_bus_line = #{shfitBusLine}
+
+    </select>
+
+    <!--    车辆排班修改-->
     <update id="updateShfitBus">
         update tb_bus_shfit t set shfit_bus_id = #{shfitBusId}
          where t.shfit_bus_line = #{shfitBusLine} and t.shfit_bus_start_station = #{shfitBusStation}
          and t.shfit_date_start_id = #{startId} and t.shfit_date = #{shfitDate} and shfit_bus_id = #{oldShfitId}
          and t.shfit_state = '未发车'
     </update>
-<!--    车辆查询（车牌条件）-->
+    <!--    车辆查询（车牌条件）-->
     <select id="selectBusLinsece" parameterType="java.lang.String" resultMap="selectAllBusManger">
         select *from tb_bus where bus_license = #{busLicense}
     </select>
-<!--    用于所有站点及经纬度Javabean-->
+    <!--    用于所有站点及经纬度Javabean-->
     <resultMap id="res-Test" type="com.bus.javabean.dyfStationBean">
         <result property="id" column="routeOrder_id"/>
         <result property="routeName" column="routeOrder_name"/>
@@ -311,8 +332,8 @@
         <result property="lon" column="station_lon"/>
         <result property="lat" column="station_lat"/>
     </resultMap>
-<!--    查询所有站点及经纬度-->
-    <select id="testGetAllData"  resultMap="res-Test">
+    <!--    查询所有站点及经纬度-->
+    <select id="testGetAllData" resultMap="res-Test">
     select tb_routeOrder.routeOrder_id,tb_routeOrder.routeOrder_name,tb_routeOrder.routeOrder_station_name,
         tb_routeOrder.routeOrder_order,tb_routeOrder.city_name,tb_station.station_lon,tb_station.station_lat
     from tb_routeOrder,tb_station,tb_state
@@ -331,6 +352,42 @@
     </resultMap>
     <select id="selectAllRoute" parameterType="java.lang.String" resultMap="routeASelect">
         select *from tb_route where city_name = #{cityName} and state_id = 1
+    </select>
+
+    <select id="timerShfit" parameterType="java.lang.String" resultMap="busShfitBean">
+            select *from tb_bus_shfit s where
+             s.shfit_bus_id = #{busId} and shfit_date = #{busDate}
+    </select>
+    <resultMap id="dateTime" type="com.bus.javabean.dyfDateBean">
+        <id property="dateId" column="date_bus_id"></id>
+        <result property="dateTime" column="date_bus_time"></result>
+    </resultMap>
+<!--    查询时间某时间对应的id-->
+    <select id="selectDateId" parameterType="java.lang.String" resultMap="dateTime">
+        select *from tb_bus_date
+            where date_bus_time = #{_dateTime}
+    </select>
+<!--    查询目前车辆停靠站点情况-->
+    <select id="selectHelpBus" resultMap="busShfitBean">
+        select DISTINCT t.bus_license,s.* from tb_bus t,tb_bus_shfit s where
+        s.shfit_date = #{dateNow}  and s.shfit_bus_id = t.bus_id
+           and shfit_date_start_id &lt;= #{dateId}
+    </select>
+    <resultMap id="routeOrderRes" type="com.bus.javabean.dyfStationOrderBean">
+        <id property="routeOrderId" column="routeOrder_id"></id>
+        <result property="routeOrderName" column="routeOrder_name"></result>
+        <result property="routeOrderStationName" column="routeOrder_station_name"></result>
+        <result property="routeOrderOrder" column="routeOrder_order"></result>
+        <result property="routeStartEnd" column="route_start_end"></result>
+        <result property="cityName" column="city_name"></result>
+        <result property="stateId" column="state_id"></result>
+    </resultMap>
+
+    <select id="timeNameLisence" resultMap="busShfitBean">
+        select *from tb_bus_shfit s where
+        s.shfit_this_station = #{shfitThisStation} and s.shfit_date =
+        #{shfitDate} and shfit_bus_id = #{shfitBusId} and shfit_date_start_id >= #{shfitDateID}
+
     </select>
 </mapper>
 

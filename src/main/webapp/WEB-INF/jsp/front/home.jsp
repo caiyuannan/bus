@@ -12,6 +12,9 @@
 	String cssPath=request.getContextPath()+"/css/";
 	String jsPath=request.getContextPath()+"/js/";
 	String imgPath=request.getContextPath()+"/img/";
+	String laPath = application.getContextPath()+"/layui/";
+	String frontPath = application.getContextPath()+"/WEB-INF/jsp/front/";
+
 %>
 <html>
 <head>
@@ -22,8 +25,8 @@
 	<link rel="stylesheet" href=<%=path + "/bootstrap/css/bootstrap.min.css"%>>
 	<link rel="stylesheet" href=<%=cssPath + "login.css"%>>
 	<script src=<%=jsPath + "jquery.js"%>></script>
-
 	<script src=<%=path + "/bootstrap/js/bootstrap.min.js"%>></script>
+	<script src=<%=jsPath + "dyfLogin.js"%>></script>
 	<script>
 		$(document).ready(function() {
 			//打开会员登录
@@ -68,6 +71,7 @@
 					$("#_close").hide(500);
 					$("#login_container").hide(500);
 					$("#regist_container").hide(500);
+					$("#messageLogin").hide(500);
 					$("#_start").animate({
 						left: '0px',
 						height: '0px',
@@ -85,12 +89,18 @@
 				$("#regist_container").hide(500);
 				$("#login_container").show(500);
 			});
+			//短信登入
+			$("#login_message").click(function () {
+				$("#login_container").hide(500);
+				$("#messageLogin").show(500);
+			})
 		});
 	</script>
 
 </head>
 <%--<body style="background:url(<%=imgPath + "bg1.jpg"%>);">--%>
 <body>
+<input type="hidden" value=<%=path+"/img/"%> id="imgPathUrl">
 <div class="container">
 	<div class="panel-heading">
 		<h3 class="panel-title" style="font-size: 45px;">
@@ -142,7 +152,19 @@
 							<input type="text" class="form-control" />
 						</div> <button type="submit" class="btn btn-default">Submit</button>
 					</form>
+					<input id="aHrefValue" type="hidden" value="<%=path+"/aUserMassage?userBean="%>">
 					<ul class="nav navbar-nav navbar-right login_reg">
+						<li style="display: none;margin-left: -150px" id="liUser">
+							<a href="" style="display:none;width:80px;height:80px; margin-top: -15px" id="user"><img src="<%=imgPath%>45454.png" class="img-responsive" alt="Cinque Terre" style="width: 100%;height: 100%" id="imgUser"></a>
+						</li>
+						<li>
+							<div>
+							<span id="welecome" style="display: none;width: 120px;height: 70px;margin-left: -70px">欢迎：</span>
+							</div>
+						</li>
+						<li>
+							<button style="display: none;width:100px;height:30px;margin-left: 70px" class="btn btn-primary" id="outUser" onclick="self.location=document.referrer;">爸爸退了</button>
+						</li>
 						<li>
 							<button type="button" id="Login_start_" class="btn btn-primary" style="width:100px;height:40px;">登陆</button>
 						</li>
@@ -173,9 +195,10 @@
 					</div>
 					<div id="form_container1">
 						<br />
-						<input type="text" class="form-control" placeholder="手机号/用户名" id="login_number" value="jsdaima.com" />
-						<input type="password" class="form-control" placeholder="密码" id="login_password" />
-						<input type="button" value="登录" class="btn btn-success" id="login_btn" />
+						<input type="hidden" value="${sessionScope.userName}" id="userName">
+						<input type="text" class="form-control" placeholder="手机号/用户名" id="login_number" value="dyf123" onkeyup='this.value=this.value.replace(/\W/,"")'/>
+						<input type="password" class="form-control" placeholder="密码" id="login_password" value="123456" onkeyup="this.value=this.value.replace(/\s+/g,'')"/>
+						<input type="button" value="登录" class="btn btn-success" id="login_btn" onclick="login()" />
 						<span id="rememberOrfindPwd">
 						<span>
 							<input id="remember" type="checkbox" style="margin-bottom: -1.5px;"/>
@@ -194,11 +217,11 @@
 					</div>
 					<div style="width:330px;height:100px;border-bottom: 1px solid #FFFFFF;">
 						<br />
-						<button id="login_QQ" type="button" class="btn btn-info">
-							<img src="img/qq32.png" style="width:20px;margin-top:-4px;" />&emsp;QQ登录
+						<button id="login_message" type="button" class="btn btn-info">
+							<img src=<%=path+"/img/qq32.png"%> style="width:20px;margin-top:-4px;" />&emsp;短信验证
 						</button>
 						<button id="login_WB" type="button" class="btn btn-danger">
-							<img src="img/sina32.png" style="width:20px;margin-top:-4px;" />&emsp;微博登录
+							<img src=<%=path%>"img/sina32.png" style="width:20px;margin-top:-4px;" />&emsp;微博登录
 						</button>
 					</div>
 				</div>
@@ -212,7 +235,6 @@
 					</span>
 					</div>
 					<div id="form_container2" style="padding-top: 25px;">
-
 						<input type="text" class="form-control" value="jsdaima.com"  placeholder="用户名" id="regist_account"/>
 						<input type="password" class="form-control" placeholder="密码" id="regist_password1" />
 						<input type="password" class="form-control" placeholder="确认密码" id="regist_password2" />
@@ -222,7 +244,22 @@
 						<input id="getVCode" type="button" class="btn btn-success" value="点击发送验证码" onclick="sendCode(this)" />
 
 					</div>
-					<input type="button" value="注册" class="btn btn-success" id="regist_btn" />
+					<input type="button" value="注册" class="btn btn-success" id="regist_btn" onclick="registUser()"/>
+				</div>
+				<div id="messageLogin" style="display: none">
+					<div id="lab2">
+						<span id="lab_loginf">手机号登入</span>
+						<span id="lab_toLogin1">
+						&emsp;已有账号&nbsp;
+						<span id='toLoginf' style="color: #EB9316;cursor: pointer;">立即登录</span>
+					</span>
+					</div>
+					<div id="messageLogin2" style="padding-top: 25px;">
+						<input type="text" class="form-control" placeholder="手机号" id="loginPhoneNumber" />
+						<input type="text" class="form-control" placeholder="验证码" id="regist_vcode1" />
+						<input id="getVCode1" type="button" class="btn btn-success" value="点击发送验证码" onclick="sendCode1(this)" />
+					</div>
+					<input type="button" value="登入" class="btn btn-success" id="loginMsgBtn" onclick="loginMsg()"/>
 				</div>
 			</div>
 			<div class="carousel slide" id="carousel-322317">
@@ -236,18 +273,19 @@
 				</ol>
 				<div class="carousel-inner">
 					<div class="item active">
-						<img alt="" src="img/default.jpg" />
+						<img alt="" src=<%=path%>"img/default.jpg" />
 						<div class="carousel-caption">
 							<h4>
 								First Thumbnail label
 							</h4>
 							<p>
+
 								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
 							</p>
 						</div>
 					</div>
 					<div class="item">
-						<img alt="" src="img/default1.jpg" />
+						<img alt="" src=<%=path%>"/img/default1.jpg" />
 						<div class="carousel-caption">
 							<h4>
 								Second Thumbnail label
@@ -258,7 +296,7 @@
 						</div>
 					</div>
 					<div class="item">
-						<img alt="" src="img/default2.jpg" />
+						<img alt="" src=<%=path%>"img/default2.jpg" />
 						<div class="carousel-caption">
 							<h4>
 								Third Thumbnail label
@@ -332,6 +370,7 @@
 	<div class="panel-footer">
 		联系地址:XXXXX
 	</div>
+	<input type="hidden" value="" id="userSecssion">
 </div>
 
 
@@ -340,11 +379,44 @@
 	var clock = '';
 	var nums = 30;
 	var btn;
+	var dyfMessageBean;
 	function sendCode(thisBtn) {
-		btn = thisBtn;
-		btn.disabled = true; //将按钮置为不可点击
-		btn.value = '重新获取（'+nums+'）';
-		clock = setInterval(doLoop, 1000); //一秒执行一次
+		var userName = $("#regist_account").val();  //用户名
+		var passWord1 = $("#regist_password1").val(); //密码1
+		var passWord2 = $("#regist_password2").val();//密码2
+		var phoneNum = $("#regist_phone").val();    //电话号码
+		if (userName.length<2||passWord1.length<2||passWord2.length<2||phoneNum.length!=11){
+			alert("请先输入完整的个人信息和正确的电话号码后再获取验证码注册")
+		} else {
+			btn = thisBtn;
+			btn.disabled = true; //将按钮置为不可点击
+			btn.value = '重新获取（'+nums+'）';
+			clock = setInterval(doLoop, 1000); //一秒执行一次
+			$.ajax({
+				url :'http://localhost:8080/bus/userRegisetMessage',
+				type: "post",
+				data:{phoneNum:phoneNum},
+				datatype: "json",
+				async: true,
+				success:function (res) {
+					if (res.status==="success"){
+						alert("发送成功");
+						dyfMessageBean = res;
+					} else if (res.fee ==="repair"){
+						alert('该账号已存在，如忘记密码，可直接在登入页面短信登入');
+						nums = 0;
+					}
+					else {
+						alert("发送失败，请重试")
+					}
+
+				},
+				error:function () {
+					alert("网络数据异常，请联系管理员")
+				}
+			})
+		}
+
 	}
 
 	function doLoop() {

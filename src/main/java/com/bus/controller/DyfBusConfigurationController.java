@@ -3,6 +3,7 @@ package com.bus.controller;
 import com.bus.javabean.*;
 import com.bus.service.DyfBusConfigurationService;
 import com.google.gson.Gson;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -20,9 +21,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -57,6 +57,11 @@ public class DyfBusConfigurationController
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 	private String mapStationProvin;
 	private String mapStation;
+	private List<DyfBusShfitBean> busShfitBeans1;   //始程已排班车辆
+	private List<DyfBusShfitBean> busShfitBeans2;    //返程已排班车辆
+	private String provinceHelp;
+	private String provinceHelpName;
+	private List<dyfDateBean> afterTime;
 	//用于车辆管理的省份城市的树状图数据获取
 	@RequestMapping("/selectAllProvince")
 	public String selectProvinceAndcity(HttpServletResponse response, HttpServletRequest request)
@@ -73,6 +78,45 @@ public class DyfBusConfigurationController
 		List<DyfProvince> provincesList = dbs.selectProvinceCity();
 		request.setAttribute("provincesList", provincesList);
 		return "backjsp/dyfBusrepair";
+	}
+
+	//用于车辆救援的省份城市的树状图数据获取
+	@RequestMapping("/helpTree")
+	public String helpTreeSelect(HttpServletResponse response, HttpServletRequest request)
+	{
+		List<DyfProvince> provincesList = dbs.selectProvinceCity();
+		request.setAttribute("provincesList", provincesList);
+		return "backjsp/dyfHelpResoure";
+	}
+
+	//用于公交救援页面的跳转
+	@RequestMapping("/helpUrlGoTo")
+	public String helpUrlGoTo(String parm, HttpServletRequest request)
+	{
+		provinceHelp = parm;
+
+		//这里暂时写死，后面从接口拿到数据再操作
+		if (provinceHelp.equals("厦门市"))
+		{
+			provinceHelpName = "闽D";
+		} else
+		{
+			provinceHelpName = "1";
+		}
+		Date date = new Date();
+		String time1 = formatter.format(LocalDateTime.now());
+		String str[] = time1.split(":");
+		if (Integer.valueOf(str[1]) > 15 && Integer.valueOf(str[1]) <= 40)
+		{
+			time1 = str[0] + ":" + "30";
+		} else if (Integer.valueOf(str[1]) > 40)
+		{
+			time1 = (Integer.valueOf(str[0])) + 1 + ":" + "00";
+		}else {
+			time1 = (Integer.valueOf(str[0]))+ ":" + "00";
+		}
+		afterTime = dbs.selectDateId(time1);
+		return "backjsp/dyfHelpTable";
 	}
 
 	//用于车辆排班管理的省份城市的树状图数据获取
@@ -92,6 +136,7 @@ public class DyfBusConfigurationController
 		request.setAttribute("provincesList", provincesList);
 		return "backjsp/dyfBusMapStation";
 	}
+
 	//用于公交管理页面的跳转
 	@RequestMapping("/discriminate")
 	public String cityDiscriminate(String parm, HttpServletRequest request)
@@ -152,6 +197,7 @@ public class DyfBusConfigurationController
 	{
 		return "backjsp/" + path;
 	}
+
 	//添加车辆操作
 	@RequestMapping("/DyfBusAddBus")
 	@ResponseBody
@@ -268,12 +314,12 @@ public class DyfBusConfigurationController
 		{
 			mapStationProvin = "1";
 		}
-		List<dyfAllRouteBean>allRouteBeans = dbs.selectAllRoute(mapStation);
+		List<dyfAllRouteBean> allRouteBeans = dbs.selectAllRoute(mapStation);
 		for (dyfAllRouteBean allRouteBean : allRouteBeans)
 		{
 			System.out.println(allRouteBean.toString());
 		}
-		request.setAttribute("allRouteBeans",allRouteBeans);
+		request.setAttribute("allRouteBeans", allRouteBeans);
 		return "backjsp/dyfAeroPlaneView";
 	}
 
@@ -332,8 +378,11 @@ public class DyfBusConfigurationController
 			d0 = sdf.format(new Date());
 		}
 		List<DyfRouteOrder> routeOrders = dbs.selectSomeStation("1", shfitBusLine);
-		List<DyfBusShfitBean> busShfitBeans = dbs.shfitSlectAllLine(String.valueOf(d0), shfitCity, shfitBusLine, routeOrders.get(0).getRouteStationName(), "1");
-		tableBean.setData(busShfitBeans);
+		if (null != routeOrders && routeOrders.size() > 0)
+		{
+			busShfitBeans1 = dbs.shfitSlectAllLine(String.valueOf(d0), shfitCity, shfitBusLine, routeOrders.get(0).getRouteStationName(), "1");
+			tableBean.setData(busShfitBeans1);
+		}
 		tableBean.setCount(1);
 		return tableBean;
 	}
@@ -356,76 +405,313 @@ public class DyfBusConfigurationController
 		}
 
 		List<DyfRouteOrder> routeOrders = dbs.selectSomeStation("0", shfitBusLine);
-		List<DyfBusShfitBean> busShfitBeans = dbs.shfitSlectAllLine(String.valueOf(d0), shfitCity, shfitBusLine, routeOrders.get(0).getRouteStationName(), "0");
-		tableBean.setData(busShfitBeans);
+		if (null != routeOrders && routeOrders.size() > 0)
+		{
+			busShfitBeans2 = dbs.shfitSlectAllLine(String.valueOf(d0), shfitCity, shfitBusLine, routeOrders.get(0).getRouteStationName(), "0");
+			tableBean.setData(busShfitBeans2);
+		}
+
 		tableBean.setCount(1);
 		return tableBean;
 	}
 
+	//查询所有可排班车辆列表
 	@RequestMapping("/canRepaitBus")
 	@ResponseBody
-	public List<DyfBusBean> selectAllCanRepaitBus(HttpServletRequest request, String shfitBusLine, String d0, String routeOrder, String shfitBusStartStation, String dateBusId, String dateBusTime,String busLicense)
+	public List<DyfBusBean> selectAllCanRepaitBus(HttpServletRequest request, String shfitBusLine, String d0, String routeOrder, String shfitBusStartStation, String dateBusId, String dateBusTime, String busLicense)
 	{
+		List<DyfBusBean> busBeanList = null;
 		List<DyfRouteOrder> routeOrders = dbs.selectSomeStation(routeOrder, shfitBusLine);
+		for (DyfRouteOrder order : routeOrders)
+		{
+			System.out.println(order.toString());
+		}
 		if (d0 == null)
 		{
 			d0 = sdf.format(new Date());
 		}
+
 		String str[] = null;
 		String ots[] = null;
 		if (dateBusTime != null && dateBusTime != "")
 		{
 			str = dateBusTime.split(":");
-			//			dateBusTime = Integer.valueOf(str[0])+":"+""+str[1];
 		}
+
 		List<Integer> utilList = new ArrayList<>();
-		List<DyfBusShfitBean> list = dbs.selectAllCanRefait(String.valueOf(d0), shfitCity, shfitBusLine, routeOrders.get(0).getRouteStationName(), shfitBusStartStation);
-		for (DyfBusShfitBean dyfBusShfitBean : list)
+		if (routeOrders.size() > 0)
 		{
-			if (str.length > 0 && null != str)
+			List<DyfBusShfitBean> list = dbs.selectAllCanRefait(String.valueOf(d0), shfitCity, shfitBusLine, routeOrders.get(0).getRouteStationName(), shfitBusStartStation);
+
+			//			shfitBusStartStation 区分开始发车还是终点发车
+			if (shfitBusStartStation.equals("1"))
 			{
-				ots = dyfBusShfitBean.getShfitStartTime().split(":");
-				if ((Integer.valueOf(str[0])-Integer.valueOf(ots[0])) % 2 == 0 && (Integer.valueOf(str[0])
-						- Integer.valueOf(ots[0])) != 0
-//						&& Integer.valueOf(str[0]) > Integer.valueOf(ots[0])
-						&& (Integer.valueOf(str[1]) - Integer.valueOf(ots[1])) == 0)
+				for (int i = 0; i < list.size(); i++)
 				{
-				} else
+					if (list.get(i).getShfitBusId() != null)
+					{
+						utilList.add(Integer.valueOf(list.get(i).getShfitBusId()));
+					}
+
+				}
+			} else if (shfitBusStartStation.equals("0"))
+			{
+				for (int i = 0; i < list.size(); i++)
+				{
+					if (list.get(i).getShfitBusId() != null)
+					{
+						utilList.add(Integer.valueOf(list.get(i).getShfitBusId()));
+					}
+
+				}
+			}
+
+			String time = null;
+			if (!dateBusTime.equals("6:00"))
+			{
+				time = dateBusTime;
+			}
+
+			//当shfitBusStartStation = 0 表示是从终点站发车
+			if (shfitBusStartStation.equals("0"))
+			{
+				busBeanList = dbs.selectAllNoShfitBus(utilList, routeOrders.get(1).getRouteStationName(), time, routeOrders.get(0).getRouteStationName());
+				List<DyfBusBean> afterBusShfit = dbs.selectStationId(String.valueOf(Integer.valueOf(dateBusId) - 1), d0, "1", shfitBusLine);
+				for (int i = 0; i < afterBusShfit.size(); i++)
+				{
+					busBeanList.add(afterBusShfit.get(i));
+				}
+				Set<Integer> busList = new HashSet<>();
+				//通过查询整个的排班列表获取到当前时刻两小时内的排班信息并塞入集合中以供后面去除排班列表中的数据
+				for (int i = 0; i < busShfitBeans2.size(); i++)
+				{
+					if (busShfitBeans2.get(i).getShfitBusId() != null && busShfitBeans2.get(i).getShfitBusId().length() > 0)
+					{
+						if ((Integer.valueOf(busShfitBeans2.get(i).getDateBusId())) >= Integer.valueOf(dateBusId) - 4 && (Integer.valueOf(busShfitBeans2.get(i).getDateBusId())) <= Integer.valueOf(dateBusId) + 4)
+						{
+							busList.add(Integer.valueOf(busShfitBeans2.get(i).getShfitBusId()));
+						}
+					}
+				}
+				//				busShfitBeans 1  始发站
+				for (int i = 0; i < busShfitBeans1.size(); i++)
+				{
+					if (busShfitBeans1.get(i).getShfitBusId() != null && busShfitBeans1.get(i).getShfitBusId().length() > 0)
+					{
+						if ((Integer.valueOf(busShfitBeans1.get(i).getDateBusId())) > (Integer.valueOf(dateBusId) - 1) && (Integer.valueOf(busShfitBeans1.get(i).getDateBusId())) < (Integer.valueOf(dateBusId) + 1))
+						{
+							busList.add(Integer.valueOf(busShfitBeans1.get(i).getShfitBusId()));
+						}
+					}
+
+				}
+
+
+				List<DyfBusShfitBean> set1 = new ArrayList<>();
+				for (int i = 0; i < busShfitBeans1.size(); i++)
+				{
+					if (busShfitBeans1.get(i).getShfitBusId() != null)
+					{
+						set1.add(busShfitBeans1.get(i));
+					}
+				}
+				Comparator<DyfBusShfitBean> comparator = (h1, h2) -> Integer.valueOf(h1.getDateBusId()).compareTo(Integer.valueOf(h2.getDateBusId()));
+				set1.sort(comparator.reversed());
+
+				set1 = set1.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusShfitBean::getShfitBusId))), ArrayList::new));
+
+
+				List<DyfBusShfitBean> set2 = new ArrayList<>();
+				for (DyfBusShfitBean dyfBusShfitBean : busShfitBeans2)
+				{
+					if (dyfBusShfitBean.getShfitBusId() != null)
+					{
+						set2.add(dyfBusShfitBean);
+					}
+				}
+				set2.sort(comparator.reversed());
+				set2 = set2.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusShfitBean::getShfitBusId))), ArrayList::new));
+				for (int i = 0; i < set1.size(); i++)
+				{
+					for (int j = 0; j < set2.size(); j++)
+					{
+						if (set1.get(i).getShfitBusId().equals(set2.get(j).getShfitBusId()))
+						{
+							if (Integer.valueOf(set1.get(i).getDateBusId()) - Integer.valueOf(set2.get(j).getDateBusId()) < 2)
+							{
+								busList.add(Integer.valueOf(set1.get(i).getShfitBusId()));
+							}
+							if (Integer.valueOf(dateBusId) - Integer.valueOf(set2.get(j).getDateBusId()) < 2)
+							{
+								busList.add(Integer.valueOf(set1.get(i).getShfitBusId()));
+							}
+						}
+					}
+					if (Integer.valueOf(dateBusId) - Integer.valueOf(set1.get(i).getDateBusId()) < 2)
+					{
+						busList.add(Integer.valueOf(set1.get(i).getShfitBusId()));
+					}
+				}
+
+
+				busBeanList = busBeanList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusBean::getBusId))), ArrayList::new));
+
+				//判断该集合内两小时内是否有排班
+				if (busList.size() > 0)
 				{
 
-					utilList.add(Integer.valueOf(dyfBusShfitBean.getShfitBusId()));
+					for (int i = 0; i < busBeanList.size(); i++)
+					{
+						System.out.println(busBeanList.get(i).toString());
+						for (Integer integer : busList)
+						{
+
+							if (busBeanList.get(i).getBusId().equals(integer))
+							{
+								busBeanList.remove(busBeanList.get(i));
+							}
+						}
+
+					}
+
+				}
+
+				busBeanList = busBeanList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusBean::getBusLicense))), ArrayList::new));
+			} else
+			{
+				busBeanList = dbs.selectAllNoShfitBus(utilList, routeOrders.get(0).getRouteStationName(), time, routeOrders.get(1).getRouteStationName());
+				List<DyfBusBean> afterBusShfit = dbs.selectStationId(String.valueOf(Integer.valueOf(dateBusId) - 1), d0, "0", shfitBusLine);
+				for (int i = 0; i < afterBusShfit.size(); i++)
+				{
+					busBeanList.add(afterBusShfit.get(i));
+				}
+				Set<Integer> busList = new HashSet<>();
+				for (int i = 0; i < busShfitBeans1.size(); i++)
+				{
+					if (busShfitBeans1.get(i).getShfitBusId() != null && busShfitBeans1.get(i).getShfitBusId().length() > 0)
+					{
+						if ((Integer.valueOf(busShfitBeans1.get(i).getDateBusId())) >= Integer.valueOf(dateBusId) - 4 && (Integer.valueOf(busShfitBeans1.get(i).getDateBusId())) <= Integer.valueOf(dateBusId) + 4)
+						{
+							busList.add(Integer.valueOf(busShfitBeans1.get(i).getShfitBusId()));
+						}
+					}
+
+				}
+				for (int i = 0; i < busShfitBeans2.size(); i++)
+				{
+					if (busShfitBeans2.get(i).getShfitBusId() != null && busShfitBeans2.get(i).getShfitBusId().length() > 0)
+					{
+						if ((Integer.valueOf(busShfitBeans2.get(i).getDateBusId())) > (Integer.valueOf(dateBusId) - 1) && (Integer.valueOf(busShfitBeans2.get(i).getDateBusId())) < (Integer.valueOf(dateBusId) + 1))
+						{
+							busList.add(Integer.valueOf(busShfitBeans2.get(i).getShfitBusId()));
+						}
+
+					}
+
+				}
+				List<DyfBusShfitBean> set1 = new ArrayList<>();
+				for (int i = 0; i < busShfitBeans2.size(); i++)
+				{
+					if (busShfitBeans2.get(i).getShfitBusId() != null)
+					{
+						set1.add(busShfitBeans2.get(i));
+					}
+				}
+				Comparator<DyfBusShfitBean> comparator = (h1, h2) -> Integer.valueOf(h1.getDateBusId()).compareTo(Integer.valueOf(h2.getDateBusId()));
+				set1.sort(comparator.reversed());
+
+				set1 = set1.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusShfitBean::getShfitBusId))), ArrayList::new));
+
+
+				List<DyfBusShfitBean> set2 = new ArrayList<>();
+				for (DyfBusShfitBean dyfBusShfitBean : busShfitBeans1)
+				{
+					if (dyfBusShfitBean.getShfitBusId() != null)
+					{
+						set2.add(dyfBusShfitBean);
+					}
+				}
+				set2.sort(comparator.reversed());
+				set2 = set2.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusShfitBean::getShfitBusId))), ArrayList::new));
+				for (int i = 0; i < set1.size(); i++)
+				{
+					for (int j = 0; j < set2.size(); j++)
+					{
+						if (set1.get(i).getShfitBusId().equals(set2.get(j).getShfitBusId()))
+						{
+							if (Integer.valueOf(set1.get(i).getDateBusId()) - Integer.valueOf(set2.get(j).getDateBusId()) < 2)
+							{
+								busList.add(Integer.valueOf(set1.get(i).getShfitBusId()));
+							}
+							if (Integer.valueOf(dateBusId) - Integer.valueOf(set2.get(j).getDateBusId()) < 2)
+							{
+								busList.add(Integer.valueOf(set1.get(i).getShfitBusId()));
+							}
+						}
+					}
+					if (Integer.valueOf(dateBusId) - Integer.valueOf(set1.get(i).getDateBusId()) < 2)
+					{
+						busList.add(Integer.valueOf(set1.get(i).getShfitBusId()));
+					}
+				}
+
+				//判断该集合内两小时内是否有排班
+				busBeanList = busBeanList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusBean::getBusId))), ArrayList::new));
+
+				if (busList.size() > 0)
+				{
+					for (int i = 0; i < busBeanList.size(); i++)
+					{
+
+						for (Integer integer : busList)
+						{
+							if (busBeanList.get(i).getBusId().equals(integer))
+							{
+								busBeanList.remove(busBeanList.get(i));
+								break;
+							}
+						}
+
+
+					}
+				}
+				busBeanList = busBeanList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusBean::getBusLicense))), ArrayList::new));
+			}
+
+			//用来判断是否是替班的
+			if (null != busLicense && busLicense.length() > 0)
+			{
+				for (DyfBusBean bean : busBeanList)
+				{
+					if (bean.getBusLicense().equals(busLicense))
+					{
+						busBeanList.remove(bean);
+					}
 				}
 			}
 		}
-
-		List<DyfBusBean> busBeanList = dbs.selectAllNoShfitBus(utilList, routeOrders.get(0).getRouteStationName());
-		if (null != busLicense && busLicense.length()>0){
-			for (DyfBusBean bean : busBeanList)
-			{
-				if (bean.getBusLicense().equals(busLicense)){
-					busBeanList.remove(bean);
-				}
-			}
-		}
-
 		return busBeanList;
 	}
 
 	@RequestMapping("/addShfitServlet")
 	@ResponseBody
-	public String addShfitBus(HttpServletRequest request, String dateBusId, String dateBusTime, String license, String shfitBusLine, String d0, String shfitBusStartStation,String oldBusLicense)
+	public String addShfitBus(HttpServletRequest request, String dateBusId, String dateBusTime, String license, String shfitBusLine, String d0, String shfitBusStartStation, String oldBusLicense)
 	{
 		//当有传入表格上的车牌号是表示是进行换班
-		if (oldBusLicense!=null && oldBusLicense.length()>0){
+		if (oldBusLicense != null && oldBusLicense.length() > 0)
+		{
 			DyfBusBean dyfBusBean = dbs.selectBusLinsece(oldBusLicense);
-			if (dyfBusBean!=null){
-				int douMer = dbs.updateShfitBus(license,shfitBusLine,shfitBusStartStation,dateBusId,d0,String.valueOf(dyfBusBean.getBusId()));
-				if (douMer>0){
+			if (dyfBusBean != null)
+			{
+				int douMer = dbs.updateShfitBus(license, shfitBusLine, shfitBusStartStation, dateBusId, d0, String.valueOf(dyfBusBean.getBusId()));
+				if (douMer > 0)
+				{
 					return "success1";
 				}
 			}
 			//当没有传入表格上的车牌号是表示是进行排班
-		}else {
+		} else
+		{
 			int num = dbs.addShfit(d0, dateBusTime, license, shfitBusLine, dateBusId, shfitBusStartStation);
 			if (num > 0)
 			{
@@ -434,15 +720,190 @@ public class DyfBusConfigurationController
 		}
 		return "fail";
 	}
+
+	//	查询线路站点的经纬度
 	@RequestMapping("/selectAllStationServlet")
 	@ResponseBody
-	public List<dyfStationBean> returnStationLonLat(HttpServletRequest request,String shfitBusLine){
-		List<dyfStationBean> stationBeans = dbs.testGetAllData(shfitBusLine,mapStation);
+	public List<dyfStationBean> returnStationLonLat(HttpServletRequest request, String shfitBusLine)
+	{
+		List<dyfStationBean> stationBeans = dbs.testGetAllData(shfitBusLine, mapStation);
 		stationBeans.sort(dyfStationBean.Comparators.AGE);
-		for (int i = 0; i < stationBeans.size(); i++)
-		{
-			System.out.println(stationBeans.get(i).toString());
-		}
+
 		return stationBeans;
+	}
+
+	//	查询车辆时间轴
+	@RequestMapping("/selectTimer")
+	@ResponseBody
+	public List<DyfBusShfitBean> returnTimerShfit(HttpServletRequest request, String value, String lisecenId)
+	{
+		List<DyfBusShfitBean> busShfitBeans = null;
+
+		if (null != value && null != lisecenId)
+		{
+			busShfitBeans = dbs.timerShfit(lisecenId, value);
+		}
+		return busShfitBeans;
+	}
+
+	//	车辆救援管理
+	@RequestMapping("/helpAllTime")
+	@ResponseBody
+	public TableBean helpTable(HttpServletRequest request,String station,String lisenceCard)
+	{
+		TableBean tableBean = new TableBean();
+		String date = sdf.format(new Date());
+		List<DyfBusShfitBean> busShfitBeans = dbs.selectHelpBus(date, String.valueOf(afterTime.get(0).getDateId()));
+		//倒序 将最新的车辆数据倒序排放
+		Comparator<DyfBusShfitBean> comparator = (h1, h2) -> Integer.valueOf(h1.getThisDateId()).compareTo(Integer.valueOf(h2.getThisDateId()));
+		busShfitBeans.sort(comparator.reversed());
+		//去重 过滤更新最前的数据
+		busShfitBeans = busShfitBeans.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(DyfBusShfitBean::getBusLicense))), ArrayList::new));
+		List<DyfBusShfitBean> dyfBusShfitBeanList = new ArrayList<>();
+		List<Integer> busIdList = new ArrayList<>();
+		for (int i = 0; i < busShfitBeans.size(); i++)
+		{
+			if (afterTime.get(0).getDateId() - Integer.valueOf(busShfitBeans.get(i).getThisDateId()) > 2)
+			{
+				dyfBusShfitBeanList.add(busShfitBeans.get(i));
+				busIdList.add(Integer.valueOf(busShfitBeans.get(i).getShfitBusId()));
+			}
+		}
+		List<DyfRouteOrder> list = dbs.selectAllStation();
+
+		List<dyfHelpBean> dyfHelpBeanList = new ArrayList<>();
+		for (int i = 0; i < dyfBusShfitBeanList.size(); i++)
+		{
+			dyfHelpBean dyfHelpBean = new dyfHelpBean();
+			int num = 0;
+			if (dyfBusShfitBeanList.get(i).getShfitBusLine().equals("1路"))
+			{
+				if (dyfBusShfitBeanList.get(i).getShfitThisStation().equals("0")){
+					List<DyfBusShfitBean> beginShfitBean = dbs.timeNameLisence("1",dyfBusShfitBeanList.get(i).getShfitDate(),dyfBusShfitBeanList.get(i).getShfitBusId(),String.valueOf(afterTime.get(0).getDateId()));
+					dyfHelpBean.setLiscense(dyfBusShfitBeanList.get(i).getBusLicense());
+					dyfHelpBean.setStopStation(list.get(0).getRouteStationName());
+					dyfHelpBean.setNewStation(list.get(0).getRouteStationName());
+					dyfHelpBean.setJionTime(dyfBusShfitBeanList.get(i).getShfitStartTime());
+					Integer nowTime = afterTime.get(0).getDateId() - Integer.valueOf(dyfBusShfitBeanList.get(i).getThisDateId());
+
+					String nowTime1 =null;
+					if (nowTime%2==0){
+						nowTime1 = String.valueOf(nowTime/2)+"小时"+"00分";
+					}else if (nowTime%2>0){
+						nowTime1 = nowTime/2+"小时"+"30分";
+					}
+					dyfHelpBean.setNewTime(nowTime1);
+					if (beginShfitBean.size()>0){
+						dyfHelpBean.setBeginTime(beginShfitBean.get(0).getShfitStartTime());
+					}
+					dyfHelpBeanList.add(dyfHelpBean);
+
+				}else if (dyfBusShfitBeanList.get(i).getShfitThisStation().equals("1")){
+					List<DyfBusShfitBean> beginShfitBean = dbs.timeNameLisence("0",dyfBusShfitBeanList.get(i).getShfitDate(),dyfBusShfitBeanList.get(i).getShfitBusId(),String.valueOf(afterTime.get(0).getDateId()));
+					dyfHelpBean.setLiscense(dyfBusShfitBeanList.get(i).getBusLicense());
+					dyfHelpBean.setStopStation(list.get(1).getRouteStationName());
+					dyfHelpBean.setNewStation(list.get(1).getRouteStationName());
+					dyfHelpBean.setJionTime(dyfBusShfitBeanList.get(i).getShfitStartTime());
+					Integer nowTime = afterTime.get(0).getDateId() - Integer.valueOf(dyfBusShfitBeanList.get(i).getThisDateId());
+					String nowTime1 =null;
+					if (nowTime%2==0){
+						nowTime1 = String.valueOf(nowTime/2)+"小时"+"00分";
+					}else if (nowTime%2>0){
+						nowTime1 = nowTime/2+"小时"+"30分";
+					}
+					dyfHelpBean.setNewTime(nowTime1);
+					if (beginShfitBean.size()>0){
+						dyfHelpBean.setBeginTime(beginShfitBean.get(0).getShfitStartTime());
+					}
+					dyfHelpBeanList.add(dyfHelpBean);
+				}
+
+			}
+
+			if (dyfBusShfitBeanList.get(i).getShfitBusLine().equals("2路"))
+			{
+				if (dyfBusShfitBeanList.get(i).getShfitThisStation().equals("0")){
+					List<DyfBusShfitBean> beginShfitBean = dbs.timeNameLisence("1",dyfBusShfitBeanList.get(i).getShfitDate(),dyfBusShfitBeanList.get(i).getShfitBusId(),String.valueOf(afterTime.get(0).getDateId()));
+					dyfHelpBean.setLiscense(dyfBusShfitBeanList.get(i).getBusLicense());
+					dyfHelpBean.setStopStation(list.get(2).getRouteStationName());
+					dyfHelpBean.setNewStation(list.get(2).getRouteStationName());
+					dyfHelpBean.setJionTime(dyfBusShfitBeanList.get(i).getShfitStartTime());
+					Integer nowTime = afterTime.get(0).getDateId() - Integer.valueOf(dyfBusShfitBeanList.get(i).getThisDateId());
+					String nowTime1 =null;
+					if (nowTime%2==0){
+						nowTime1 = String.valueOf(nowTime/2)+"小时"+"00分";
+					}else if (nowTime%2>0){
+						nowTime1 = nowTime/2+"小时"+"30分";
+					}
+					dyfHelpBean.setNewTime(nowTime1);
+					if (beginShfitBean.size()>0){
+						dyfHelpBean.setBeginTime(beginShfitBean.get(0).getShfitStartTime());
+					}
+				}
+				if (dyfBusShfitBeanList.get(i).getShfitThisStation().equals("1")){
+					List<DyfBusShfitBean> beginShfitBean = dbs.timeNameLisence("0",dyfBusShfitBeanList.get(i).getShfitDate(),dyfBusShfitBeanList.get(i).getShfitBusId(),String.valueOf(afterTime.get(0).getDateId()));
+					dyfHelpBean.setLiscense(dyfBusShfitBeanList.get(i).getBusLicense());
+					dyfHelpBean.setStopStation(list.get(3).getRouteStationName());
+					dyfHelpBean.setNewStation(list.get(3).getRouteStationName());
+					dyfHelpBean.setJionTime(dyfBusShfitBeanList.get(i).getShfitStartTime());
+					Integer nowTime = afterTime.get(0).getDateId() - Integer.valueOf(dyfBusShfitBeanList.get(i).getThisDateId());
+					String nowTime1 =null;
+					if (nowTime%2==0){
+						nowTime1 = String.valueOf(nowTime/2)+"小时"+"00分";
+					}else if (nowTime%2>0){
+						nowTime1 = nowTime/2+"小时"+"30分";
+					}
+					dyfHelpBean.setNewTime(nowTime1);
+					if (beginShfitBean.size()>0){
+						dyfHelpBean.setBeginTime(beginShfitBean.get(0).getShfitStartTime());
+					}
+
+				}
+				dyfHelpBeanList.add(dyfHelpBean);
+			}
+		}
+		List<DyfBusBean>dyfBusBeans = dbs.selectAllNoShfitBus(busIdList,null,null,null);
+
+		for (DyfBusBean dyfBusBean : dyfBusBeans)
+		{
+			dyfHelpBean dyfHelpBean = new dyfHelpBean();
+			dyfHelpBean.setLiscense(dyfBusBean.getBusLicense());
+			dyfHelpBean.setStopStation(dyfBusBean.getEndStation());
+			dyfHelpBean.setNewStation("当天还未排班车辆");
+			dyfHelpBeanList.add(dyfHelpBean);
+		}
+		//下面是用户站点车牌查询判断
+		List<dyfHelpBean>returnHelpBean = new ArrayList<>();
+		for (int i = 0; i < dyfHelpBeanList.size(); i++)
+		{
+			if (lisenceCard!=null && lisenceCard.length()>0){
+				if (lisenceCard.length()<dyfHelpBeanList.get(i).getLiscense().length()){
+					String st = dyfHelpBeanList.get(i).getLiscense().substring(0,lisenceCard.length());
+					if (st.equals(lisenceCard)){
+						returnHelpBean.add(dyfHelpBeanList.get(i));
+					}
+				}
+
+			}
+			if (station!=null && station.length()>0){
+				if (station.length()<dyfHelpBeanList.get(i).getStopStation().length()){
+					String st = dyfHelpBeanList.get(i).getStopStation().substring(0,station.length());
+					if (st.equals(station)){
+						returnHelpBean.add(dyfHelpBeanList.get(i));
+					}
+				}
+
+			}
+		}
+		if (returnHelpBean.size()>0){
+			tableBean.setCount(1);
+			tableBean.setData(returnHelpBean);
+			return tableBean;
+		}else {
+			tableBean.setData(dyfHelpBeanList);
+			tableBean.setCount(1);
+		}
+
+		return tableBean;
 	}
 }

@@ -146,9 +146,9 @@ public class DyfBusConfigurationService
 	}
 
 	//	查询所有可排班车辆
-	public List<DyfBusBean> selectAllNoShfitBus(List<Integer> list, String busEndStation)
+	public List<DyfBusBean> selectAllNoShfitBus(List<Integer> list, String busEndStation, String busTime, String twoBusStation)
 	{
-		return busConfigurationMapper.selectAllNoShfitBus(list, busEndStation);
+		return busConfigurationMapper.selectAllNoShfitBus(list, busEndStation, busTime, twoBusStation);
 	}
 
 	//排班添加
@@ -176,7 +176,38 @@ public class DyfBusConfigurationService
 	}
 
 	//	查询该城市所有的路线
-	public List<dyfAllRouteBean> selectAllRoute(String cityName){
+	public List<dyfAllRouteBean> selectAllRoute(String cityName)
+	{
 		return busConfigurationMapper.selectAllRoute(cityName);
 	}
+
+	//	时间轴查看
+	public List<DyfBusShfitBean> timerShfit(String busId, String busDate)
+	{
+		return busConfigurationMapper.timerShfit(busId, busDate);
+	}
+
+	//	查询某段时间下不同发车站下的所有车辆排班信息
+	public List<DyfBusBean> selectStationId(String shfitBusId, String shfitDate, String shfitStation, String shfitBusLine)
+	{
+		return busConfigurationMapper.selectStationId(shfitBusId, shfitDate, shfitStation, Integer.valueOf(shfitBusId), Integer.valueOf(shfitBusId) + 4, shfitBusLine);
+	}
+
+	//查询时间对应的时间id
+	public List<dyfDateBean> selectDateId(String dateTime)
+	{
+		return busConfigurationMapper.selectDateId(dateTime);
+	}
+
+	//	查询当前时间内停靠车辆信息
+	public List<DyfBusShfitBean> selectHelpBus(String dateNow, String dateId)
+	{
+		return busConfigurationMapper.selectHelpBus(dateNow,dateId);
+	}
+	//查询该车辆的最新发车信息
+	public List<DyfBusShfitBean>timeNameLisence( String shfitThisStation, String shfitDate, String shfitBusId, String shfitDateID){
+		return busConfigurationMapper.timeNameLisence(shfitThisStation,shfitDate,shfitBusId,shfitDateID);
+	}
+
+
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.dyfTwoConfigurationMapper">
+<!--    用户的映射数据库-->
+    <resultMap id="selectHtmlUser" type="com.bus.javabean.DyfHtmlUserBean">
+        <id property="userId" column="user_id"></id>
+        <result property="userName" column="user_name"></result>
+        <result property="userPassWord" column="user_password"></result>
+        <result property="userPhoneNumber" column="user_phonenumber"></result>
+        <result property="userHeadPortrait" column="user_headportrait"></result>
+        <result property="userBalance" column="user_balance"></result>
+        <result property="userHomeLongitude" column="user_home_longitude"></result>
+        <result property="userCompanyLongitude" column="user_company_longitude"></result>
+        <result property="userStatus" column="user_status"></result>
+        <result property="userHomeLatitude" column="user_home_latitude"></result>
+        <result property="userCompanyLatitude" column="user_company_latitude"></result>
+        <result property="userSex" column="user_sex"></result>
+        <result property="userHome" column="user_home"></result>
+        <result property="userCompany" column="user_company"></result>
+        <result property="userFaceToken" column="user_face_token"></result>
+    </resultMap>
+<!--    用户账号密码登入-->
+    <select id="userLogin" resultMap="selectHtmlUser">
+        select *from tb_user where user_name = #{userName} and user_password = #{userPassWord}
+    </select>
+<!--    查询注册电话是否重复-->
+    <select id="userSelectrepeatRegister" parameterType="java.lang.String" resultMap="selectHtmlUser">
+        select *from tb_user where user_phonenumber = #{userPhoneNum}
+    </select>
+<!--    用户注册添加到数据库-->
+    <insert id="userRegisterInto">
+        insert into tb_user(user_name,user_password,user_phonenumber,user_status) values (
+        #{userName},#{userPass},#{userPhoneNum},1
+        )
+    </insert>
+</mapper>

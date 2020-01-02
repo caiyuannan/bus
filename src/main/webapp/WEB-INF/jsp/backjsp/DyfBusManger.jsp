@@ -92,7 +92,7 @@
 <table id="demo" lay-filter="test" style="margin-top: 10px"></table>
 <div class="layui-footer my-footer">
 	<script id="barDemo" type="text/html">
-		<a class="layui-btn layui-btn-xs" lay-event="edit">排班</a>
+		<a class="layui-btn layui-btn-xs" lay-event="edit">时间轴查看</a>
 		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="detail">修改</a>
 		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="check1">报废停用</a>
@@ -127,7 +127,22 @@
 				var data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'edit') { //查看
-					layer.msg("jinlai")
+					window.partitionDate = data['busId'];
+					window.parLices = data['busLicense'];
+					layer.open({
+						type: 2
+						// ,offset: 2 //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+						,id: 'layerDemo1' //防止重复弹出
+						,content: '/bus/web/dyfBusAllTimer'
+						,title: '车辆时间轴'
+						,btn: '关闭'
+						,area: ['1050px', '500px']
+						,yes: function(){
+							layer.closeAll();
+						},
+
+
+					});
 				} else if (layEvent === 'del') { //删除
 					var stateName = data['stateName'];
 					var busId = data['busId'];
@@ -174,13 +189,6 @@
 							updateBus();
 						})
 					}
-
-
-					//同步更新缓存对应的值
-					/*obj.update({
-						username: '123'
-						,title: 'xxx'
-					});*/
 				} else if (layEvent === "check1") {
 					var stateName = data['stateName'];
 					var busId = data['busId'];
@@ -375,7 +383,7 @@
 
 				layer.open({
 					type: 1,
-					title: "新建配置",
+					title: "修改",
 					closeBtn: 1,
 					shift: 2,
 					area: ['500px', '750px'],
@@ -427,10 +435,10 @@
 			} else {
 				num++;
 			}
-			if (endStation === 0||endStation.length<1){
+			if (endStation === 0 || endStation.length < 1) {
 				layer.msg("请先选择车辆夜间停放站点")
 				return;
-			}else {
+			} else {
 				num++;
 			}
 			//	判断是否填入使用时间
@@ -480,7 +488,7 @@
 				$.ajax({
 					type: "post",
 					url: "http://localhost:8080/bus/DyfBusAddBus",
-					data: "msg=" + cardNum + "=" + busDiver + "=" + busAge + "=" + busYear + "=" + carType+"="+endStation,
+					data: "msg=" + cardNum + "=" + busDiver + "=" + busAge + "=" + busYear + "=" + carType + "=" + endStation,
 					datatype: "text",
 					async: true,
 					success: function (res) {
@@ -563,7 +571,8 @@
 		</div>
 		<div class="layui-form">
 			<div class="layui-input-block">
-				<select name="driverState" id="endStation" lay-filter="required" style="width: 100px;margin-left: -60px">
+				<select name="driverState" id="endStation" lay-filter="required"
+				        style="width: 100px;margin-left: -60px">
 					<option value="0">请选择末班停站地点</option>
 					<c:if test="${requestScope.selectAllStation!=null}">
 						<c:forEach items="${requestScope.selectAllStation}" begin="0" step="1" var="item">

@@ -1,5 +1,7 @@
 package com.bus.javabean;
 
+import java.util.Comparator;
+
 /**
  * @author 40651
  * 公交车排班表
@@ -26,8 +28,53 @@ public class DyfBusShfitBean
 	private String routeName;
 	private String dateBusTime;
 	private String dateBusId;
+	private String shfitThisStation;
+	private String thisDateId;
 	public DyfBusShfitBean()
 	{
+	}
+
+	public class MyComparator implements Comparator<DyfBusShfitBean>
+	{
+
+		@Override
+		public int compare(DyfBusShfitBean p1, DyfBusShfitBean p2) {
+			return Integer.valueOf(p1.getDateBusId()).compareTo(Integer.valueOf(p2.getDateBusId()));
+		}
+
+	}
+
+	public DyfBusShfitBean(Integer shfitId, String shfitDate, String shfitStartTime, String shfitEndTime, String shfitBusId, String shfitBusLine, String shfitState, String busLicense, String routeName, String dateBusTime, String dateBusId, String shfitThisStation, String thisDateId)
+	{
+		this.shfitId = shfitId;
+		this.shfitDate = shfitDate;
+		this.shfitStartTime = shfitStartTime;
+		this.shfitEndTime = shfitEndTime;
+		this.shfitBusId = shfitBusId;
+		this.shfitBusLine = shfitBusLine;
+		this.shfitState = shfitState;
+		this.busLicense = busLicense;
+		this.routeName = routeName;
+		this.dateBusTime = dateBusTime;
+		this.dateBusId = dateBusId;
+		this.shfitThisStation = shfitThisStation;
+		this.thisDateId = thisDateId;
+	}
+
+	public DyfBusShfitBean(Integer shfitId, String shfitDate, String shfitStartTime, String shfitEndTime, String shfitBusId, String shfitBusLine, String shfitState, String busLicense, String routeName, String dateBusTime, String dateBusId, String shfitThisStation)
+	{
+		this.shfitId = shfitId;
+		this.shfitDate = shfitDate;
+		this.shfitStartTime = shfitStartTime;
+		this.shfitEndTime = shfitEndTime;
+		this.shfitBusId = shfitBusId;
+		this.shfitBusLine = shfitBusLine;
+		this.shfitState = shfitState;
+		this.busLicense = busLicense;
+		this.routeName = routeName;
+		this.dateBusTime = dateBusTime;
+		this.dateBusId = dateBusId;
+		this.shfitThisStation = shfitThisStation;
 	}
 
 	public DyfBusShfitBean(Integer shfitId, String shfitDate, String shfitStartTime, String shfitEndTime, String shfitBusId, String shfitBusLine, String shfitState, String busLicense, String routeName, String dateBusTime, String dateBusId)
@@ -48,7 +95,27 @@ public class DyfBusShfitBean
 	@Override
 	public String toString()
 	{
-		return "DyfBusShfitBean{" + "shfitId=" + shfitId + ", shfitDate='" + shfitDate + '\'' + ", shfitStartTime='" + shfitStartTime + '\'' + ", shfitEndTime='" + shfitEndTime + '\'' + ", shfitBusId='" + shfitBusId + '\'' + ", shfitBusLine='" + shfitBusLine + '\'' + ", shfitState='" + shfitState + '\'' + ", busLicense='" + busLicense + '\'' + ", routeName='" + routeName + '\'' + ", dateBusTime='" + dateBusTime + '\'' + ", dateBusId='" + dateBusId + '\'' + '}';
+		return "DyfBusShfitBean{" + "shfitId=" + shfitId + ", shfitDate='" + shfitDate + '\'' + ", shfitStartTime='" + shfitStartTime + '\'' + ", shfitEndTime='" + shfitEndTime + '\'' + ", shfitBusId='" + shfitBusId + '\'' + ", shfitBusLine='" + shfitBusLine + '\'' + ", shfitState='" + shfitState + '\'' + ", busLicense='" + busLicense + '\'' + ", routeName='" + routeName + '\'' + ", dateBusTime='" + dateBusTime + '\'' + ", dateBusId='" + dateBusId + '\'' + ", shfitThisStation='" + shfitThisStation + '\'' + '}';
+	}
+
+	public String getThisDateId()
+	{
+		return thisDateId;
+	}
+
+	public void setThisDateId(String thisDateId)
+	{
+		this.thisDateId = thisDateId;
+	}
+
+	public String getShfitThisStation()
+	{
+		return shfitThisStation;
+	}
+
+	public void setShfitThisStation(String shfitThisStation)
+	{
+		this.shfitThisStation = shfitThisStation;
 	}
 
 	public String getDateBusId()

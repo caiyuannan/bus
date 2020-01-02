@@ -41,10 +41,10 @@
 	</div>
 	</div>
 	<div class="layui-input-inline" style="margin-left: 30px">
-	<label class="layui-form-label">*排班日期:</label>
-	<div class="layui-input-block" style="width: 120px">
-		<input type="text" class="layui-input" id="dateTime">
-	</div>
+		<label class="layui-form-label">*排班日期:</label>
+		<div class="layui-input-block" style="width: 120px">
+			<input type="text" class="layui-input" id="dateTime">
+		</div>
 	</div>
 <%--	<div class="layui-input-inline" style="margin-left: 30px">--%>
 <%--		<label class="layui-form-label">注意，排班功能实现了</label>--%>
@@ -137,9 +137,9 @@
 				elem: '#dateTime' //指定元素
 				,min: 0 //7天前
 				,done: function(value, date, endDate){
-					console.log(value); //得到日期生成的值，如：2017-08-18
-					console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
-					console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+					// (value); //得到日期生成的值，如：2017-08-18
+					// (date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+					// (endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
 					var shfitBusLine = $("#beforeBusState").val();
 					table.reload('demo', {
 						url: 'http://localhost:8080/bus/busShfitAllInforMation'
@@ -186,21 +186,14 @@
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				var busLicense = data['busLicense'];
 				if (layEvent === 'check1') { //查看    发车表
-					// if (busLicense!=null&&busLicense.length>0) {
-					//
-					// 	layer.msg(busLicense)
-					// }else {
 						openDilog(data,form,1,1,busLicense);
-					// }
 				}
 				if (layEvent==='check2') {  //往返表
-					// if (busLicense!=null&&busLicense.length>0) {
-					// 	layer.msg(busLicense)
-					// }else {
+
 						openDilog(data,form,0,0,busLicense);
-					// }
+
 				}
-			})
+			});
 			//监听提交
 			form.on('submit(formDemo)', function(data){
 				layer.msg(JSON.stringify(data.field));
@@ -208,10 +201,7 @@
 			});
 		});
 	});
-	//线路下拉框的数据更新
-	// $("#beforeBusState").change(function () {
-	// 	alert(123)
-	// })
+
 
 function openDilog(data,form,routeOrder,shfitBusStartStation,busLicense) {
 	var dateBusId = data['dateBusId'];

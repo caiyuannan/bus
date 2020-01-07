@@ -12,6 +12,7 @@
 	String cssPath=request.getContextPath()+"/css/";
 	String jsPath=request.getContextPath()+"/js/";
 	String imgPath=request.getContextPath()+"/img/";
+	String laPath = application.getContextPath()+"/layui/";
 %>
 <html>
 <head>
@@ -23,6 +24,8 @@
 	<script src=<%=jsPath + "jquery.js"%>></script>
 	<script src=<%=path + "/bootstrap/js/bootstrap.min.js"%>></script>
 	<script src=<%=jsPath+"accountCenter.js"%>></script>
+	<link rel="stylesheet" href="<%=laPath%>css/layui.css" media="all">
+	<script src="<%=laPath%>layui.js"></script>
 	<style>
 		.panel-body a{text-decoration: none;color: #5e5e5e;}
 		.panel-body:hover{background-color:#9EEA6A;opacity: 0.3;font-size: 20px;font-weight: bold;cursor: pointer;}
@@ -46,16 +49,16 @@
 							</div>
 							<div id="panel-element-328542" class="panel-collapse collapse">
 								<div class="panel-body">
-									<a>个人信息</a>
+									<a href="javascript:void(0)" title=<%=path+"/HtmlUserInforMation"%> onclick="changgeURL(this)">个人信息</a>
+								</div>
+								<div class="panel-body" >
+									<a href="javascript:void(0)" id="successTitle" title=<%=path+"/myMoney"%> onclick="changgeURL(this)">我的钱包</a>
 								</div>
 								<div class="panel-body">
-									<a>我的钱包</a>
+									<a href="javascript:void(0)" title=<%=path+"/twoDisMensional"%> onclick="changgeURL(this)">乘车二维码</a>
 								</div>
 								<div class="panel-body">
-									<a>乘车二维码</a>
-								</div>
-								<div class="panel-body">
-									<a>消费明细</a>
+									<a href="javascript:void(0)" title=<%=path+"/front/DyfUserStream"%> onclick="changgeURL(this)">消费明细</a>
 								</div>
 							</div>
 						</div>
@@ -64,11 +67,26 @@
 
 				</div>
 				<div class="col-md-10 column" style="background-color: #deedf7;height: 550px;">
-				<iframe src="localhost:8080/bus/front/success"></iframe>
+				<iframe src="" style="height: 100%;width: 100%" id="myiframe"></iframe>
+
+
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+<%--判断是否充值金额成功问题--%>
+<input type="hidden" id="successMoney" value="${requestScope.success}">
+<script>
+	$(function () {
+		$(".collapse").collapse();
+		if ($("#successMoney").val()==='success') {
+			var successTitle = $("#successTitle");
+			var urlTitle = successTitle.attr('title');
+			$("#myiframe").attr("src",urlTitle);
+			console.log($("#myiframe").attr('src'));
+		}
+	})
+</script>
 </body>
 </html>

@@ -77,7 +77,7 @@ public class CynMangeUserController
 		return "front/findStation";
 	}
 	/**
-	 * 个人中心页面
+	 * 页面
 	 * by连晨诚
 	 * @return
 	 */

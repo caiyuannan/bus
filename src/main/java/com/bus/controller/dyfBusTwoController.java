@@ -33,6 +33,7 @@ public class dyfBusTwoController
 		DyfHtmlUserBean dyfHtmlUserBean = dbs.userLogin(userName,userPs);
 		if (dyfHtmlUserBean!=null){
 			request.getSession().setAttribute("userName",dyfHtmlUserBean.getUserName());
+			request.getSession().setAttribute("userPhone",dyfHtmlUserBean.getUserPhoneNumber());
 			return dyfHtmlUserBean;
 		}
 		return null;

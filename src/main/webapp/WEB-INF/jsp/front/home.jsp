@@ -126,7 +126,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									<a href="#">Action</a>
+									<a href="#">Another action</a>
 								</li>
 								<li>
 									<a href="#">Another action</a>
@@ -221,7 +221,7 @@
 							<img src=<%=path+"/img/qq32.png"%> style="width:20px;margin-top:-4px;" />&emsp;短信验证
 						</button>
 						<button id="login_WB" type="button" class="btn btn-danger">
-							<img src=<%=path%>"img/sina32.png" style="width:20px;margin-top:-4px;" />&emsp;微博登录
+							<img src=<%=path+"/img/sina32.png"%> style="width:20px;margin-top:-4px;" />&emsp;微博登录
 						</button>
 					</div>
 				</div>
@@ -273,7 +273,7 @@
 				</ol>
 				<div class="carousel-inner">
 					<div class="item active">
-						<img alt="" src=<%=path%>"img/default.jpg" />
+						<img alt="" src="/bus/img/default.jpg" />
 						<div class="carousel-caption">
 							<h4>
 								First Thumbnail label
@@ -285,7 +285,7 @@
 						</div>
 					</div>
 					<div class="item">
-						<img alt="" src=<%=path%>"/img/default1.jpg" />
+						<img alt="" src="/bus/img/default1.jpg" />
 						<div class="carousel-caption">
 							<h4>
 								Second Thumbnail label
@@ -296,7 +296,7 @@
 						</div>
 					</div>
 					<div class="item">
-						<img alt="" src=<%=path%>"img/default2.jpg" />
+						<img alt="" src="/bus/img/default2.jpg" />
 						<div class="carousel-caption">
 							<h4>
 								Third Thumbnail label

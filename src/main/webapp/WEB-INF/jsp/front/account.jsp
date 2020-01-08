@@ -57,6 +57,9 @@
 								<div class="panel-body">
 									<a>消费明细</a>
 								</div>
+								<div class="panel-body">
+									<a href="/bus/toSuggesting">投诉建议</a>
+								</div>
 							</div>
 						</div>
 

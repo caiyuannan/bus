@@ -63,8 +63,6 @@
 <div id="container"></div>
 <script type="text/javascript">
 	var time = 1;
-
-
 	var map = new BMap.Map("container");
 	map.centerAndZoom(new BMap.Point(118.194034, 24.489054), 13);
 	map.enableScrollWheelZoom(true);

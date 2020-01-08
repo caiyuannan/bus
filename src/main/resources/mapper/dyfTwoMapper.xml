@@ -34,4 +34,64 @@
         #{userName},#{userPass},#{userPhoneNum},1
         )
     </insert>
+<!--    修改用户头像-->
+    <update id="updateImg" parameterType="java.lang.String">
+        update tb_user set user_headportrait = #{image} where user_phonenumber = #{userPhoneNum}
+    </update>
+<!--    修改用户信息-->
+    <update id="updateUserInforMation" parameterType="com.bus.javabean.DyfHtmlUserBean">
+        UPDATE tb_user set user_sex = #{userSex}
+        <if test="userHome!=null and userHome!=''">
+            ,user_home = #{userHome}
+        </if>
+        <if test="userCompany!=null and userCompany!=''">
+            ,  user_company = #{userCompany}
+        </if>
+        <if test="userHomeLongitude!=null and userHomeLongitude!=''">
+            ,user_home_longitude = #{userHomeLongitude}
+        </if>
+        <if test="userCompanyLongitude!=null and userCompanyLongitude!=''">
+            ,user_company_longitude = #{userCompanyLongitude}
+        </if>
+        <if test="userHomeLatitude!=null and userHomeLatitude!=''">
+            ,user_home_latitude =#{userHomeLatitude}
+        </if>
+        <if test="userCompanyLatitude!=null and userCompanyLatitude!=''">
+            ,user_company_latitude = #{userCompanyLatitude}
+        </if>
+        where user_phonenumber = #{userPhoneNumber}
+    </update>
+    <resultMap id="aliPay" type="com.bus.javabean.DyfAliPayBean">
+        <id property="orderId" column="api_id"></id>
+        <result property="orderMoney" column="api_money"></result>
+        <result property="orderType" column="api_type"></result>
+        <result property="orderPhoneNum" column="api_phonenum"></result>
+        <result property="nowDate" column="api_date"></result>
+    </resultMap>
+    <select id="selectAliPay" resultMap="aliPay">
+         select *from tb_alipy order by api_id desc;
+    </select>
+    <insert id="insertAliPay" parameterType="com.bus.javabean.DyfAliPayBean">
+        INSERT into tb_alipy(api_money,api_type,api_phonnum,api_date) VALUES (#{orderMoney},#{orderType},#{orderPhoneNum},#{nowDate})
+    </insert>
+    <update id="updateUserMoney" parameterType="java.lang.String">
+        update tb_user set user_balance = #{userBlance} where user_phonenumber = #{userNum}
+    </update>
+
+<!--    用户消费明细分页查看-->
+    <select id="selectSaveMoney" resultMap="aliPay">
+        select *from tb_alipy where api_phonnum = ${phoneNumber}
+        <if test="userDate != null and userDate !=''">
+            and api_date = #{userDate}
+        </if>
+        limit #{startIndex},#{pageSize}
+    </select>
+<!--    消费明细总页数-->
+    <select id="selectSaveMoneyCount" resultType="integer">
+        select count(*) from tb_alipy where api_phonnum = ${phoneNumber}
+        <if test="userDate != null and userDate !=''">
+            and api_date = #{userDate}
+        </if>
+
+    </select>
 </mapper>

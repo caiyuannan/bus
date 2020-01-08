@@ -266,9 +266,7 @@ public class DyfBusConfigurationController
 		if (userState != null && userState.length() > 0)
 		{
 			List<stateBean> list = dbs.selectAllState(userState);
-			if(list.size()>0){
-				dyfBusBean.setBusState(list.get(0).getStateId().intValue());
-			}
+			dyfBusBean.setBusState(list.get(0).getStateId().intValue());
 		}
 		if (null != userState && userState.equals("维修"))
 		{

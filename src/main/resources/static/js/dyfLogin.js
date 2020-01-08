@@ -109,12 +109,16 @@ function registUser() {
 
 }
 
+//短信窗口立即登入按钮跳转到登入窗口方法
+function reg(){
+	$("#messageLogin").hide(500);
+	$("#login_container").show(500);
+}
 
-
-	var clock = '';
+var clock = '';
 	var nums = 30;
 	var btn;
-	var loginMsgUser;
+	var loginMsgUser=1;
 	var phoneNum;
 	function sendCode1(thisBtn) {
 		 phoneNum = $("#loginPhoneNumber").val();    //电话号码
@@ -154,35 +158,41 @@ function registUser() {
 		var userLoginView = $("#loginPhoneNumber").val();
 		var regist_vcode1 = $("#regist_vcode1").val();
 		var imgUrl = $("#imgPathUrl").val(); //工程路径
-		console.log(userLoginView+'   ',phoneNum+'+++',loginMsgUser.num,regist_vcode1);
-		if (userLoginView===phoneNum&&loginMsgUser.num===parseInt(regist_vcode1.trim())) {
-			$.ajax({
-				url: 'http://localhost:8080/bus/userLoginMsg',
-				type: "post",
-				data: {userLoginView: userLoginView},
-				datatype: "json",
-				async: true,
-				success:function (res) {
-					if (null!=res&&""!=res){
-						alert("登入成功");
-						$("#userSecssion").val(res);
-						$("#user").show();
-						$("#welecome").text('欢迎你，'+res.userName);
-						$("#welecome").show();
-						$("#outUser").show();
-						$("#imgUser").attr('src',imgUrl+res.userHeadPortrait);
-						$("#liUser").show();
-						$("#Login_start_").hide();
-						$("#Regist_start_").hide();
-						someClost();
+		if (null!=userLoginView&&userLoginView!='') {
+
+			if (loginMsgUser!=1&&userLoginView === phoneNum && loginMsgUser.num === parseInt(regist_vcode1.trim())) {
+				$.ajax({
+					url: 'http://localhost:8080/bus/userLoginMsg',
+					type: "post",
+					data: {userLoginView: userLoginView},
+					datatype: "json",
+					async: true,
+					success: function (res) {
+						if (null != res && "" != res) {
+							var aHref = $("#aHrefValue").val();
+							alert("登入成功");
+							$("#userSecssion").val(res);
+							$("#user").show();
+							$("#welecome").text('欢迎你，' + res.userName);
+							$("#welecome").show();
+							$("#outUser").show();
+							$("#imgUser").attr('src', imgUrl + res.userHeadPortrait);
+							$("#user").attr('href',aHref+res.userPhoneNumber);
+							$("#liUser").show();
+							$("#Login_start_").hide();
+							$("#Regist_start_").hide();
+							someClost();
+						}
+
 					}
-
-				}
-			})
+				})
+			} else {
+				alert("请确认电话号码和验证码正确")
+			}
 		}else {
-			alert("请确认电话号码和验证码正确")
-		}
+			alert('请先填写手机号并发送信息')
 
+		}
 
 	}
 

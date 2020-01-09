@@ -1,5 +1,7 @@
 package com.bus.dao;
-import com.bus.javabean.*;
+import com.bus.javabean.XhaCityBean;
+import com.bus.javabean.XhaPageBean;
+import com.bus.javabean.XhaStationBean;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

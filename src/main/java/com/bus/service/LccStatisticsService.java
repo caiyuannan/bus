@@ -1,6 +1,5 @@
 package com.bus.service;
 
-import com.bus.dao.LccDriverManageMapper;
 import com.bus.dao.LccStatisticsMapper;
 import com.bus.javabean.LccCashBean;
 import org.springframework.stereotype.Service;
@@ -8,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class LccStatisticsService
@@ -31,7 +29,7 @@ public class LccStatisticsService
 	 * @return
 	 */
 	@Transactional
-	public List<LccCashBean>findRouteCashesByDate(String s,String e){
+	public List<LccCashBean>findRouteCashesByDate(String s, String e){
 //		System.out.println(lsp.findRouteCashesByDate(map).toString()+"========");
 		return lsp.findRouteCashesByDate(s,e);
 	}

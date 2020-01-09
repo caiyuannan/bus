@@ -32,24 +32,48 @@
         <result property="menuUrl" column="menu_url"/>
     </resultMap>
 
-    <insert id="addLog" parameterType="com.bus.aoplog.CynSystemLog">
-        insert into tb_journal(operator,operation_time,operation_transaction,money)
-        values(#{actionName},#{actionTime},#{actionInf},#{money})
+    <insert id="addLog" parameterType="com.bus.javabean.CynLogSelectBean">
+        insert into tb_journal(operator,operation_time,operation_transaction,money,state_id)
+        values(#{actionName},#{actionTime},#{actionInf},#{money},1)
     </insert>
 
-    <select id="findLogAllByOperatorName" parameterType="java.lang.String" resultMap="res-Log">
-        select *from tb_journal where 1=1
-        <if test="actionName!=null">
-            and tb_journal.operator=#{actionName}
-        </if>
+    <select id="findLogAllCountByOperatorName" parameterType="com.bus.javabean.CynLogSelectBean" resultType="java.lang.Integer">
+        select count(*) FROM tb_journal
+        where tb_journal.state_id=1
+        <choose>
+            <when test="actionName!=null and actionName!=''">
+                and tb_journal.operator like '%${actionName}%'
+            </when>
+        </choose>
     </select>
-    <resultMap id="res-Log" type="com.bus.aoplog.CynSystemLog">
+    <select id="findLogAllByOperatorName" parameterType="com.bus.javabean.CynLogSelectBean" resultMap="res-Log">
+        select *from tb_journal
+        where tb_journal.state_id=1
+        <if test="actionName!=null">
+            and tb_journal.operator like '%${actionName}%'
+        </if>
+        limit #{start},#{count}
+    </select>
+    <resultMap id="res-Log" type="com.bus.javabean.CynLogInf">
         <result property="logInfId" column="journal_id"/>
         <result property="actionName" column="operator"/>
         <result property="actionTime" column="operation_time"/>
         <result property="actionInf" column="operation_transaction"/>
         <result property="money" column="money"/>
     </resultMap>
+
+    <update id="deleteLogInf" parameterType="java.lang.Integer">
+        update tb_journal set tb_journal.state_id=2
+        where tb_journal.journal_id=#{logId}
+    </update>
+    <update id="updateLog" parameterType="com.bus.javabean.CynLogInf">
+        update tb_journal set tb_journal.operator=#{actionName},
+        tb_journal.operation_transaction=#{actionInf},
+        tb_journal.operation_time=#{actionTime}
+        set tb_journal.money=#{money}
+        where tb_journal.journal_id=#{logId}
+    </update>
+
 </mapper>
 
 

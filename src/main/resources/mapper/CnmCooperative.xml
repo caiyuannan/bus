@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CnmCooperativeMapper">
+
+    <resultMap id="Cooperative" type="com.bus.javabean.CnmCooperativeBean">
+        <result property="cooperativeId" column="cooperative_id"></result>
+        <result property="cooperativeName" column="cooperative_name"></result>
+        <result property="cooperativeType" column="cooperative_type"></result>
+        <result property="cooperativeX" column="cooperative_x"></result>
+        <result property="cooperativeY" column="cooperative_y"></result>
+        <result property="cooperativeArea" column="cooperative_area"></result>
+        <result property="stateId" column="state_id"></result>
+        <result property="stateName" column="state_name"></result>
+    </resultMap>
+
+    <!--    获取合作商表-->
+    <select id="findCooperativeTable" parameterType="com.bus.javabean.CnmCooperativeWhere" resultMap="Cooperative">
+        SELECT *,CONCAT_WS(",",cooperative_x,cooperative_y) as cooperativeCoordinate,s.state_name as stateName FROM  tb_cooperative c,tb_state s
+        <where>
+            <if test="cooperativeName !=null and cooperativeName !=''">
+                and cooperative_name LIKE '%${cooperativeName}%'
+            </if>
+            <if test="cooperativeArea !=null and cooperativeArea !=''">
+                and cooperative_area LIKE '%${cooperativeArea}%'
+            </if>
+            <if test="cooperativeType !=null and cooperativeType !=''">
+                and cooperative_type LIKE '%${cooperativeType}%'
+            </if>
+            and c.state_id=s.state_id
+
+        </where>
+        limit ${page},${limit}
+    </select>
+
+    <!--    获取合作商表总条数-->
+    <select id="findCooperativeTableCount" parameterType="com.bus.javabean.CnmCooperativeWhere" resultType="java.lang.Integer">
+        SELECT COUNT(*) COUNT  FROM tb_cooperative c,tb_state s
+        <where>
+            <if test="cooperativeName !=null and cooperativeName !=''">
+                and cooperative_name LIKE '%${cooperativeName}%'
+            </if>
+            <if test="cooperativeArea !=null and cooperativeArea !=''">
+                and cooperative_area LIKE '%${cooperativeArea}%'
+            </if>
+            <if test="cooperativeType !=null and cooperativeType !=''">
+                and cooperative_type LIKE '%${cooperativeType}%'
+            </if>
+            and c.state_id=s.state_id
+        </where>
+    </select>
+
+<!--    删除合作商-->
+<!--    <delete id="deleteCooperativeTable" parameterType="java.lang.Integer">-->
+<!--        DELETE FROM tb_cooperative WHERE cooperative_id=#{cooperativeId}-->
+<!--    </delete>-->
+    <update id="deleteCooperativeTable" parameterType="java.lang.Integer">
+        update tb_cooperative set state_id=8
+         WHERE cooperative_id=#{cooperativeId}
+    </update>
+
+<!--    添加合作商-->
+    <insert id="addCooperativeTable" parameterType="com.bus.javabean.CnmCooperativeBean">
+        insert into
+        tb_cooperative(cooperative_name,cooperative_type,cooperative_x,cooperative_y,cooperative_area,state_id)
+        values (#{cooperativeName},#{cooperativeType},#{cooperativeX},#{cooperativeY},#{cooperativeArea},1)
+    </insert>
+
+<!--        修改合作商-->
+    <update id="updateCooperativeTable" parameterType="com.bus.javabean.CnmCooperativeBean">
+        update tb_cooperative set cooperative_name=#{cooperativeName},cooperative_type=#{cooperativeType},cooperative_x=#{cooperativeX},cooperative_y=#{cooperativeY},cooperative_area=#{cooperativeArea} where cooperative_id=#{cooperativeId}
+    </update>
+
+<!--    获取合作商类型-->
+    <select id="findCooperativeType"  resultMap="Cooperative">
+        SELECT distinct cooperative_type FROM  tb_cooperative
+    </select>
+
+    <!--    修改合作商状态-->
+    <update id="updateCooperativestate" parameterType="com.bus.javabean.CnmCooperativeBean">
+        update tb_cooperative  set state_id=#{stateId} where cooperative_id=#{cooperativeId}
+    </update>
+
+    <!--    查询状态-->
+    <select id="findCooperativeState" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT state_id as stateId FROM  tb_state  WHERE state_name=#{stateName}
+    </select>
+
+<!--    查询广告状态为启用的时候advertisement-->
+    <select id="findCooperativeTypeInf" parameterType="java.lang.Integer"  resultMap="Cooperative">
+        SELECT * FROM  tb_advertisement where cooperative_id=#{cooperativeId} and state_id=1
+    </select>
+
+</mapper>

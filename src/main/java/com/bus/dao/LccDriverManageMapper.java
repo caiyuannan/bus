@@ -2,10 +2,7 @@ package com.bus.dao;
 
 import com.bus.javabean.*;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,21 +42,21 @@ public interface LccDriverManageMapper
 
 	public LccBusShfitBean findBusShfit();
 
-	public int insertDriverWorkload(Map<String,Object> map);
-	public int addGateCard(Map<String,Object> map);
+	public int insertDriverWorkload(Map<String, Object> map);
+	public int addGateCard(Map<String, Object> map);
 	public int queryAttendanceId();
-	public boolean updateBusShfitState(Map<String,Object> map);
+	public boolean updateBusShfitState(Map<String, Object> map);
 
-	public List<LccDriverBean> queryAllDrivers(Map<String,Object> map);
-	public int getTotalPage(Map<String,Object> map);
+	public List<LccDriverBean> queryAllDrivers(Map<String, Object> map);
+	public int getTotalPage(Map<String, Object> map);
 
 	public boolean updateDrivers(LccDriverBean ldb);
 
-	public List<LccDriverWorkloadBean> findDriverWorkload(Map<String,Object> map);
-	public int getTotalPage1(Map<String,Object> map);
+	public List<LccDriverWorkloadBean> findDriverWorkload(Map<String, Object> map);
+	public int getTotalPage1(Map<String, Object> map);
 
-	public List<LccDriverWageBean> findDriverWage(Map<String,Object> map);
-	public int getTotalPage2(Map<String,Object> map);
+	public List<LccDriverWageBean> findDriverWage(Map<String, Object> map);
+	public int getTotalPage2(Map<String, Object> map);
 
 	public int save(Face face);
 	public List<Face> selectAllFace();

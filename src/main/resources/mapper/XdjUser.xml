@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        乘客用户的xml-->
+
+<mapper namespace="com.bus.dao.XdjUserMapper">
+        <resultMap id="selectAllMap" type="com.bus.javabean.XdjUser">
+                <id property="userId" column="user_id"></id>
+                <result property="userPhonenumber" column="user_phonenumber"></result>
+                <result property="userName" column="user_name"></result>
+                <result property="userHome" column="user_home"></result>
+                <result property="userCompany" column="user_company"></result>
+                <result property="userBalance" column="user_balance"></result>
+        </resultMap>
+
+        <select id="findXdjUserAll" parameterType="com.bus.javabean.XdjUser" resultMap="selectAllMap" >
+             select tb_user.user_id,tb_user.user_phonenumber,tb_user.user_name,
+             tb_user.user_home,tb_user.user_company,tb_user.user_balance from tb_user
+            <if test="userName !=null and userName!=''">
+                and user_name like concat(#{userName},'%')
+            </if>
+            <if test="userPhonenumber != null and userPhonenumber!=''">
+                and user_phonenumber = #{userPhonenumber}
+            </if>
+        </select>
+
+    <select id="findUserCount"  parameterType="com.bus.javabean.XdjUser" resultType="java.lang.Integer" >
+        SELECT COUNT(*) FROM tb_user
+    </select>
+<!--        增加insert-->
+        <insert id="insertXdjUser" parameterType="com.bus.javabean.XdjUser" keyProperty=" user_id" >
+        	insert into tb_user(
+		    user_id,user_phonenumber,user_name,user_home,user_company,user_balance)
+		    values(
+		    #{user_id},
+		    #{user_phonenumber},
+		    #{user_name},
+		    #{user_home}
+		    #{user_company}
+		    #{user_balance})
+        </insert>
+<!--        删除delete-->
+        <delete id="deleteXdjUser" parameterType="java.lang.Integer" >
+           	delete from tb_user where user_id=#{userId}
+        </delete>
+
+<!--        update修改-->
+        <update id="updateXdjUser" parameterType="com.bus.javabean.XdjUser" >
+            update tb_user set tb_user.user_phonenumber=#{userPhonenumber},tb_user.user_name=#{userName},
+            tb_user.user_home=#{userHome},tb_user.user_company=#{userCompany},tb_user.user_balance=#{userBalance}
+             where tb_user.user_id=#{user_id}
+        </update>
+</mapper>
+
+
+

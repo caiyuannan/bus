@@ -8,8 +8,7 @@
 	String imgPath=request.getContextPath()+"/img/";
 	String laPath = application.getContextPath()+"/layui/";
 %>
-<%--<script src="<%=request.getContextPath() %>/static/js/jquery.min.js" type="text/javascript"></script>
-<script src="<%=request.getContextPath()"--%>
+
 <html>
 
     <head>

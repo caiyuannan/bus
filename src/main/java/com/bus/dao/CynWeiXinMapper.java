@@ -37,4 +37,6 @@ public interface CynWeiXinMapper
 	public int addAdvice(CynAdviceBean advice);
 
 	public int addAdviceImage(CynAdviceBean advice);
+
+	public List<CynStationAndRouteBean> getAllStationByCityName(@Param("cityName") String cityName);
 }

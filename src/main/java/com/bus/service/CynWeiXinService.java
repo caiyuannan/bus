@@ -2,6 +2,7 @@ package com.bus.service;
 
 import com.bus.dao.CynWeiXinMapper;
 import com.bus.javabean.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,5 +114,12 @@ public class CynWeiXinService
 		return cynWeiXinMapper.addAdviceImage(advice);
 	}
 
+	/**
+	 * 通过城市名，获取到所有站点的经纬度和站点名
+	 */
+	@Transactional
+	public List<CynStationAndRouteBean> getAllStationByCityName(@Param("cityName") String cityName){
+		return cynWeiXinMapper.getAllStationByCityName(cityName);
+	}
 }
 

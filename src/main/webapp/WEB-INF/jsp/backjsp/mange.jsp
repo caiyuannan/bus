@@ -13,7 +13,7 @@
 	<title>智能公交车管理系统</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<link rel="stylesheet" href=<%=path+"/layui/css/layui.css"%>>
-	<script src="${ctx}/webjars/jquery/3.3.1-2/jquery.min.js"></script>
+	<script type="text/javascript" src=<%=jspath + "jquery-3.4.1.js"%>></script>
 	<script src=<%=path + "/layui/layui.js"%>></script>
 	<script language="JavaScript">
 		history.pushState(null,null,document.URL);
@@ -40,7 +40,7 @@
 					</c:choose>
 				</a>
 			</li>
-			<li class="layui-nav-item"><a href="/bus/web/mangeuserlogin">退出</a></li>
+			<li class="layui-nav-item"><a onclick="exit()">退出</a></li>
 		</ul>
 	</div>
 
@@ -67,6 +67,23 @@
 	</div>
 </div>
 <script>
+	function exit(){
+		$.ajax({
+			type: "POST",//提交的方式
+			url: "/bus/exit",//提交的地址
+			dataType: "text",//希望返回的数据类型
+			async: true,//异步操作
+			success: function (msg) {//成功的方法  msg为返回数据
+				alert(msg);
+				if("退出成功!"===msg){
+					window.location.href="/bus/web/mangeuserlogin";
+				}
+			},
+			error: function () {//错误的方法
+				alert("服务器正忙")
+			}
+		});
+	};
 	//JavaScript代码区域
 	layui.use('element', function(){
 		var element = layui.element;

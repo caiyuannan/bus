@@ -1,34 +1,30 @@
 package com.bus.aoplog;
-
+import com.bus.javabean.CynLogInf;
 import com.bus.javabean.CynMangeUserBean;
-import com.bus.service.CynMangeUserService;
-import com.sun.jdi.DoubleValue;
+import com.bus.service.CynAopAddLogService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Controller
 @Aspect
 @Component
 public class CynSystemLogAspect
 {
 
-	@Resource
-	private CynMangeUserService mangeUserService;
+	@Resource(name="cynAopAddLogService")
+	private CynAopAddLogService cynAopAddLogService;
 
 	@Pointcut("within(com.bus.controller.CynMangeUserController)")
 	public void systemLogAspect() {
@@ -58,7 +54,6 @@ public class CynSystemLogAspect
 			//1.方法名相同 2.参数数量一致 3.参数名字是否一致
 			String operatorName = "";
 			String operatorType = "";
-			String money="";
 			Class<?>[] paramsTypes = null;
 			boolean isParams = true;
 
@@ -94,21 +89,21 @@ public class CynSystemLogAspect
 							if((!"".equals(operatorType))&&operatorType.length()>0){
 								//获取操作人
 								String actionName=((CynMangeUserBean)(request.getSession().getAttribute("user"))).getMangeUserName();
-								if(!"".equals(actionName)){
-									//获取操作时间
-									String actionTime=new SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(new Date());
+								//获取操作时间
+								String actionTime=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-									CynSystemLog systemLog = new CynSystemLog();
-									systemLog.setActionName(actionName);
-									systemLog.setActionTime(actionTime);
-									systemLog.setActionInf(operatorType);
-									//添加到SQL中
-									int res=mangeUserService.addLog(systemLog);
-									if(res>0){
-										System.out.println("添加日志成功！");
-									}else {
-										System.out.println("添加日志失败！");
-									}
+								CynSystemLog cynSystemLog = new CynSystemLog();
+								cynSystemLog.setActionname(actionName);
+								cynSystemLog.setActiontime(actionTime);
+								cynSystemLog.setActioninf(operatorType);
+
+
+								//添加到SQL中
+								int res=cynAopAddLogService.addLog(cynSystemLog);
+								if(res>0){
+									System.out.println("添加日志成功！");
+								}else {
+									System.out.println("添加日志失败！");
 								}
 							}
 						}

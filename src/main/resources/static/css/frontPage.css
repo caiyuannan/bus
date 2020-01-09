@@ -1,0 +1,106 @@
+/**
+ * 设置页面字体
+ */
+/*body,td,th {*/
+/*    font-family: 宋体;*/
+/*}*/
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+#mydiv{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+}
+#mydiv img{
+    width: 100px;
+    height: 100px;
+
+}
+.panel2 {
+    max-width:768px;
+    min-width:320px;
+    font-family:'微软雅黑',"宋体";
+    min-height:100%;
+    position:relative;
+    margin:auto;
+    background:#e9e9e9;
+    width:100%;
+}
+::-webkit-scrollbar {
+    width:0px
+}
+a:link,a:visited,a:hover,a:active {
+    text-decoration:none;
+    -webkit-tap-highlight-color:transparent;
+}
+ul,li,dl,dd,h1,h2,h3,h4,h5,h6,p,input {
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+.panel {
+    width:100%;
+    text-align:center;
+    background:#000;
+    /*margin-top:30px;*/
+}
+.panel_zhong {
+    font-size:18px;
+    padding-left:20px;
+    height:34px;
+    line-height:34px;
+    color:#fff;
+}
+
+/*公告栏-新闻滚动*/
+.apple {
+    width:100%;
+    height:100px;
+    background:#fff;
+    overflow:hidden;
+}
+.apple ul li {
+    height:45px;
+    line-height:45px;
+    font-size:14px;
+}
+.apple ul li a {
+    color:#000;
+    display:block;
+    padding-left:20px;
+    padding-right:20px;
+}
+.apple ul li a:hover {
+    color:red;
+}
+.apple ul li a span {
+    float:right;
+}
+.Noticewarp {
+    overflow:hidden;
+    height:45px;
+    line-height:45px;
+    width:100%;
+    float:left;
+    background-color:#fff;
+    margin-top:10px;
+    margin-bottom:40px;
+}
+.Noticewarp a {
+    color:#d61515;
+    width:auto;
+    float:left;
+    margin-right:40px;
+    margin-left:3px;
+}
+.Noticewarp .scroll {
+    width:9999px;
+    float:left;
+    position:relative;
+}

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CnmTbRouteOrderMapper">
+
+    <!-- 查询所有的路线名-->
+    <resultMap id="routeOrderRes" type="com.bus.javabean.XhaRouteOrderBean">
+        <result property="routeOrderId" column="routeOrder_id"></result>
+        <result property="routeName" column="routeOrder_name"></result>
+        <result property="stationName" column="routeOrder_station_name"></result>
+        <result property="routeOrderNumber" column="routeOrder_order"></result>
+        <result property="isStartEnd" column="routeOrder_start_end"></result>
+    </resultMap>
+
+<!--    通过线路名查询线路信息上-->
+    <select id="StationByRouteOrderName" parameterType="com.bus.javabean.CnmBusWhere" resultMap="routeOrderRes">
+        select *
+        from tb_routeOrder
+        <where>
+            <if test="shfitBusLine !=null and shfitBusLine !=''">
+                and routeOrder_name=#{shfitBusLine}
+            </if>
+            AND  state_id=1
+            <if test='shfitThisStation =="1"'>
+                ORDER BY routeOrder_order ASC
+            </if>
+            <if test='shfitThisStation =="0"'>
+                ORDER BY routeOrder_order DESC
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+
+
+    <!-- cnm通过路线名查询路线名-->
+    <select id="queryStationByRouteOrderName" parameterType="com.bus.javabean.CnmFindStationWhere" resultType="com.bus.javabean.CnmFindStationWhere">
+        select ros1.routeOrder_name as routeName ,ros2.routeOrder_order as endOrder ,ros1.routeOrder_order as startOrder
+         from tb_routeOrder ros1,tb_routeOrder ros2
+        <where>
+        <if test="startStop !=null and startStop !=''">
+            and ros1.routeOrder_station_name=#{startStop}
+        </if>
+         <if test="endStop !=null and endStop !=''">
+                and ros2.routeOrder_station_name=#{endStop}
+         </if>
+            and ros1.routeOrder_name=ros2.routeOrder_name and ros1.routeOrder_order &lt; ros2.routeOrder_order and ros2.state_id=1
+        </where>
+    </select>
+
+    <!-- 通过起始点的站号查询经过的站信息-->
+    <select id="queryStationInfoBySE" resultMap="routeOrderRes"  parameterType="com.bus.javabean.CnmFindStationWhere">
+        select * from tb_routeOrder
+        <where>
+        <if test="endOrder !=null and endOrder !=''" >
+            and routeOrder_order  BETWEEN #{startOrder} and #{endOrder}
+        </if>
+            <if test="routeName !=null and routeName !=''">
+                and routeOrder_name=#{routeName}
+            </if>
+            AND  state_id=1
+        </where>
+    </select>
+
+
+
+    <resultMap id="stationRes" type="com.bus.javabean.XhaStationBean">
+        <result property="stationId" column="station_id"></result>
+        <result property="cityName" column="city_name"></result>
+        <result property="stationName" column="station_name"></result>
+        <result property="stationLon" column="station_lon"></result>
+        <result property="stationLat" column="station_lat"></result>
+        <result property="routes" column="routes"></result>
+    </resultMap>
+
+
+<!--    &lt;!&ndash; 从路线中删除站点&ndash;&gt;-->
+<!--    <update id="deleteStation" parameterType="com.bus.javabean.XhaRouteOrderBean">-->
+<!--        update tb_routeOrder set state_id = 2 where routeOrder_name = #{routeName} and routeOrder_station_name = #{stationName}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash; 删除后对路线顺序进行从新排列&ndash;&gt;-->
+<!--    <update id="realignRoute" parameterType="com.bus.javabean.XhaRouteOrderBean">-->
+<!--        update tb_routeOrder set routeOrder_order = routeOrder_order-1 where routeOrder_name = #{routeName} and routeOrder_order > #{routeOrderNumber}-->
+<!--    </update>-->
+
+
+<!--    &lt;!&ndash; 查询所有站点&ndash;&gt;-->
+<!--    <select id="queryAllStation" resultMap="stationRes">-->
+<!--        select * from tb_station where state_id = 1-->
+<!--    </select>-->
+
+    <!-- cnm通过站点名查询站点信息-->
+    <select id="queryStation"  resultMap="stationRes">
+        select * from tb_station where state_id = 1 and station_name=#{stationName}
+    </select>
+
+
+<!--    排班表-->
+    <resultMap id="busShfit" type="com.bus.javabean.DyfBusShfitBean">
+        <id property="shfitId" column="shfit_id"></id>
+        <result property="shfitDate" column="shfit_date"></result>
+        <result property="shfitStartTime" column="shfit_start_time"></result>
+        <result property="shfitEndTime" column="shfit_end_time"></result>
+        <result property="shfitBusId" column="shfit_bus_id"></result>
+        <result property="shfitBusLine" column="shfit_bus_line"></result>
+        <result property="shfitState" column="shfit_state"></result>
+        <result property="busLicense" column="bus_license"></result>
+        <result property="routeName" column="route_name"></result>
+        <result property="dateBusTime" column="date_bus_time"></result>
+        <result property="dateBusId" column="date_bus_id"></result>
+    </resultMap>
+
+<!--    查询在线车辆-->
+    <select id="ShifSum" parameterType="com.bus.javabean.CnmBusWhere" resultMap="busShfit">
+        select * from tb_bus_shfit
+        where shfit_date =#{shfitDate}  and shfit_bus_line=#{shfitBusLine} and shfit_this_station=#{shfitThisStation}
+        and shfit_start_time   BETWEEN #{shfitStartTime} and #{shfitEndTime}
+
+    </select>
+
+
+</mapper>
+
+
+

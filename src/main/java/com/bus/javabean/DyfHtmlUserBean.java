@@ -1,5 +1,8 @@
 package com.bus.javabean;
 
+
+import java.io.Serializable;
+
 /**
  * @author 40651
  * private Integer userId;  id
@@ -18,7 +21,7 @@ package com.bus.javabean;
  * 	private String userCompany; gs名称
  * 	private String userFaceToken;  ？？？？
  */
-public class DyfHtmlUserBean
+public class DyfHtmlUserBean implements Serializable
 {
 	private Integer userId;
 	private String userName;
@@ -64,6 +67,8 @@ public class DyfHtmlUserBean
 	{
 		return "DyfHtmlUserBean{" + "userId=" + userId + ", userName='" + userName + '\'' + ", userPassWord='" + userPassWord + '\'' + ", userPhoneNumber='" + userPhoneNumber + '\'' + ", userHeadPortrait='" + userHeadPortrait + '\'' + ", userBalance='" + userBalance + '\'' + ", userHomeLongitude='" + userHomeLongitude + '\'' + ", userCompanyLongitude='" + userCompanyLongitude + '\'' + ", userStatus='" + userStatus + '\'' + ", userHomeLatitude='" + userHomeLatitude + '\'' + ", userCompanyLatitude='" + userCompanyLatitude + '\'' + ", userSex='" + userSex + '\'' + ", userHome='" + userHome + '\'' + ", userCompany='" + userCompany + '\'' + ", userFaceToken='" + userFaceToken + '\'' + '}';
 	}
+
+
 
 	public Integer getUserId()
 	{
@@ -204,14 +209,14 @@ public class DyfHtmlUserBean
 	{
 		this.userCompany = userCompany;
 	}
-
 	public String getUserFaceToken()
 	{
 		return userFaceToken;
 	}
-
 	public void setUserFaceToken(String userFaceToken)
 	{
 		this.userFaceToken = userFaceToken;
 	}
+
+
 }

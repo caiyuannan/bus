@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CnmSimulationMapper">
+
+    <resultMap id="Simulation" type="com.bus.javabean.CnmSimulationBean">
+        <result property="simulationId" column="simulation_id"></result>
+        <result property="stationId" column="station_id"></result>
+        <result property="stationName" column="station_name"></result>
+        <result property="simulationSum" column="simulation_sum"></result>
+        <result property="simulationTime" column="simulation_time"></result>
+    </resultMap>
+
+    <!--    添加-->
+    <insert id="addSimulationTable" parameterType="com.bus.javabean.CnmSimulationBean">
+        insert into
+        tb_simulation(station_id,station_name,simulation_sum,simulation_time)
+        values (#{stationId},#{stationName},#{simulationSum},#{simulationTime})
+    </insert>
+
+    <!--    获取广告配置表-->
+    <select id="findSimulationTable" parameterType="com.bus.javabean.CnmSimulationWhere" resultMap="Simulation">
+        SELECT * FROM  tb_simulation
+        <where>
+            <if test="simulationTime !=null and simulationTime !=''">
+                and simulation_time LIKE '%${simulationTime}%'
+            </if>
+            <if test="stationName !=null and stationName !=''">
+                and station_name LIKE '%${stationName}%'
+            </if>
+
+        </where>
+        limit ${page},${limit}
+    </select>
+
+    <!--    获取合作商表总条数-->
+    <select id="findSimulationTableCount" parameterType="com.bus.javabean.CnmSimulationWhere" resultType="java.lang.Integer">
+        SELECT COUNT(*) COUNT  FROM tb_simulation
+        <where>
+            <if test="simulationTime !=null and simulationTime !=''">
+                and simulation_time LIKE '%${simulationTime}%'
+            </if>
+            <if test="stationName !=null and stationName !=''">
+                and station_name LIKE '%${stationName}%'
+            </if>
+        </where>
+    </select>
+
+    <!--    查询状态-->
+    <select id="findSimulationInf"  resultMap="Simulation">
+        SELECT simulation_time as simulationTime FROM  tb_simulation
+    </select>
+
+
+
+<!--&lt;!&ndash;    删除合作商&ndash;&gt;-->
+<!--&lt;!&ndash;    <delete id="deleteAdvertisementTable" parameterType="java.lang.Integer">&ndash;&gt;-->
+<!--&lt;!&ndash;        DELETE FROM tb_advertisement WHERE advertisement_id=#{advertisementId}&ndash;&gt;-->
+<!--&lt;!&ndash;    </delete>&ndash;&gt;-->
+<!--    <update id="deleteAdvertisementTable" parameterType="java.lang.Integer">-->
+<!--        update tb_advertisement set state_id=8-->
+<!--         WHERE advertisement_id=#{advertisementId}-->
+<!--    </update>-->
+
+
+<!--&lt;!&ndash;    用合作商名查询合作商的&ndash;&gt;-->
+<!--    <select id="findCooperativeInf" parameterType="java.lang.String"  resultMap="Cooperative">-->
+<!--        SELECT * FROM  tb_cooperative where cooperative_name=#{cooperativeName}-->
+<!--    </select>-->
+<!--    &lt;!&ndash;    查询广告是否有这条记录&ndash;&gt;-->
+<!--    <select id="findAdvertisementInf" parameterType="com.bus.javabean.CnmAdvertisementBean"  resultMap="advertisement">-->
+<!--        SELECT * FROM  tb_advertisement-->
+<!--        <where>-->
+<!--            <if test="cooperativeId !=null and cooperativeId !=''">-->
+<!--                and cooperative_id=#{cooperativeId}-->
+<!--            </if>-->
+<!--            <if test="advertisingType !=null and advertisingType !=''">-->
+<!--                and advertising_type=#{advertisingType}-->
+<!--            </if>-->
+<!--            <if test="advertisingHeadlines !=null and advertisingHeadlines !=''">-->
+<!--                and advertising_headlines=#{advertisingHeadlines}-->
+<!--            </if>-->
+<!--            <if test="deadline !=null and deadline !=''">-->
+<!--                and deadline=#{deadline}-->
+<!--            </if>-->
+<!--            <if test="releaseTime !=null and releaseTime !=''">-->
+<!--                and release_time=#{releaseTime}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+<!--&lt;!&ndash;        修改合作商&ndash;&gt;-->
+<!--    <update id="updateAdvertisementTable" parameterType="com.bus.javabean.CnmAdvertisementWhere">-->
+<!--        update tb_advertisement set advertising_headlines=#{advertisingHeadlines},advertising_type=#{advertisingType},deadline=#{deadline},release_time=#{releaseTime} where advertisement_id=#{advertisementId}-->
+<!--    </update>-->
+
+<!--&lt;!&ndash;    获取合作商类型&ndash;&gt;-->
+<!--    <select id="findAdvertisementType"  resultMap="advertisement">-->
+<!--        SELECT * FROM  tb_advertisement-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;    修改合作商状态&ndash;&gt;-->
+<!--    <update id="updateAdvertisementState" parameterType="com.bus.javabean.CnmAdvertisementWhere">-->
+<!--        update tb_advertisement  set state_id=#{stateId} where advertisement_id=#{advertisementId}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash;    查询状态&ndash;&gt;-->
+<!--    <select id="findAdvertisementState" parameterType="java.lang.String" resultType="java.lang.Integer">-->
+<!--        SELECT state_id as stateId FROM  tb_state  WHERE state_name=#{stateName}-->
+<!--    </select>-->
+
+
+</mapper>

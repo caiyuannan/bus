@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.XhaStationConfigurationMapper">
+
+    <resultMap id="cityRes" type="com.bus.javabean.XhaCityBean">
+        <result property="cityId" column="city_id"></result>
+        <result property="cityName" column="city_name"></result>
+    </resultMap>
+
+    <!-- 通过省份id查询所有的城市-->
+    <select id="queryCityByProvinceId" parameterType="java.lang.Integer" resultMap="cityRes">
+        select tc.*,tp.province_name from tb_city tc,tb_province tp where tc.province_id = tp.province_id and tp.province_id = #{provinceId}
+    </select>
+    <resultMap id="stationRes" type="com.bus.javabean.XhaStationBean">
+        <result property="stationId" column="station_id"></result>
+        <result property="cityName" column="city_name"></result>
+        <result property="stationName" column="station_name"></result>
+        <result property="stationLon" column="station_lon"></result>
+        <result property="stationLat" column="station_lat"></result>
+        <result property="routes" column="routes"></result>
+    </resultMap>
+
+    <!-- 通过城市名、站点名称查询站点-->
+    <select id="queryStationByProvinceName" parameterType="com.bus.javabean.XhaPageBean" resultMap="stationRes">
+        select * from tb_station
+        <where>
+            city_name = #{cityName} and state_id = 1
+            <if test="null != stationName and '' != stationName">
+                and station_name like '%${stationName}%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 通过城市名、站点名称查询站点带分页-->
+    <select id="queryStationOnLimit" resultMap="stationRes">
+        select * from tb_station
+        <where>
+            city_name = #{cityName} and state_id = 1
+            <if test="null != stationName and '' != stationName">
+                and station_name like '%${stationName}%'
+            </if>
+        </where>
+        limit #{start},#{end}
+    </select>
+
+    <!-- 删除站点，逻辑删除-->
+    <update id="deleteStation" parameterType="java.lang.Integer">
+        update tb_station set state_id = 2,station_lon = null,station_lat = null where station_id = #{stateId}
+    </update>
+
+    <!-- 查询站点是否已经存在,或者被逻辑删除-->
+    <select id="seleteStationIsExisted" resultMap="stationRes">
+        select * from tb_station where station_name = #{stationName} and state_id = #{stateId}
+    </select>
+
+    <!-- 把逻辑删除的站点返回来,并更新坐标-->
+    <update id="updateStation" parameterType="com.bus.javabean.XhaStationBean">
+        update tb_station set state_id = 1,station_lon = #{stationLon},station_lat = #{stationLat} where city_name = #{cityName} and station_name = #{stationName}
+    </update>
+
+    <!-- 添加新站点-->
+    <insert id="addStation" parameterType="com.bus.javabean.XhaStationBean">
+        insert into tb_station(city_name,station_name,station_lon,station_lat,state_id) values (#{cityName},#{stationName},#{stationLon},#{stationLat},1)
+    </insert>
+
+    <!-- 根据站点的变动及时更新城市配置表,进行增加-->
+    <update id="addStationCount">
+        update tb_city_configuration set station_count = station_count+1 where city_name = #{cityName};
+    </update>
+
+    <!-- 根据站点的变动及时更新城市配置表,进行减少-->
+    <update id="reduceStationCount">
+        update tb_city_configuration set station_count = station_count-1 where city_name = #{cityName};
+    </update>
+
+    <!-- 根据站点id查询站点信息-->
+    <select id="queryStationById" parameterType="java.lang.Integer" resultMap="stationRes">
+        select * from tb_station where station_id = #{stationId}
+    </select>
+
+
+</mapper>
+
+
+

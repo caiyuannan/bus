@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CnmAdvertisementMapper">
+
+    <resultMap id="advertisement" type="com.bus.javabean.CnmAdvertisementBean">
+        <result property="advertisementId" column="advertisement_id"></result>
+        <result property="cooperativeId" column="cooperative_id"></result>
+        <result property="advertisingHeadlines" column="advertising_headlines"></result>
+        <result property="advertisingType" column="advertising_type"></result>
+        <result property="releaseTime" column="release_time"></result>
+        <result property="deadline" column="deadline"></result>
+        <result property="stateId" column="state_id"></result>
+        <result property="stateName" column="state_name"></result>
+        <result property="cooperativeName" column="cooperative_name"></result>
+        <result property="advertisingImgurl" column="advertising_imgurl"></result>
+    </resultMap>
+
+    <resultMap id="Cooperative" type="com.bus.javabean.CnmCooperativeBean">
+        <result property="cooperativeId" column="cooperative_id"></result>
+        <result property="cooperativeName" column="cooperative_name"></result>
+        <result property="cooperativeType" column="cooperative_type"></result>
+        <result property="cooperativeX" column="cooperative_x"></result>
+        <result property="cooperativeY" column="cooperative_y"></result>
+        <result property="cooperativeArea" column="cooperative_area"></result>
+        <result property="stateId" column="state_id"></result>
+        <result property="stateName" column="state_name"></result>
+    </resultMap>
+
+    <!--    获取广告配置表-->
+    <select id="findAdvertisementTable" parameterType="com.bus.javabean.CnmAdvertisementWhere" resultMap="advertisement">
+        SELECT *,s.state_name as stateName,c.cooperative_name as cooperativeName FROM  tb_advertisement a,tb_state s,tb_cooperative c
+        <where>
+            <if test="cooperativeName !=null and cooperativeName !=''">
+                and cooperative_name LIKE '%${cooperativeName}%'
+            </if>
+            <if test="advertisingType !=null and advertisingType !=''">
+                and advertising_type LIKE '%${advertisingType}%'
+            </if>
+            <if test="stateName !=null and stateName !=''">
+                and state_name LIKE '%${stateName}%'
+            </if>
+            and a.state_id=s.state_id and c.cooperative_id=a.cooperative_id
+
+        </where>
+        limit ${page},${limit}
+    </select>
+
+    <!--    获取合作商表总条数-->
+    <select id="findAdvertisementTableCount" parameterType="com.bus.javabean.CnmAdvertisementWhere" resultType="java.lang.Integer">
+        SELECT COUNT(*) COUNT  FROM tb_advertisement a,tb_state s,tb_cooperative c
+        <where>
+            <if test="cooperativeName !=null and cooperativeName !=''">
+                and cooperative_name LIKE '%${cooperativeName}%'
+            </if>
+            <if test="advertisingType !=null and advertisingType !=''">
+                and advertising_type LIKE '%${advertisingType}%'
+            </if>
+            <if test="stateName !=null and stateName !=''">
+                and state_name LIKE '%${stateName}%'
+            </if>
+            and a.state_id=s.state_id and c.cooperative_id=a.cooperative_id
+        </where>
+    </select>
+
+<!--    删除合作商-->
+<!--    <delete id="deleteAdvertisementTable" parameterType="java.lang.Integer">-->
+<!--        DELETE FROM tb_advertisement WHERE advertisement_id=#{advertisementId}-->
+<!--    </delete>-->
+    <update id="deleteAdvertisementTable" parameterType="java.lang.Integer">
+        update tb_advertisement set state_id=8
+         WHERE advertisement_id=#{advertisementId}
+    </update>
+
+<!--    添加合作商-->
+    <insert id="addAdvertisementTable" parameterType="com.bus.javabean.CnmAdvertisementBean">
+        insert into
+        tb_advertisement(cooperative_id,advertising_headlines,advertising_type,deadline,release_time,state_id,advertising_imgurl)
+        values (#{cooperativeId},#{advertisingHeadlines},#{advertisingType},#{deadline},#{releaseTime},1,#{advertisingImgurl})
+    </insert>
+<!--    用合作商名查询合作商的-->
+    <select id="findCooperativeInf" parameterType="java.lang.String"  resultMap="Cooperative">
+        SELECT * FROM  tb_cooperative where cooperative_name=#{cooperativeName}
+    </select>
+    <!--    查询广告是否有这条记录-->
+    <select id="findAdvertisementInf" parameterType="com.bus.javabean.CnmAdvertisementBean"  resultMap="advertisement">
+        SELECT * FROM  tb_advertisement
+        <where>
+            <if test="cooperativeId !=null and cooperativeId !=''">
+                and cooperative_id=#{cooperativeId}
+            </if>
+            <if test="advertisingType !=null and advertisingType !=''">
+                and advertising_type=#{advertisingType}
+            </if>
+            <if test="advertisingHeadlines !=null and advertisingHeadlines !=''">
+                and advertising_headlines=#{advertisingHeadlines}
+            </if>
+            <if test="deadline !=null and deadline !=''">
+                and deadline=#{deadline}
+            </if>
+            <if test="releaseTime !=null and releaseTime !=''">
+                and release_time=#{releaseTime}
+            </if>
+        </where>
+    </select>
+
+
+<!--        修改合作商-->
+    <update id="updateAdvertisementTable" parameterType="com.bus.javabean.CnmAdvertisementWhere">
+        update tb_advertisement set advertising_headlines=#{advertisingHeadlines},advertising_type=#{advertisingType},deadline=#{deadline},release_time=#{releaseTime} where advertisement_id=#{advertisementId}
+    </update>
+
+<!--    获取合作商类型-->
+    <select id="findAdvertisementType"  resultMap="advertisement">
+        SELECT * FROM  tb_advertisement
+    </select>
+
+    <!--    修改合作商状态-->
+    <update id="updateAdvertisementState" parameterType="com.bus.javabean.CnmAdvertisementWhere">
+        update tb_advertisement  set state_id=#{stateId} where advertisement_id=#{advertisementId}
+    </update>
+
+    <!--    查询状态-->
+    <select id="findAdvertisementState" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT state_id as stateId FROM  tb_state  WHERE state_name=#{stateName}
+    </select>
+    <!--    查询类型为轮播广告的-->
+    <select id="findAdvertisement" parameterType="com.bus.javabean.CnmAdvertisementBean" resultMap="advertisement">
+        SELECT * FROM  tb_advertisement
+        <where>
+        <if test="deadline !=null and deadline !=''">
+            and deadline  BETWEEN  '0-0-0' AND #{deadline}
+        </if>
+        AND  state_id=1 and advertising_type='轮播广告'
+        </where>
+    </select>
+
+</mapper>

@@ -61,7 +61,7 @@
 									<a href="javascript:void(0)" title=<%=path+"/front/DyfUserStream"%> onclick="changgeURL(this)">消费明细</a>
 								</div>
 								<div class="panel-body">
-									<a href="/bus/toSuggesting">投诉建议</a>
+									<a href="javascript:void(0)" title=<%=path+"/toSuggesting"%> onclick="changgeURL(this)" >投诉建议</a>
 								</div>
 							</div>
 						</div>

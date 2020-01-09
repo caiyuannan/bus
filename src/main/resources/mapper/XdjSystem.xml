@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        系统帐号管理的xml-->
+
+<mapper namespace="com.bus.dao.XdjSystemMapper">
+    <resultMap id="selectAllMap" type="com.bus.javabean.XdjSystem">
+        <id property="mangeuserId" column="mangeuser_id"></id>
+        <result property="mangeuserName" column="mangeuser_name"></result>
+        <result property="password" column="password"></result>
+        <result property="mangeuserPhonenumber" column="mangeuser_phonenumber"></result>
+        <result property="roleName" column="role_name"></result>
+        <result property="mangeuserCity" column="mangeuser_city"></result>
+    </resultMap>
+    <select id="findXdjSystemAll" parameterType="com.bus.javabean.XdjSystem" resultMap="selectAllMap" >
+        select tb_mangeuser.mangeuser_id,tb_mangeuser.mangeuser_name,tb_mangeuser.`password`,tb_mangeuser.mangeuser_phonenumber,
+        tb_role.role_name,tb_mangeuser.mangeuser_city from tb_mangeuser,tb_mangeuser_role,tb_role
+        <where>
+            <if test="mangeuserName !=null and mangeuserName!=''">
+                and mangeuser_name like concat(#{mangeuserName},'%')
+            </if>
+            <if test="roleName != null and roleName!=''">
+                and role_name = #{roleName}
+            </if>
+            and tb_mangeuser.mangeuser_id=tb_mangeuser_role.mangeuser_id
+            and tb_role.role_id=tb_mangeuser_role.role_id
+        </where>
+    </select>
+
+
+    <insert id="insertXdjSystem" parameterType="com.bus.javabean.XdjSystem" >
+        insert into tb_mangeuser,tb_mangeuser_role,tb_role(
+		    mangeuser_id,mangeuser_name,password,mangeuser_phonenumber,role_name,mangeuser_city)
+		    values(
+		    #{mangeuser_id},
+		    #{mangeuser_name},
+		    #{password},
+		    #{mangeuser_phonenumber}
+		    #{role_name}
+		    #{mangeuser_city})
+    </insert>
+
+    <delete id="deleteXdjSystem" parameterType="Integer" >
+           	delete from tb_mangeuser,tb_mangeuser_role,tb_role
+           	where mangeuser_id=#{mangeuser_id}
+        </delete>
+
+    <update id="updateXdjSystem" parameterType="com.bus.javabean.XdjSystem" >
+  update tb_mangeuser,tb_mangeuser_role,tb_role set mangeuser_id=#{mangeuser_id}
+  where tb_mangeuser.mangeuser_id=tb_mangeuser_role.mangeuser_id
+  and tb_role.role_id=tb_mangeuser_role.role_id
+    </update>
+</mapper>

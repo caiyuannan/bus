@@ -131,6 +131,12 @@
         insert into tb_advice_image(advice_id,temp_path)
         values(#{id},#{imagePath})
     </insert>
+    
+    <select id="getAllStationByCityName" parameterType="java.lang.String" resultMap="res-stations">
+        select tb_station.station_name,tb_station.station_lon,tb_station.station_lat
+        from tb_station
+        where city_name=#{cityName}
+    </select>
 </mapper>
 
 

@@ -50,7 +50,7 @@ public class LccSuggestionService
 	 */
 	@Transactional
 	public int getTotalPages2(Map<String,Object> map){
-
-		return sggp.getTotalPage2(map);
+		return sggp.getTotalPages2(map);
+//		return sggp.getTotalPage2(map);
 	}
 }

@@ -2,82 +2,83 @@ package com.bus.aoplog;
 
 /**
  * 日志实体
- * loginfid:自增ID
- * actionname:操作人
- * actiontime:操作时间
- * actioninf:操作事件
- * money:充值金额
- * @author yn
+ *
+ * @author zx
  *
  */
 public class CynSystemLog
 {
-	private int logInfId;
-	private String actionName;
-	private String actionTime;
-	private String actionInf;
-	private double money;
+	private int loginfid;
+	private int documentid;
+	private String actionname;
+	private String actiontime;
+	private String actioninf;
 
 	public CynSystemLog()
 	{
 	}
-
-	public CynSystemLog(int logInfId, String actionName, String actionTime, String actionInf, double money)
+	public CynSystemLog(int loginfid, int documentid, String actionname, String actiontime, String actioninf)
 	{
-		this.logInfId = logInfId;
-		this.actionName = actionName;
-		this.actionTime = actionTime;
-		this.actionInf = actionInf;
-		this.money = money;
+		this.loginfid = loginfid;
+		this.documentid = documentid;
+		this.actionname = actionname;
+		this.actiontime = actiontime;
+		this.actioninf = actioninf;
 	}
 
-	public int getLogInfId()
+	@Override
+	public String toString()
 	{
-		return logInfId;
+		return "CynSystemLog{" + "loginfid=" + loginfid + ", documentid=" + documentid + ", actionname='" + actionname + '\'' + ", actiontime='" + actiontime + '\'' + ", actioninf='" + actioninf + '\'' + '}';
 	}
 
-	public void setLogInfId(int logInfId)
+	public int getLoginfid()
 	{
-		this.logInfId = logInfId;
+		return loginfid;
 	}
 
-	public String getActionName()
+	public void setLoginfid(int loginfid)
 	{
-		return actionName;
+		this.loginfid = loginfid;
 	}
 
-	public void setActionName(String actionName)
+	public int getDocumentid()
 	{
-		this.actionName = actionName;
+		return documentid;
 	}
 
-	public String getActionTime()
+	public void setDocumentid(int documentid)
 	{
-		return actionTime;
+		this.documentid = documentid;
 	}
 
-	public void setActionTime(String actionTime)
+	public String getActionname()
 	{
-		this.actionTime = actionTime;
+		return actionname;
 	}
 
-	public String getActionInf()
+	public void setActionname(String actionname)
 	{
-		return actionInf;
+		this.actionname = actionname;
 	}
 
-	public void setActionInf(String actionInf)
+	public String getActiontime()
 	{
-		this.actionInf = actionInf;
+		return actiontime;
 	}
 
-	public double getMoney()
+	public void setActiontime(String actiontime)
 	{
-		return money;
+		this.actiontime = actiontime;
 	}
 
-	public void setMoney(double money)
+	public String getActioninf()
 	{
-		this.money = money;
+		return actioninf;
+	}
+
+	public void setActioninf(String actioninf)
+	{
+		this.actioninf = actioninf;
 	}
 }

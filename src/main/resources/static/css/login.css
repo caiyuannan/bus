@@ -35,6 +35,8 @@
 	text-align: center;
 	display: none;
 	margin-top: 30px;
+	margin: 0 auto;
+	padding-left: 15px;
 }
 
 #lab1 {
@@ -112,13 +114,6 @@
 	border-radius: 0;
 	margin-top: 20px;
 }
-#regist_btn1{
-	float: left;
-	width: 100px;
-	height: 40px;
-	border-radius: 0;
-	margin-top: 20px;
-}
 /*记住密码，找回密码*/
 #rememberOrfindPwd {
 	display: inline-block;
@@ -143,11 +138,6 @@
 }
 /*登陆表单容器*/
 #form_container1 {
-	width: 330px;
-	height: 240px;
-	border-bottom: 1px solid #FFFFFF;
-}
-#messageLogin{
 	width: 330px;
 	height: 240px;
 	border-bottom: 1px solid #FFFFFF;

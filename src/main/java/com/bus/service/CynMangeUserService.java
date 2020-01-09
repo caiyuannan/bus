@@ -1,8 +1,9 @@
 package com.bus.service;
 
 import com.bus.aoplog.CynSystemLog;
-import com.bus.aoplog.CynSystemLogAspect;
 import com.bus.dao.CynMangeUserMapper;
+import com.bus.javabean.CynLogInf;
+import com.bus.javabean.CynLogSelectBean;
 import com.bus.javabean.CynMangeUserBean;
 import com.bus.javabean.CynMenuBean;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,22 @@ public class CynMangeUserService
 	 * 查看日志操作
 	 */
 	@Transactional
-	public List<CynSystemLog> findLogAllByOperatorName(String actionName){
-		return cynMangeUserMapper.findLogAllByOperatorName(actionName);
+	public List<CynLogInf> findLogAllByOperatorName(CynLogSelectBean cynLogSelectBean){
+		return cynMangeUserMapper.findLogAllByOperatorName(cynLogSelectBean);
 	}
+	@Transactional
+	public int findLogAllCountByOperatorName(CynLogSelectBean cynLogSelectBean){
+		return cynMangeUserMapper.findLogAllCountByOperatorName(cynLogSelectBean);
+	}
+
+	@Transactional
+	public int updateLog(CynLogInf cynLogInf){
+		return cynMangeUserMapper.updateLog(cynLogInf);
+	}
+	@Transactional
+	public int deleteLogInf(int logId){
+		return cynMangeUserMapper.deleteLogInf(logId);
+	}
+
+
 }

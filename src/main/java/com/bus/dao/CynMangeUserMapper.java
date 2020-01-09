@@ -1,7 +1,8 @@
 package com.bus.dao;
 
 import com.bus.aoplog.CynSystemLog;
-import com.bus.aoplog.CynSystemLogAspect;
+import com.bus.javabean.CynLogInf;
+import com.bus.javabean.CynLogSelectBean;
 import com.bus.javabean.CynMangeUserBean;
 import com.bus.javabean.CynMenuBean;
 import org.apache.ibatis.annotations.Mapper;
@@ -32,5 +33,20 @@ public interface CynMangeUserMapper
 	/**
 	 * 获取所有的日志信息
 	 */
-	public List<CynSystemLog> findLogAllByOperatorName(String actionName);
+	public List<CynLogInf> findLogAllByOperatorName(CynLogSelectBean cynLogSelectBean);
+
+	/**
+	 * 获取日志的总页数
+	 */
+	public int findLogAllCountByOperatorName(CynLogSelectBean cynLogSelectBean);
+
+	/**
+	 * 修改日志操作
+	 */
+	public int updateLog(CynLogInf cynLogInf);
+
+	/**
+	 * 删除日志操作
+	 */
+	public int deleteLogInf(int logId);
 }

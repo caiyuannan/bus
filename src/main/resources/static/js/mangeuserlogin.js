@@ -14,13 +14,13 @@ function subMethod() {
 	var cardCode=$("#loginCode").val();
 
 	if(name.length>0&&pass.length>0){
-		if(inputCode===cardCode){
+		// if(inputCode===cardCode){
 			$("#form-date").attr("action", $("#form-date").attr("action"));
 			$("#form-date").submit();
-		}else {
-			createCode('#loginCode');
-			alert("验证码输入有误！");
-		}
+		// }else {
+		// 	createCode('#loginCode');
+		// 	alert("验证码输入有误！");
+		// }
 	}else {
 		createCode('#loginCode');
 		alert("账号或密码不能为空");

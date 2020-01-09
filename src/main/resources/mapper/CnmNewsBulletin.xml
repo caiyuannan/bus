@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CnmNewsBulletinMapper">
+
+    <resultMap id="NewsBulletin" type="com.bus.javabean.CnmNewsBulletinBean">
+        <result property="newsBulletinId" column="news_bulletin_id"></result>
+        <result property="newsBulletinTime" column="news_bulletin_time"></result>
+        <result property="newsBulletinContent" column="news_bulletin_content"></result>
+        <result property="newsBulletinType" column="new_bulletin_type"></result>
+        <result property="newsBulletinTitle" column="new_bulletin_title"></result>
+        <result property="stateId" column="state_id"></result>
+        <result property="stateName" column="state_name"></result>
+    </resultMap>
+
+    <!--    获取合作商表-->
+    <select id="findNewsBulletinTable" parameterType="com.bus.javabean.CnmNewsBulletinWhere" resultMap="NewsBulletin">
+        SELECT *,s.state_name as stateName FROM  tb_news_bulletin c,tb_state s
+        <where>
+            <if test="newsBulletinTitle !=null and newsBulletinTitle !=''">
+                and new_bulletin_title LIKE '%${newsBulletinTitle}%'
+            </if>
+            <if test="newsBulletinTime !=null and newsBulletinTime !=''">
+                and news_bulletin_time LIKE '%${newsBulletinTime}%'
+            </if>
+            <if test="newsBulletinType !=null and newsBulletinType !=''">
+                and new_bulletin_type LIKE '%${newsBulletinType}%'
+            </if>
+            and c.state_id=s.state_id
+
+        </where>
+        limit ${page},${limit}
+    </select>
+
+    <!--    获取合作商表总条数-->
+    <select id="findNewsBulletinTableCount" parameterType="com.bus.javabean.CnmNewsBulletinWhere" resultType="java.lang.Integer">
+        SELECT COUNT(*) COUNT  FROM tb_news_bulletin c,tb_state s
+        <where>
+            <if test="newsBulletinTitle !=null and newsBulletinTitle !=''">
+                and new_bulletin_title LIKE '%${newsBulletinTitle}%'
+            </if>
+            <if test="newsBulletinTime !=null and newsBulletinTime !=''">
+                and news_bulletin_time LIKE '%${newsBulletinTime}%'
+            </if>
+            <if test="newsBulletinType !=null and newsBulletinType !=''">
+                and new_bulletin_type LIKE '%${newsBulletinType}%'
+            </if>
+            and c.state_id=s.state_id
+        </where>
+    </select>
+
+<!--    删除合作商-->
+    <delete id="deleteNewsBulletinTable" parameterType="java.lang.Integer">
+        DELETE FROM tb_news_bulletin WHERE news_bulletin_id=#{newsBulletinId}
+    </delete>
+
+<!--    添加合作商-->
+    <insert id="addNewsBulletinTable" parameterType="com.bus.javabean.CnmNewsBulletinBean">
+        insert into
+        tb_news_bulletin(news_bulletin_time,news_bulletin_content,new_bulletin_type,new_bulletin_title,state_id)
+        values (#{newsBulletinTime},#{newsBulletinContent},#{newsBulletinType},#{newsBulletinTitle},1)
+    </insert>
+
+<!--        修改合作商-->
+    <update id="updateNewsBulletinTable" parameterType="com.bus.javabean.CnmNewsBulletinBean">
+        update tb_news_bulletin set new_bulletin_title=#{newsBulletinTitle},new_bulletin_type=#{newsBulletinType},news_bulletin_content=#{newsBulletinContent} where news_bulletin_id=#{newsBulletinId}
+    </update>
+
+<!--    获取合作商类型-->
+    <select id="findNewsBulletinType"  resultMap="NewsBulletin">
+        SELECT * FROM  tb_news_bulletin
+    </select>
+
+    <!--    修改合作商状态-->
+    <update id="updateNewsBulletinState" parameterType="com.bus.javabean.CnmNewsBulletinBean">
+        update tb_news_bulletin  set state_id=#{stateId} where news_bulletin_id=#{newsBulletinId}
+    </update>
+
+    <!--    查询状态-->
+    <select id="findNewsBulletinState" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT state_id as stateId FROM  tb_state  WHERE state_name=#{stateName}
+    </select>
+
+    <!--    查询新闻表信息-->
+    <select id="findNewsBulletinInf" parameterType="java.lang.String" resultMap="NewsBulletin">
+        SELECT * FROM  tb_news_bulletin  WHERE state_id=1
+    </select>
+
+
+</mapper>

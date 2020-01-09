@@ -58,7 +58,7 @@
 			</div>
 			<div class="usernameWrapDiv">
 				<div class="submitLabel">
-					<label>没有账号？<a href="#" id="loginRegister">点击注册</a></label>
+					<label>没有账号？<a id="loginRegister" onclick="test()">点击注册</a></label>
 				</div>
 				<div class="submitDiv">
 					<input id="loginBtn" type="button" class="submit layui-btn layui-btn-primary" value="登录" onclick="subMethod()"></input>
@@ -72,5 +72,21 @@
 		<script>alert("${requestScope.msg}")</script>
 	</c:when>
 </c:choose>
+<script>
+	function test(){
+		$.ajax({
+			type: "GET",//提交的方式
+			url: "/bus/wechat/getTestMethod",//提交的地址
+			dataType: "text",//希望返回的数据类型
+			async: true,//异步操作
+			success: function (msg) {//成功的方法  msg为返回数据
+				alert(msg);
+			},
+			error: function () {//错误的方法
+				alert("服务器正忙")
+			}
+		});
+	}
+</script>
 </body>
 </html>

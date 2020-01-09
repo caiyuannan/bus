@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.dao.CynMangeCardMapper">
+    <select id="getAllCardCount" parameterType="com.bus.javabean.CynCardSelectBean" resultType="java.lang.Integer">
+        select count(*) FROM tb_card,tb_state
+        where tb_card.card_state_id=tb_state.state_id
+        <choose>
+            <when test="stateName!=null and stateName!=''">
+                and tb_state.state_name like '%${stateName}%'
+            </when>
+        </choose>
+    </select>
+    <select id="getAllCard" parameterType="com.bus.javabean.CynCardSelectBean" resultMap="res-Card">
+        select tb_card.card_id,tb_card.card_num,tb_state.state_name,tb_card.user_name
+        from tb_card,tb_state
+        where tb_card.card_state_id=tb_state.state_id
+        <if test="stateName!=null and stateName!=''">
+            and tb_state.state_name like '%${stateName}%'
+        </if>
+        limit #{start},#{count}
+    </select>
+    <resultMap id="res-Card" type="com.bus.javabean.CynCardBean">
+        <result property="cardId" column="card_id"/>
+        <result property="cardNum" column="card_num"/>
+        <result property="stateName" column="state_name"/>
+        <result property="userName" column="user_name"/>
+    </resultMap>
+
+    <update id="delCardById" parameterType="java.lang.Integer">
+        update tb_card
+        set tb_card.card_state_id=14
+        where tb_card.card_id=#{id}
+    </update>
+
+    <update id="updateCardById" parameterType="java.lang.Integer">
+        update tb_card
+        set tb_card.card_state_id=#{id2}
+        where tb_card.card_id=#{id}
+    </update>
+
+    <select id="getStateId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select tb_state.state_id
+        from tb_state
+        where tb_state.state_name=#{stateName}
+    </select>
+
+    <insert id="batchInsertCard" parameterType="java.util.List">
+        INSERT INTO
+        tb_card(card_num,card_state_id)
+        VALUES
+        <foreach collection="list" item="productCategory" index="index"
+                 separator=",">
+            (
+            #{productCategory.cardNum},
+            11
+            )
+        </foreach>
+    </insert>
+
+</mapper>
+
+
+

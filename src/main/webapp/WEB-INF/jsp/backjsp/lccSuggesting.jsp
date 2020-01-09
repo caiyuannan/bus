@@ -39,7 +39,7 @@
 		}
 		.layui-body {
 			position: absolute;
-			left: 346px;
+			/*left: 346px;*/
 			right: 0;
 			top: 0;
 			bottom: 0;

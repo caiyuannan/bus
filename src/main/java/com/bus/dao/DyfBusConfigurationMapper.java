@@ -46,41 +46,41 @@ public interface DyfBusConfigurationMapper
 	public Integer updateBusInforMation(DyfBusBean dyfBusBean);
 
 	// 车辆维修记录数据
-	public List<DyfBusRepairBean> selectAllRepair(@Param("startIndex") BigDecimal startIndex, @Param("pageSize") Integer pageSize,@Param("province") String province,@Param("license") String license );
+	public List<DyfBusRepairBean> selectAllRepair(@Param("startIndex") BigDecimal startIndex, @Param("pageSize") Integer pageSize, @Param("province") String province, @Param("license") String license);
 	//车辆分页信息总条数
-	public BigDecimal countSelectRepair(@Param("province") String province,@Param("license") String license);
+	public BigDecimal countSelectRepair(@Param("province") String province, @Param("license") String license);
 //	当用户点击维修状态后插入维修表表数据
 	public Integer insertAddRepairBus(DyfBusRepairBean dyfBusRepairBean);
 //	查询分页所有的车辆排班信息
-	public List<DyfBusShfitBean> shfitSlectAllLine(@Param("shfitDate") String shfitDate,@Param("cityName") String cityName,@Param("shfitBusLine") String shfitBusLine,@Param("busEndStation") String busEndStation,@Param("shfitBusStartStation") String shfitBusStartStation);
+	public List<DyfBusShfitBean> shfitSlectAllLine(@Param("shfitDate") String shfitDate, @Param("cityName") String cityName, @Param("shfitBusLine") String shfitBusLine, @Param("busEndStation") String busEndStation, @Param("shfitBusStartStation") String shfitBusStartStation);
 //	查询排班分页总条数
-	public Integer shfitCount(@Param("shfitDate") String shfitDate,@Param("cityName") String cityName);
+	public Integer shfitCount(@Param("shfitDate") String shfitDate, @Param("cityName") String cityName);
 //	查询所有的线路
 	public List<DyfRouteBean> routeAllSelect(@Param("cityName") String cityName);
 //	查询所有可排班车联的，区分起始站和终点站
-	public List<DyfRouteOrder> selectSomeStation(@Param("routeOrder") String routeOrder,@Param("routeName") String routeName);
+	public List<DyfRouteOrder> selectSomeStation(@Param("routeOrder") String routeOrder, @Param("routeName") String routeName);
 //	查询所有的车辆排班
-	public List<DyfBusShfitBean> selectAllCanRefait(@Param("shfitDate") String shfitDate,@Param("cityName") String cityName,@Param("shfitBusLine") String shfitBusLine,@Param("busEndStation") String busEndStation,@Param("shfitBusStartStation") String shfitBusStartStation);
+	public List<DyfBusShfitBean> selectAllCanRefait(@Param("shfitDate") String shfitDate, @Param("cityName") String cityName, @Param("shfitBusLine") String shfitBusLine, @Param("busEndStation") String busEndStation, @Param("shfitBusStartStation") String shfitBusStartStation);
 //去除掉所有不可选择的排班
-	public List<DyfBusBean> selectAllNoShfitBus(@Param("list")List<Integer>list,@Param("busEndStation")String busEndStation,@Param("busTime")String busTime,@Param("twoBusStation")String twoBusStation);
+	public List<DyfBusBean> selectAllNoShfitBus(@Param("list") List<Integer> list, @Param("busEndStation") String busEndStation, @Param("busTime") String busTime, @Param("twoBusStation") String twoBusStation);
 //添加排班
-	public int addShfit(@Param("shfitDate") String shfitDate,@Param("shfitStartTime") String shfitStartTime,@Param("shfitBusId") String shfitBusId,@Param("shfitBusLine") String shfitBusLine,@Param("shfitStartId") String shfitStartId,@Param("startStation") String startStation);
+	public int addShfit(@Param("shfitDate") String shfitDate, @Param("shfitStartTime") String shfitStartTime, @Param("shfitBusId") String shfitBusId, @Param("shfitBusLine") String shfitBusLine, @Param("shfitStartId") String shfitStartId, @Param("startStation") String startStation);
 //	替换排班
-	public int updateShfitBus(@Param("shfitBusId") String shfitBusId,@Param("shfitBusLine")String shfitBusLine,@Param("shfitBusStation") String shfitBusStation,@Param("startId") String startId,@Param("shfitDate") String shfitDate,@Param("oldShfitId") String oldShfitId);
+	public int updateShfitBus(@Param("shfitBusId") String shfitBusId, @Param("shfitBusLine") String shfitBusLine, @Param("shfitBusStation") String shfitBusStation, @Param("startId") String startId, @Param("shfitDate") String shfitDate, @Param("oldShfitId") String oldShfitId);
 //	根据车牌查询车辆id
 	public DyfBusBean selectBusLinsece(String busLicense);
 //	查询所有站路下对应的站点数和站点经纬度
-	public List<dyfStationBean> testGetAllData(@Param("route") String route,@Param("cityName") String cityName);
+	public List<dyfStationBean> testGetAllData(@Param("route") String route, @Param("cityName") String cityName);
 //	查询所有的站点名称
 	public List<dyfAllRouteBean>selectAllRoute(String cityName);
 //	时间轴信息查看
-	public List<DyfBusShfitBean> timerShfit(@Param("busId") String busId,@Param("busDate") String busDate);
+	public List<DyfBusShfitBean> timerShfit(@Param("busId") String busId, @Param("busDate") String busDate);
 //	查询某段时间下所有排班车辆信息
-	public List<DyfBusBean> selectStationId(@Param("shfitBusId") String shfitBusId,@Param("shfitDate") String shfitDate,@Param("shfitStation") String shfitStation,@Param("shfitBusId1") Integer shfitBusId1,@Param("shfitBusId2") Integer shfitBusId2,@Param("shfitBusLine") String shfitBusLine);
+	public List<DyfBusBean> selectStationId(@Param("shfitBusId") String shfitBusId, @Param("shfitDate") String shfitDate, @Param("shfitStation") String shfitStation, @Param("shfitBusId1") Integer shfitBusId1, @Param("shfitBusId2") Integer shfitBusId2, @Param("shfitBusLine") String shfitBusLine);
 //	查询时间对应的时间id
 	public List<dyfDateBean>selectDateId(String dateTime);
 //	查询当断时间内停站车辆信息
-	public List<DyfBusShfitBean>selectHelpBus(@Param("dateNow") String dateNow,@Param("dateId") String dateId);
+	public List<DyfBusShfitBean>selectHelpBus(@Param("dateNow") String dateNow, @Param("dateId") String dateId);
 //	查询该车最新发车信息
-	public List<DyfBusShfitBean>timeNameLisence(@Param("shfitThisStation") String shfitThisStation,@Param("shfitDate") String shfitDate,@Param("shfitBusId") String shfitBusId,@Param("shfitDateID") String shfitDateID);
+	public List<DyfBusShfitBean>timeNameLisence(@Param("shfitThisStation") String shfitThisStation, @Param("shfitDate") String shfitDate, @Param("shfitBusId") String shfitBusId, @Param("shfitDateID") String shfitDateID);
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        系统帐号管理的xml-->
+
+<mapper namespace="com.bus.dao.XdjRoleMapper">
+    <resultMap id="selectAllMap" type="com.bus.javabean.CynRoleBean">
+        <id property="roleId" column="role_id"></id>
+        <result property="roleName" column="role_name"></result>
+    </resultMap>
+
+    <select id="findXdjRoleAll" parameterType="com.bus.javabean.CynRoleBean" resultMap="selectAllMap" >
+         select * from tb_role
+    </select>
+
+    <select id="findRoleCount" parameterType="com.bus.javabean.CynRoleBean" resultType="java.lang.Integer">
+    SELECT COUNT(*) COUNT  FROM tb_role
+    </select>
+
+    <insert id="insertXdjRole" parameterType="com.bus.javabean.CynRoleBean" >
+        insert into tb_role(role_id,role_name)
+		    values( #{role_id_id},
+		    #{role_name})
+    </insert>
+
+    <delete id="deleteXdjRole" parameterType="Integer" >
+           	delete from tb_role
+           	where role_id=#{role_id}
+        </delete>
+
+    <update id="updateXdjRole" parameterType="com.bus.javabean.CynRoleBean" >
+  update tb_role set role_name=#{role_name}
+  where  role_id=#{role_id}
+    </update>
+</mapper>

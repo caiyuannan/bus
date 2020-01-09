@@ -1,8 +1,6 @@
 package com.bus.controller;
 
 import com.bus.javabean.LccCashBean;
-import com.bus.javabean.Msg;
-import com.bus.javabean.Mssg;
 import com.bus.service.LccStatisticsService;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Controller;
@@ -11,8 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

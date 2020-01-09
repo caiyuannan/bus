@@ -16,7 +16,6 @@ public class XhaPageBean {
 	private int count;
 	private int limit;
 	private List list;
-	private String routeName;
 
 	public XhaPageBean() {
 	}
@@ -35,14 +34,6 @@ public class XhaPageBean {
 		this.limit = limit;
 		this.cityName = cityName;
 		this.stationName = stationName;
-	}
-
-	public XhaPageBean(String cityName, String routeName, String stationName, int page, int limit) {
-		this.cityName = cityName;
-		this.routeName = routeName;
-		this.stationName = stationName;
-		this.page = page;
-		this.limit = limit;
 	}
 
 	public XhaPageBean(String provinceName, String cityName, int page, int start, int end, int count, int limit, List list) {
@@ -128,14 +119,6 @@ public class XhaPageBean {
 
 	public void setLimit(int limit) {
 		this.limit = limit;
-	}
-
-	public String getRouteName() {
-		return routeName;
-	}
-
-	public void setRouteName(String routeName) {
-		this.routeName = routeName;
 	}
 
 	@Override

@@ -41,7 +41,7 @@ public class XhaCityConfigurationController {
 	 */
 	@RequestMapping("queryCityConfiguration")
 	@ResponseBody
-	public TableBean queryCityConfiguration(String page,String limit,String provinceName,String cityName){
+	public TableBean queryCityConfiguration(String page, String limit, String provinceName, String cityName){
 		System.out.println("provinceName:"+provinceName+",cityName:"+cityName);
 		XhaPageBean pb = new XhaPageBean(provinceName,cityName,0,0);
 		//表格中的总条数

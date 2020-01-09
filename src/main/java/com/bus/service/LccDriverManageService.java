@@ -1,12 +1,11 @@
 package com.bus.service;
 
-import com.bus.javabean.*;
 import com.bus.dao.LccDriverManageMapper;
+import com.bus.javabean.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

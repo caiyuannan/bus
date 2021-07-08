@@ -5,10 +5,10 @@ server:
 
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://120.27.247.16:3306/busCar?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
-    username: caiyuannan
-    password: abc123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://cdb-e7ge3g0e.cd.tencentcdb.com:10022/测试?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 2009@ffcs
     #    type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 8 #初始化时建立物理连接的个数
@@ -44,18 +44,19 @@ spring:
         min-idle: 0
     timeout: 5000ms
 
-  mvc:
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
-    pathmatch:
-      #设置是否是后缀模式匹配，如“/user"是否匹配/user.*,默认true为匹配
-      #当此参数设置为true，那么/user.html, /user.aa,/user.*都能正常访问
-      use-suffix-pattern: true
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/jsp/
+#      suffix: .jsp
+#    pathmatch:
+#      #设置是否是后缀模式匹配，如“/user"是否匹配/user.*,默认true为匹配
+#      #当此参数设置为true，那么/user.html, /user.aa,/user.*都能正常访问
+#      use-suffix-pattern: false
 
 mybatis:
   #  config-location: classpath:SqlMapConfig.xml
   mapper-locations: classpath:/mapper/*.xml
-  type-aliases-package: com.bus.javabean
+  type-aliases-package: java/com/bus/javabean
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
